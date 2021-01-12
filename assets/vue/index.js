@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import router from 'vue-router';
+import router from './router/routes';
 import store from './store';
 import LoginFormModal from "./views/security/LoginFormModal";
 //import TestComponent from "./views/TestComponent";

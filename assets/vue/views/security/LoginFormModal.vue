@@ -12,20 +12,22 @@
           <div id="err_message" class="alert alert-danger" role="alert"></div>
 
           <form action=""  method="post" name="form_login" id="formLoginModal" >
+
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
             <label for="inputUsername">Username</label>
-            <input type="text" name="username" id="inputUsername" class="form-control" required autofocus>
+            <input type="text" v-model="username" name="username" id="inputUsername" class="form-control" required>
+            <div v-show="submitted && !username" class="invalid-feedback">Username is required</div>
 
             <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" required>
+            <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" required>
 
             <div class="checkbox mb-3">
               <label>
                 <input type="checkbox" name="_remember_me"> Remember me
               </label>
             </div>
-            <button class="btn btn-lg btn-primary" type="button" @click="submitLoginEvent($event)">
+            <button class="btn btn-lg btn-primary" type="submit" @click="submitLoginEvent($event)">
               Sign in
             </button>
             <button class="btn btn-default" type="button" aria-hidden="true" data-dismiss="modal">Cancel</button>
@@ -49,19 +51,30 @@
 <script>
 import {createHelpers} from 'vuex-map-fields';
 
+const { mapFields } = createHelpers({
+  getterType: "UserModule/getLoginField",
+  mutationType: 'UserModule/updateLoginField',
+});
+
 
 export default {
   name: "LoginFormModal",
   computed:{
+    submitted(){
+      return this.$store.getters["UserModule/getIsSubmitted"];
+    },
     responseData(){
       return this.$store.getters["UserModule/getResponseData"];
-    }
+    },
+    ...mapFields([
+        "username",
+        "password"
+    ]),
   },
   methods:{
     async submitLoginEvent(event){
       if(event) event.preventDefault();
-      const result = await this.$store.dispatch("UserModule/sendLoginForm",{username:'fff',password:'hhh'});
-      console.log(result);
+      const result = await this.$store.dispatch("UserModule/sendLoginForm",this.$store.state.UserModule.user);
     }
   }
 

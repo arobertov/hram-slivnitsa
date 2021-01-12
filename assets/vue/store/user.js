@@ -12,25 +12,30 @@ export default {
         user:{
             id:'',
             username:'',
+            password:'',
             email:'',
             alias:'',
         },
         isLogin:false,
         isError:false,
+        isSubmitted:false,
         error:null,
         responseData:''
     },
     getters:{
+        getIsSubmitted(state){
+            return state.isSubmitted;
+        },
         getResponseData(state){
-            return state.responseData
-        }
+            return state.responseData;
+        },
+        getLoginField(state){
+            return  getField(state);
+        },
     },
     mutations: {
         updateLoginField(state, field) {
             updateField(state.user, field);
-        },
-        getLoginField(state){
-            getField(state)
         },
         [USER_LOGIN](state,responseData){
             state.user = responseData,
