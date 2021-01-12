@@ -34,7 +34,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(
-     *      min = 2,
+     *      min = 4,
      *      max = 30,
      *      minMessage = "Your usrname must be at least {{ limit }} characters long",
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
