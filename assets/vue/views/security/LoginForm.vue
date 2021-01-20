@@ -34,7 +34,7 @@
 
 <script>
 import {createHelpers} from 'vuex-map-fields';
-import { ValidationObserver, ValidationProvider,Validator } from 'vee-validate';
+import { ValidationObserver, ValidationProvider} from 'vee-validate';
 
 const { mapFields } = createHelpers({
   getterType: "UserModule/getLoginField",
