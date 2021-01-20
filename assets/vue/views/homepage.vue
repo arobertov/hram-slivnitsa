@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-button variant="success" v-b-modal.login-form>Login</b-button>
+    <a data-toggle="modal" data-target="#loginModal">
+      <span class="btn  btn-success">Login</span>
+    </a>
    <login-form></login-form>
     <test></test>
   </div>
