@@ -121,11 +121,13 @@ export default {
     async handleSubmit() {
       // Exit when the form isn't valid
       const result = await this.$store.dispatch("UserModule/sendLoginForm", this.$store.state.UserModule.user);
-
-      // Hide the modal manually
-      this.$nextTick(() => {
-        $('#loginModal').modal('hide')
-      })
+      if(result !== undefined){
+        this.$nextTick(() => {
+          $('#loginModal').modal('hide');
+          console.log(result)
+          return result;
+        })
+      }
     }
   }
 }
