@@ -35,7 +35,7 @@
                 </b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
-            <ValidationProvider rules="required|min:4|max:30" name="Username">
+            <ValidationProvider rules="required|min:4|max:30" name="Passwors">
               <b-form-group
                   label="Парола:"
                   label-for="input-password"
@@ -44,6 +44,7 @@
               >
                 <b-form-input
                     name="password"
+                    type="password"
                     id="input-password"
                     v-model="user.password"
                     :state="errors[0] ? false : (valid ? true : null)"
@@ -55,8 +56,15 @@
                 </b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
+            <b-form-checkbox
+                  id="remember_me"
+                  name="_remember_me"
+                  v-model="user.remember_me"
+              >
+                Запомни ме !
+            </b-form-checkbox>
             <b-button variant="success" type="submit">
-              Submit
+              Влез
             </b-button>
           </b-form>
         </ValidationObserver>
@@ -110,22 +118,18 @@ export default {
     },
     ...mapFields([
       "username",
-      "password"
+      "password",
+      "_remember_me"
     ]),
   },
   methods: {
-    resetModal() {
-      this.user.username = ''
-      this.usernameState = null
-    },
     async handleSubmit() {
       // Exit when the form isn't valid
       const result = await this.$store.dispatch("UserModule/sendLoginForm", this.$store.state.UserModule.user);
       if(result !== undefined){
+        await this.$store.dispatch("UserModule/getUser",result);
         this.$nextTick(() => {
           $('#loginModal').modal('hide');
-          console.log(result)
-          return result;
         })
       }
     }

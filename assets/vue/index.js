@@ -24,6 +24,8 @@ Vue.filter('formatDate', function (value) {
     }
 });
 
+Vue.prototype.$siteUser = window.user;
+
 new Vue({
     components:{
         Homepage,

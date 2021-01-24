@@ -3,7 +3,6 @@ import login from "../api/login_api";
 
 const
     USER_LOGIN = "USER_LOGIN",
-    FETCHING_LOGIN_SUCCESS = "FETCHING_LOGIN_SUCCESS",
     FETCHING_LOGIN_ERROR = "FETCHING_LOGIN_ERROR",
     UPDATE_MESSAGE = "UPDATE_MESSAGE";
 
@@ -16,6 +15,7 @@ export default {
             password:'',
             email:'',
             alias:'',
+            remember_me: undefined
         },
         isLogin:false,
         isError:false,
@@ -26,6 +26,9 @@ export default {
     getters:{
         getUser(state){
             return state.user;
+        },
+        getIsLogin(state){
+            return state.isLogin;
         },
         getIsSubmitted(state){
             return state.isSubmitted;
@@ -66,12 +69,19 @@ export default {
     actions:{
         async sendLoginForm({ commit }, loginFormData) {
             try {
-                let response = await login.signIn(loginFormData);
-                commit(USER_LOGIN, response.data);
-                return response.data;
+                const loginResponse = await login.signIn(loginFormData);
+                return loginResponse.headers.location;
             } catch (error) {
                 let errorData = error.response.data;
                 commit(FETCHING_LOGIN_ERROR,errorData);
+            }
+        },
+        async getUser({commit},loginResponse){
+            try{
+                const user = await login.findUser(loginResponse);
+                commit(USER_LOGIN,user.data)
+            } catch (error){
+               console.log(error);
             }
         }
     }

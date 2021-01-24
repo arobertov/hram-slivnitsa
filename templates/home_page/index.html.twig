@@ -7,6 +7,10 @@
     <div id="vue-entry"></div>
 {% endblock %}
 {% block javascripts %}
+    <script>
+    window.user = {{ user|raw }}
+    </script>
     {{ parent() }}
     {{ encore_entry_script_tags('vue') }}
+
 {% endblock %}
