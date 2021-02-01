@@ -10,12 +10,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={
+ *          "post"={
+ *              "validation_groups"={"Default", "create"}
+ *          },
+ *     },
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
@@ -51,14 +57,22 @@ class User implements UserInterface
      * @Groups({"user:write"})
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
+     */
+    private $password;
+
+    /**
+     * @SerializedName("password")
+     * @Groups("user:write")
      * @Assert\Length(
+     *     groups={"create"},
      *      min = 6,
      *      max = 30,
      *      minMessage = "Your password must be at least {{ limit }} characters long",
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
      */
-    private $password;
+    private $plainPassword;
 
     /**
      * @Groups({"user:read", "user:write"})
@@ -148,6 +162,16 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -162,7 +186,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getEmail(): ?string

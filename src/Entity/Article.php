@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -30,12 +31,20 @@ class Article
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Article title must be at least {{ limit }} characters long",
+     *      maxMessage = "Article title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $content;
 

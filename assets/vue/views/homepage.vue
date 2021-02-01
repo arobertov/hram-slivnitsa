@@ -12,6 +12,15 @@
       </a>
     </div>
    <login-form></login-form>
+    <register-form></register-form>
+    <button
+        type="button"
+        class="btn btn-outline-secondary"
+        data-toggle="modal"
+        data-target="#registerModal"
+    >
+      Регистрация
+    </button>
     <test></test>
   </div>
 </template>
@@ -19,10 +28,11 @@
 <script>
 import Test from "./Test";
 import LoginForm from "./security/LoginForm";
+import RegisterForm from "./security/RegisterForm";
 
 export default {
 name: "homepage",
-  components: { LoginForm, Test},
+  components: {RegisterForm, LoginForm, Test},
   computed: {
     user() {
       return this.$siteUser == null ? this.$store.getters["UserModule/getUser"] : this.$siteUser  ;

@@ -35,7 +35,7 @@
                 </b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
-            <ValidationProvider rules="required|min:4|max:30" name="Passwors">
+            <ValidationProvider rules="required|min:4|max:30" name="Password">
               <b-form-group
                   label="Парола:"
                   label-for="input-password"
@@ -60,6 +60,7 @@
                   id="remember_me"
                   name="_remember_me"
                   v-model="user.remember_me"
+                  checked="true"
               >
                 Запомни ме !
             </b-form-checkbox>
@@ -73,10 +74,19 @@
         <div class="modal-footer m-auto">
           <div class="container" >
             <a href="">
-              <span><button type="button" class="btn btn-outline-secondary">Forgot Password</button></span>
+              <span><button type="button" class="btn btn-outline-secondary">Забравена парола</button></span>
             </a>
             <a href="">
-              <span><button type="button" class="btn btn-outline-secondary">Registration</button></span>
+              <span>
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-toggle="modal"
+                    data-target="#registerModal"
+                >
+                  Регистрация
+                </button>
+              </span>
             </a>
           </div>
         </div>
@@ -103,12 +113,6 @@ export default {
   computed: {
     user() {
       return this.$store.getters["UserModule/getUser"]
-    },
-    submitted() {
-      return this.$store.getters["UserModule/getIsSubmitted"];
-    },
-    responseData() {
-      return this.$store.getters["UserModule/getResponseData"];
     },
     formIsError() {
       return this.$store.getters["UserModule/getIsError"];
