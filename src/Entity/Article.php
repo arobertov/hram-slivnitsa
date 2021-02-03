@@ -49,6 +49,12 @@ class Article
     private $content;
 
     /**
+     * @Groups({"article:read","article:write"})
+     * @ORM\Column (type="boolean",nullable=true)
+     */
+    private $isPublished;
+
+    /**
      * @Groups({"article:read"})
      * @ORM\Column(type="datetime")
      */
@@ -114,6 +120,19 @@ class Article
         $this->content = $content;
 
         return $this;
+    }
+
+    public function getIsPublished(): bool
+    {
+        if ($this->isPublished===null){
+            return false;
+        }
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished=false): self
+    {
+        $this->isPublished = $isPublished;
     }
 
     public function getDateCreated(): ?\DateTimeInterface
