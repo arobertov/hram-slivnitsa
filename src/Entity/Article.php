@@ -15,6 +15,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *      normalizationContext={"groups"={"article:read"}},
  *     denormalizationContext={"groups"={"article:write"}},
+ *      collectionOperations={
+ *           "get",
+ *           "post"={"security"="is_granted('ROLE_EDITOR')","security_message"="Нямате необходимите права да създадете статия."}
+ *     },
+ *     itemOperations={
+ *          "get"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
+ *          "put"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
+ *          "patch"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
+ *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате статия."}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
@@ -133,6 +143,8 @@ class Article
     public function setIsPublished(bool $isPublished=false): self
     {
         $this->isPublished = $isPublished;
+
+        return $this;
     }
 
     public function getDateCreated(): ?\DateTimeInterface

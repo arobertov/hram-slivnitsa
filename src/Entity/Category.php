@@ -13,6 +13,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"category:read"}},
  *     denormalizationContext={"groups"={"category:write"}},
+ *     collectionOperations={
+ *           "get",
+ *           "post"={"security"="is_granted('ROLE_EDITOR')","security_message"="Нямате необходимите права да създадете категория."}
+ *     },
+ *     itemOperations={
+ *          "get"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
+ *          "put"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате категорията."},
+ *          "patch"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате категорията."},
+ *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате категорията."}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */

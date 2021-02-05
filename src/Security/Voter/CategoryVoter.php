@@ -1,16 +1,12 @@
 <?php
-
-
 namespace App\Security\Voter;
 
-use App\Entity\Article;
+use App\Entity\Category;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-
-class ArticleVoter extends Voter
+class CategoryVoter extends Voter
 {
-
     private $voterHelper;
 
     public function __construct(VoterHelperInterface $voterHelper)
@@ -24,7 +20,7 @@ class ArticleVoter extends Voter
      */
     protected function supports(string $attribute, $subject): bool
     {
-        return $subject instanceof Article && $this->voterHelper->handleAttribute($attribute);
+        return $subject instanceof Category && $this->voterHelper->handleAttribute($attribute);
     }
 
 
