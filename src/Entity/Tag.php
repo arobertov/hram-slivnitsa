@@ -13,6 +13,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"tag:read"}},
  *     denormalizationContext={"groups"={"tag:write"}},
+ *     collectionOperations={
+ *           "get",
+ *           "post"={"security"="is_granted('ROLE_EDITOR')","security_message"="Нямате необходимите права да създадете статия."}
+ *     },
+ *     itemOperations={
+ *          "get"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
+ *          "put"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
+ *          "patch"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
+ *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате статия."}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=TagRepository::class)
  */
@@ -37,6 +47,7 @@ class Tag
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
+
 
     /**
      * @Groups({"tag:read"})
