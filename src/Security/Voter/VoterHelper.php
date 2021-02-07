@@ -14,6 +14,7 @@ class VoterHelper implements VoterHelperInterface
     const WRITE = 'WRITE';
     CONST EDIT = 'EDIT';
     CONST DELETE = 'DELETE';
+    const ALL_ACTIONS = 'ALL_ACTIONS';
 
     private $security;
 
@@ -50,6 +51,8 @@ class VoterHelper implements VoterHelperInterface
                 return $this->canEdit($subject,$user);
             case self::DELETE:
                 return $this->canDelete($subject,$user);
+            case self::ALL_ACTIONS:
+                return $this->allAction($subject,$user);
         }
         throw new \Exception(sprintf('Unhandled attribute "%s"', $attribute));
     }
@@ -97,13 +100,23 @@ class VoterHelper implements VoterHelperInterface
     }
 
     /**
+     * @param $subject
+     * @param $user
+     * @return bool
+     */
+    private function allAction($subject,$user): bool
+    {
+        return $this->security->isGranted('ROLE_EDITOR')&&$subject===$user;
+    }
+
+    /**
      * @param $attribute
      * @return bool
      * @throws \Exception
      */
     public function handleAttribute($attribute): bool
     {
-        if(in_array($attribute,[self::VIEW,self::WRITE,self::EDIT,self::DELETE])){
+        if(in_array($attribute,[self::VIEW,self::WRITE,self::EDIT,self::DELETE,self::ALL_ACTIONS])){
             return true;
         }
         throw new \Exception(sprintf('Unhandled attribute "%s"', $attribute));

@@ -15,13 +15,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={
- *          "post"={
- *              "validation_groups"={"Default", "create"}
- *          },
- *     },
+ * normalizationContext={"groups"={"user:read"}},
+ * denormalizationContext={"groups"={"user:write"}},
+ * collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_SUPER_ADMIN')","security_message"="Нямате необходимите права да преглеждате потребителите."},
+ *     "post"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')","validation_groups"={"Default", "create"}},
+ * },
+ * itemOperations={
+ *     "get"={"security"="is_granted('ALL_ACTIONS',object)","security_message"="Нямате необходимите права да преглеждате потребител."},
+ *     "put"={"security"="is_granted('ALL_ACTIONS',object)","security_message"="Нямате необходимите права да редактирате потребител."},
+ *     "patch"={"security"="is_granted('ALL_ACTIONS',object)","security_message"="Нямате необходимите права да редактирате потребител."},
+ *     "delete"={"security"="is_granted('ALL_ACTIONS',object)","security_message"="Нямате необходимите права да изтривате потребител."}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
@@ -78,6 +83,7 @@ class User implements UserInterface
     /**
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="string", length=255,unique=true)
+     * @Assert\NotBlank()
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
