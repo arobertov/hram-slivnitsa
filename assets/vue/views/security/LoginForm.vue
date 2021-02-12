@@ -56,14 +56,6 @@
                 </b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
-            <b-form-checkbox
-                  id="remember_me"
-                  name="_remember_me"
-                  v-model="user.remember_me"
-                  checked="true"
-              >
-                Запомни ме !
-            </b-form-checkbox>
             <b-button variant="success" type="submit">
               Влез
             </b-button>

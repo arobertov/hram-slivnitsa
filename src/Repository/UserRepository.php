@@ -36,6 +36,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    /**
+     * @param string $emailFormData
+     * @return User|null
+     * @throws \Exception
+     */
+    public function checkEmailExist(string $emailFormData): ?User
+    {
+        $userEmail = $this->findOneBy(['email'=>$emailFormData]);
+        if(!$userEmail){
+            throw new \Exception('Потребител с такъв имейл не е открит');
+        }
+        return $userEmail;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

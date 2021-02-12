@@ -27,11 +27,3 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    app.rememberme.services:
-        alias: security.authentication.rememberme.services.simplehash.main
-        public: true
-
-    # This section enables autowiring of the Remember Me Service
-    Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface: '@app.rememberme.services'
