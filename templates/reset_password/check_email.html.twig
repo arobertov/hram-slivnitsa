@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+{% block body %}
+    <p>Изпратен е имейл, който съдържа връзка, върху която можете да щракнете, за да нулирате паролата си. Тази връзка ще изтече след {{ tokenLifetime|date('g') }} час.</p>
+    <p>Ако не получите имейл, моля, проверете папката си със спам или <a href="{{ path('app_forgot_password_request') }}">опитайте отново</a>.</p>
+{% endblock %}
