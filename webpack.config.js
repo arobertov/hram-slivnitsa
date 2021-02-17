@@ -1,4 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require('path');
+var webpack = require('webpack')
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -7,6 +9,18 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
+    .addPlugin(
+        new webpack.ProvidePlugin({
+            "window.Quill": "quill/dist/quill.js",
+            Quill: "quill/dist/quill.js"
+        })
+    )
+    .configureDevServerOptions(options=>{
+       options.https={
+           pfx:path.join(process.env.HOMEPATH,'.symfony/certs/default.p12')
+    //pfx=%UserProfile%\.symfony\certs\default.p12
+        }
+    })
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -24,6 +38,7 @@ Encore
     .addEntry('palette','./assets/js/palette-css.js')
     .addEntry('dashboard','./assets/js/dashboard-css.js')
     .addEntry('vue','./assets/vue/index.js')
+    .addEntry('vue-admin','./assets/vue/index-admin.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -82,5 +97,6 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 ;
+
 
 module.exports = Encore.getWebpackConfig();

@@ -1,0 +1,24 @@
+{% extends 'base-admin-panel.html.twig' %}
+
+{% block title %} Администраторски панел  {% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-dark fixed-top bg-main flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Към сайта</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Търси" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+            </li>
+        </ul>
+    </nav>
+
+    <div id="admin-vue-entry"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.user = {{ user|raw }}
+    </script>
+    {{ parent() }}
+
+{% endblock %}

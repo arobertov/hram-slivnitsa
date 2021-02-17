@@ -6,11 +6,8 @@ import VeeValidate,{Validator} from 'vee-validate';
 import bg from 'vee-validate/dist/locale/bg'
 import VuePaginate from 'vue-paginate';
 import moment from 'moment';
-import Homepage from "./views/homepage";
-import LoginForm from "./views/security/LoginForm";
-import RegisterForm from "./views/security/RegisterForm";
-import Test from "./views/Test";
-
+// ***** import components  ******** //
+import Aside from './views/admin-panel';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -29,12 +26,9 @@ Vue.prototype.$siteUser = window.user;
 
 new Vue({
     components:{
-        Homepage,
-        LoginForm,
-        RegisterForm,
-        Test,
+        Aside
     },
-    template:"<Homepage/>",
+    template:"<Aside/>",
     router,
     store
-}).$mount('#vue-entry');
+}).$mount('#admin-vue-entry');

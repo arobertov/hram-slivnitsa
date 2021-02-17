@@ -80,7 +80,6 @@ export default {
                 return registerResponse.headers.location;
             } catch (error) {
                 commit(FETCHING_FORM_ERROR,error);
-                console.log(error.response.data);
             }
         },
         async getUser({commit},response){
