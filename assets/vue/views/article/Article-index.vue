@@ -14,11 +14,10 @@
         <div v-else-if="!hasArticles" class="row col">
             Няма публикувана статия !
         </div>
-
         <div  v-else>
             <b-table hover
                      id="article-dashboard-index"
-                     :items="articles"
+                     :items="articles['hydra:member']"
                      :fields="fields"
                      :per-page="perPage"
                      :current-page="currentPage"
@@ -40,7 +39,10 @@
                     </b-button-group>
                 </template>
                 <template v-slot:cell(dateEdit)="data">
-                    {{data.item.dateEdit | formatDate}}
+                    {{data.item.dateEdited | formatDate}}
+                </template>
+                <template v-slot:cell(owner)="data">
+                    {{data.item.owner.alias}}
                 </template>
                 <template v-slot:cell(category)="data">
                     {{data.item.category.name}}
@@ -138,7 +140,7 @@
                         sortable:true
                     },
                     {
-                        key:'author',
+                        key:'owner',
                         label:'Автор',
                         sortable:true
                     },
@@ -163,7 +165,7 @@
         computed: {
             rows() {
                 const rows =  this.$store.getters["ArticleModule/articles"];
-                return rows.length;
+                return rows["hydra:member"].length;
             },
             isLoading() {
                 return this.$store.getters["ArticleModule/isLoading"];

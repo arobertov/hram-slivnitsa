@@ -56,7 +56,7 @@ export default {
             return state.error;
         },
         hasArticles(state) {
-            return state.articles.length > 0;
+            return true; //state.articles.length > 0;
         },
         articles(state) {
             return state.articles;

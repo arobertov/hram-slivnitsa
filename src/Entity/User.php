@@ -91,7 +91,7 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write","article:read"})
      * @ORM\Column(type="string", length=255,unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(

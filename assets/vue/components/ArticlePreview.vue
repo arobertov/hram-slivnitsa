@@ -1,5 +1,5 @@
 <template>
-    <div v-if="article.isPublished != undefined" class="container bg-white">
+    <div v-if="article.isPublished !== undefined" class="container bg-white">
         <div >
             {{ article.id}}
         </div>
@@ -11,7 +11,8 @@
             <span v-html="article.content"></span>
         </div>
         <div>
-            {{article.author}}
+            <span>Автор</span>
+            {{article.owner.alias}}
         </div>
         <div>
             {{article.dateCreated | formatDate}}
