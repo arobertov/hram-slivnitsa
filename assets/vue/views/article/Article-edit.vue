@@ -4,27 +4,19 @@
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2 caption-text">Редактирай статия</h1>
     </div>
-    <div v-if="error" class="alert alert-danger">
-      {{ error }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
 
     <div class="container-sm ">
       <form name="article" method="put">
         <div id="article">
-          <div class="badge badge-danger" v-if="formErrors.title"> {{ formErrors.title }}</div>
           <div class="form-group row">
             <label class="col-form-label col-sm-2" for="article_title">Title</label>
             <div class="col-sm-10"><input v-model="title" type="text" id="article_title"
                                           name="article[title]" class="form-control"></div>
           </div>
-          <div class="badge badge-danger" v-if="formErrors.contents"> {{ formErrors.contents }}</div>
           <div class="form-group row"><label class="col-form-label col-sm-2"
                                              for="article_contents">Contents</label>
             <div class="col-sm-10">
-              <vue-editor :editorOptions="editorSettings" v-model="contents"
+              <vue-editor :editorOptions="editorSettings" v-model="content"
                           class="bg-white"></vue-editor>
             </div>
           </div>
@@ -41,15 +33,13 @@
               </select>
             </div>
           </div>
-          <div class="form-group row"><label class="col-form-label col-sm-2"
-                                             for="article_category">Category</label>
-            <div class="col-sm-10" v-if="category">
-              <select v-model="category.id" id="article_category" name="article[category]"
-                      class="form-control">
-                <option v-for="cat in categories" v-bind:value="cat.id">{{ cat.name }}</option>
-              </select>
-            </div>
-          </div>
+          <b-form-select
+              v-model="category"
+              :options="categories['hydra:member']"
+          >
+
+          </b-form-select>
+
           <div class="form-group row">
             <div class="col-sm-2"></div>
             <div class="col-sm-10">
@@ -68,60 +58,42 @@
 </template>
 
 <script>
-import {createHelpers} from 'vuex-map-fields';
-import {VueEditor, Quill} from "vue2-editor";
-import {ImageDrop} from "quill-image-drop-module";
-//import ImageResize from "quill-image-resize-module";
+import { createHelpers } from 'vuex-map-fields';
+import { VueEditor , Quill} from "vue2-editor";
+import { ImageDrop } from "quill-image-drop-module";
+import ImageResize  from "quill-image-resize-module";
 
 Quill.register('modules/imageDrop', ImageDrop);
-//Quill.register('modules/imageResize', ImageResize);
+Quill.register('modules/imageResize', ImageResize);
 
-const {mapFields} = createHelpers({
-  getterType: 'articleMod/getArticleField',
-  mutationType: 'articleMod/updateArticleField',
+const { mapFields } = createHelpers({
+  getterType: 'ArticleModule/getArticleField',
+  mutationType: 'ArticleModule/updateArticleField',
 });
 export default {
   name: "Article-edit",
   components: {VueEditor},
   data() {
     return {
-      content: "<h1>Initial Content</h1>",
       editorSettings: {
         modules: {
           imageDrop: true,
           imageResize: {}
         }
-      }
+      },
+      category:'/api/categories/4'
     }
   },
   computed: {
-    article() {
-      return this.$store.getters['ArticleModule/article'];
-    },
-    isLoading() {
-      return this.$store.getters['ArticleModule/isLoading'];
-    },
-    hasError() {
-      return this.$store.getters['ArticleModule/hasError'];
-    },
-    error() {
-      return this.$store.getters['ArticleModule/error'];
-    },
-    responseData() {
-      return this.$store.getters['ArticleModule/responseData'];
-    },
-    formErrors() {
-      return this.$store.getters["ArticleModule/formErrors"];
-    },
-    categories() {
+    categories(){
       return this.$store.getters["CategoryModule/getCategories"];
     },
-    tagsMod() {
+    tagsMod(){
       return this.$store.getters["TagModule/tags"];
     },
     ...mapFields([
       'title',
-      'contents',
+      'content',
       'tags',
       'category',
       'isPublished'

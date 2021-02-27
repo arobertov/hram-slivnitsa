@@ -22,7 +22,7 @@
                     <div class="form-group row"><label class="col-form-label col-sm-2"
                                                        for="article_content">Contents</label>
                         <div class="col-sm-10">
-                            <vue-editor :editorOptions="editorSettings" v-model="content" class="bg-white"></vue-editor>
+                            <vue-editor id="article_content" :editorOptions="editorSettings" v-model="content" class="bg-white"></vue-editor>
                         </div>
                     </div>
                     <div class="form-group row"><label class="col-form-label col-sm-2" for="article_images">Images</label>
@@ -119,7 +119,8 @@
             let store = this.$store;
             let result = store.dispatch("CategoryModule/findAllCategories");
             result.then(function (e) {
-                store.commit("ArticleModule/CREATING_ARTICLE",e[0].id);
+                let category = e['hydra:member'];
+                store.commit("ArticleModule/CREATING_ARTICLE",category.length>0?category[0]['@id']:null);
             })
         },
         methods: {

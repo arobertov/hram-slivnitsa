@@ -210,8 +210,6 @@ export default {
                 commit(FETCHING_ARTICLES_ERROR, error);
                 return null;
             }
-
-
         }
     }
 };
