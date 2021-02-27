@@ -3,10 +3,7 @@ import CategoryApi from "../api/category_api";
 export default {
     namespaced: true,
     state: {
-        category: {
-            id: '',
-            name: '',
-        },
+        category: {},
         categories:[]
     },
     getters: {
@@ -21,11 +18,8 @@ export default {
         }
     },
     mutations: {
-        updateCategoryId(state, categoryId) {
-            state.category.id = categoryId;
-        },
-        updateCategoryName(state, categoryName) {
-            state.category.name = categoryName;
+        updateCategory(state, category) {
+            state.category.id = category;
         },
         updateCategories(state,categories){
             state.categories = categories;
@@ -35,8 +29,7 @@ export default {
         async createCategory({commit},categoryFormData){
             try{
              let response = await CategoryApi.createCategory(categoryFormData);
-             commit('updateCategoryId',categoryFormData.id);
-             commit(' updateCategoryName',categoryFormData.name);
+             commit('updateCategory',categoryFormData);
              return response.data;
             } catch (e) {
                 return e;

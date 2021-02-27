@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import HomePage from "../views/homepage"
+import HomePage from "../views/Homepage"
 import AdminHome from "../views/admin-panel/Admin-home";
 import AdminArticleIndex from "../views/article/Article-index";
 import AdminArticleShow from "../views/article/Article-show";
@@ -17,7 +17,8 @@ export default new VueRouter({
         {
             path:"/",
             name:"homepage",
-            component:HomePage
+            component:HomePage,
+
         },
         {
             path: "/admin",

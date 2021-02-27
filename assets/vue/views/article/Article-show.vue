@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import ArticlePreview from "../../components/ArticlePreview";
+    import ArticlePreview from "../../components/admin-panel-components/ArticlePreview";
     export default {
         name: "Article-show",
         components:{

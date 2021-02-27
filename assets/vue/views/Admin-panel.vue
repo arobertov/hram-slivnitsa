@@ -44,14 +44,17 @@
             <li class="nav-item" >
               <a class="nav-link" href="#">
                 <span class="nav-icon"><b-icon-image></b-icon-image></span>
-                {{ appEl }}
+                Изображения
               </a>
             </li>
           </ul>
         </div>
       </nav>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <router-view/>
+        <div class="main-content">
+          <b-breadcrumb :items="items" @add-breadcrumbs="addBreads"></b-breadcrumb>
+          <router-view/>
+        </div>
       </main>
     </div>
   </div>
@@ -62,7 +65,15 @@
 export default {
   name: "Aside-nav",
   data(){
-    return {appEl: 'Изображения '}
+    return{
+      items:[]
+    }
+  },
+  methods:{
+    addBreads(items){
+      this.items=[...this.items,...items];
+      console.log(this.items);
+    }
   }
 }
 </script>

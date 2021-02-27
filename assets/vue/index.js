@@ -3,7 +3,7 @@ import router from './router/routes';
 import store from './store';
 import Common from './common-index';
 // ***** import components  ******** //
-import Homepage from "./views/homepage";
+import Homepage from "./views/Homepage";
 import LoginForm from "./views/security/LoginForm";
 import RegisterForm from "./views/security/RegisterForm";
 import Test from "./views/Test";

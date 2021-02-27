@@ -1,8 +1,5 @@
 <template>
     <div class="main-content">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2 caption-text">Създай статия</h1>
-        </div>
         <div v-if="error"  class="alert alert-danger">
             {{ error }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -68,6 +65,8 @@
     import { VueEditor , Quill} from "vue2-editor";
     import { ImageDrop } from "quill-image-drop-module";
     import ImageResize  from "quill-image-resize-module";
+    import AdminPageCaption from "../../components/admin-panel-components/Admin-page-caption";
+
 
     Quill.register('modules/imageDrop', ImageDrop);
     Quill.register('modules/imageResize', ImageResize);
@@ -79,9 +78,15 @@
 
     export default {
         name: "Article-new",
-        components: { VueEditor },
+        components: {
+          VueEditor,
+          AdminPageCaption
+        },
         data() {
             return {
+              items:[
+                { text:'Създай статия',to:{name:'admin_article_new'} }
+              ],
                 editorSettings: {
                     modules: {
                         imageDrop: true,
@@ -123,7 +128,10 @@
                 store.commit("ArticleModule/CREATING_ARTICLE",category.length>0?category[0]['@id']:null);
             })
         },
-        methods: {
+        mounted() {
+          this.$emit('add-breadcrumbs',this.items);
+        },
+      methods: {
             async createArticle(event) {
                 if (event) {
                     event.preventDefault()

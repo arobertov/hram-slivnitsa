@@ -1,8 +1,5 @@
 <template>
-    <div class="main-content">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2 caption-text">Главна страница</h1>
-    </div>
+    <div>
         <div class="row">
             <router-link :to="{ name:'admin_article_new' }" class="col-md-4 mb-3" tag="div">
                 <a href="#" class="btn bg-add-btn bg-sub-caption btn-lg btn-block btn-huge">

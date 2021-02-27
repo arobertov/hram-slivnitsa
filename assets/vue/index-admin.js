@@ -4,7 +4,7 @@ import store from './store';
 
 import Common from './common-index'
 // ***** import components  ******** //
-import Aside from './views/admin-panel';
+import Aside from './views/Admin-panel';
 
 Common.vueCommonSets();
 
