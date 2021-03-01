@@ -92,7 +92,7 @@ export default {
       let categories = this.$store.getters["CategoryModule/getCategories"]["hydra:member"];
       let options = [];
       categories.forEach(cat=>{
-        options.text = cat.name, options.value = cat['@id']
+        options.push({text:cat.name,value:cat['@id']});
       })
       return options;
     },
