@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import MainModule from "./main";
 import UserModule from "./user";
 import ArticleModule from "./article";
 import CategoryModule from "./category";
@@ -9,9 +10,10 @@ Vue.use(Vuex);
 
 export default  new Vuex.Store({
     modules:{
+        MainModule:MainModule,
         UserModule: UserModule,
         ArticleModule: ArticleModule,
         CategoryModule: CategoryModule,
-        TagModule: TagModule
+        TagModule: TagModule,
     }
 })

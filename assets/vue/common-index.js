@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import VeeValidate,{Validator} from 'vee-validate';
@@ -18,9 +17,6 @@ function vueCommonSets(){
         }
     });
 }
-
-
-
 
 export default {
     name: "Common-index",

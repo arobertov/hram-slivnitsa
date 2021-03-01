@@ -52,7 +52,7 @@
       </nav>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="main-content">
-          <b-breadcrumb :items="items" @add-breadcrumbs="addBreads"></b-breadcrumb>
+          <b-breadcrumb :items="items" ></b-breadcrumb>
           <router-view/>
         </div>
       </main>
@@ -64,15 +64,12 @@
 <script>
 export default {
   name: "Aside-nav",
-  data(){
-    return{
-      items:[]
-    }
+  created() {
+    this.$store.dispatch("MainModule/fetchingBreads",[{text:'Администраторски панел',to:{name:'admin_panel'}}]);
   },
-  methods:{
-    addBreads(items){
-      this.items=[...this.items,...items];
-      console.log(this.items);
+  computed:{
+    items(){
+      return this.$store.getters["MainModule/getItems"];
     }
   }
 }

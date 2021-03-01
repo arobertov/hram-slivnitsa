@@ -58,18 +58,22 @@
 </template>
 
 <script>
-import { createHelpers } from 'vuex-map-fields';
-import { VueEditor , Quill} from "vue2-editor";
-import { ImageDrop } from "quill-image-drop-module";
-import ImageResize  from "quill-image-resize-module";
+import {createHelpers} from 'vuex-map-fields';
+import {VueEditor, Quill} from "vue2-editor";
+import {ImageDrop} from "quill-image-drop-module";
+import ImageResize from "quill-image-resize-module";
 
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
 
-const { mapFields } = createHelpers({
+const {mapFields} = createHelpers({
   getterType: 'ArticleModule/getArticleField',
   mutationType: 'ArticleModule/updateArticleField',
 });
+const items = [
+  {text: 'Статии', to: {name: 'admin_article_index'}},
+  {text: 'Редактирай статия', to: {name: 'admin_article_edit'}}
+];
 export default {
   name: "Article-edit",
   components: {VueEditor},
@@ -81,14 +85,14 @@ export default {
           imageResize: {}
         }
       },
-      category:'/api/categories/4'
+      category: '/api/categories/4'
     }
   },
   computed: {
-    categories(){
+    categories() {
       return this.$store.getters["CategoryModule/getCategories"];
     },
-    tagsMod(){
+    tagsMod() {
       return this.$store.getters["TagModule/tags"];
     },
     ...mapFields([
@@ -101,12 +105,19 @@ export default {
   },
   created() {
     let store = this.$store;
-    const data = store.dispatch('ArticleModule/findArticle', this.$route.params.id), tags = [];
+    const data = store.dispatch('ArticleModule/findArticle', this.$route.params.id),
+          tags = [];
     store.dispatch("CategoryModule/findAllCategories");
     data.then(function (d) {
       d.tags.forEach(e => tags.push(e.id));
       store.commit('ArticleModule/EDITING_ARTICLE', tags);
-    });
+    })
+  },
+  mounted() {
+    this.$store.commit("MainModule/ATTACH_BREADS", items)
+  },
+  destroyed() {
+    this.$store.commit("MainModule/DETACH_BREADS", items);
   },
   methods: {
     async editArticle(event) {

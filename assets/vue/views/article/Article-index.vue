@@ -1,8 +1,5 @@
 <template>
     <div class="main-content">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2 caption-text">Всички статии</h1>
-        </div>
         <div v-if="isLoading" class="alert alert-info">
             Зареждане на статий ...
         </div>
@@ -117,6 +114,7 @@
 </template>
 
 <script>
+const items = [{text:'Статии',to:{name:'admin_article_index'}}];
     export default {
         name: "Article-index",
         data(){
@@ -188,7 +186,11 @@
             if(this.$store.getters["ArticleModule/articles"].length <= 1){
                  this.$store.dispatch("ArticleModule/findAll");
             }
-    },
+            this.$store.commit("MainModule/ATTACH_BREADS",items)
+        },
+        destroyed() {
+          this.$store.commit("MainModule/DETACH_BREADS",items);
+        },
         methods:{
             async deleteArticle(articleId){
                 const result = await this.$store.dispatch("ArticleModule/deleteArticle",articleId);
