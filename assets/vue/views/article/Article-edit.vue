@@ -35,9 +35,8 @@
           </div>
           <b-form-select
               v-model="category"
-              :options="categories['hydra:member']"
+              :options="categories"
           >
-
           </b-form-select>
 
           <div class="form-group row">
@@ -90,7 +89,12 @@ export default {
   },
   computed: {
     categories() {
-      return this.$store.getters["CategoryModule/getCategories"];
+      let categories = this.$store.getters["CategoryModule/getCategories"]["hydra:member"];
+      let options = [];
+      categories.forEach(cat=>{
+        options.text = cat.name, options.value = cat['@id']
+      })
+      return options;
     },
     tagsMod() {
       return this.$store.getters["TagModule/tags"];
