@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: {
         category: {},
-        categories:[]
+        categories:null
     },
     getters: {
         getCategoryId(state) {
@@ -14,7 +14,14 @@ export default {
             return state.name;
         },
         getCategories(state){
-            return state.categories;
+            let options = [];
+            if(Array.isArray(state.categories)){
+                state.categories.forEach(cat=>{
+                    options.push({text:cat.name,value:cat['@id']});
+                })
+            }
+            return options;
+            //return state.categories;
         }
     },
     mutations: {
@@ -38,8 +45,8 @@ export default {
         async findAllCategories({commit}){
             try{
                 let response = await CategoryApi.findAllCategories();
-                commit('updateCategories', response.data);
-                return response.data;
+                commit('updateCategories', response.data['hydra:member']);
+                return response.data['hydra:member'];
             } catch (e) {
                 return e;
             }

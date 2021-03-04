@@ -1,18 +1,29 @@
 import TagApi from '../api/tag_api';
-
+const HYDRA_MEMBER = "hydra:member";
 export default {
     namespaced: true,
     state: {
-        tags : [
-            {id:1,name:"Tag1"},
-            {id:2,name:"Tag2"},
-            {id:3,name:"Tag3"},
-            {id:4,name:"Tag4"},
-        ]
+        tags :[]
     },
     getters:{
-        tags(state){
+        getTags(state){
             return state.tags;
+        }
+    },
+    mutations:{
+        updateTags(state,tags){
+            state.tags = tags;
+        }
+    },
+    actions:{
+        async findAllTags({commit}){
+            try{
+                let response = await TagApi.findAll();
+                commit('updateTags',response.data[HYDRA_MEMBER]);
+                return response.data[HYDRA_MEMBER];
+            }catch (e) {
+                return e;
+            }
         }
     }
 }

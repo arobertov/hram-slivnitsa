@@ -6,7 +6,7 @@
     </div>
 
     <div class="container-sm ">
-      <form name="article" method="put">
+      <form name="article">
         <div id="article">
           <div class="form-group row">
             <label class="col-form-label col-sm-2" for="article_title">Title</label>
@@ -16,7 +16,7 @@
           <div class="form-group row"><label class="col-form-label col-sm-2"
                                              for="article_contents">Contents</label>
             <div class="col-sm-10">
-              <vue-editor :editorOptions="editorSettings" v-model="content"
+              <vue-editor :editorOptions="editorSettings" v-model="content" id="article_contents"
                           class="bg-white"></vue-editor>
             </div>
           </div>
