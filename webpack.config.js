@@ -14,13 +14,10 @@ Encore
             Quill: "quill/dist/quill.js"
         })
     )
-    .configureDevServerOptions(options => {
-        options.firewall = false;
-    })
     /*
     .configureDevServerOptions(options=>{
        options.https={
-           cert:'AngelRobertov/.symfony/certs/default.p12'
+           cert:'/.symfony/certs/default.p12'
            // encore dev-server --https --pfx=%UserProfile%\.symfony\certs\default.p12
         }
     })

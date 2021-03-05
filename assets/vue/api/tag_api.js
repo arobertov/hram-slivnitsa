@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export default {
-    create(tagFormData){
+    create(tagName){
         return axios.post('/api/tags',{
-            name : tagFormData.name
+            name : tagName
         })
     },
     findAll(){
