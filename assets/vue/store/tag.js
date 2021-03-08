@@ -9,7 +9,11 @@ export default {
             name:'',
             description:'',
             iri:''
-        }
+        },
+        isError: false,
+        isSuccess:false,
+        successMessage:'',
+        error: ''
     },
     getters:{
         getTags(state){
@@ -17,14 +21,40 @@ export default {
         },
         getTag(state){
             return state.tag;
+        },
+        getIsSuccess(state){
+            return state.isSuccess;
+        },
+        getSuccessMessage(state){
+            return state.successMessage;
+        },
+        getIsError(state) {
+            return state.isError;
+        },
+        getError(state) {
+            return state.error;
         }
     },
     mutations:{
         updateTags(state,tags){
             state.tags = tags;
+            state.isError = false;
+        },
+        createTag(state,tag){
+            state.tag = tag;
+            state.isError = false;
+            state.isSuccess = true;
+            state.successMessage = 'Успешно създадохте етикет '+state.tag.name+' !';
         },
         updateTag(state,tag){
             state.tag = tag;
+            state.isError = false;
+            state.isSuccess = true;
+            state.successMessage = 'Успешно редактирахте етикет '+state.tag.name+' !';
+        },
+        setError(state,error){
+            state.isError = true;
+            state.error = error;
         }
     },
     actions:{
@@ -32,10 +62,15 @@ export default {
             try {
                 let response = await TagApi.create(tagName);
                 const tag = response.data;
-                commit('updateTag',tag);
+                commit('createTag',tag);
                 return tag;
             }catch (e) {
-                return e;
+                let error = e.response.data;
+                if(error.hasOwnProperty('violations')){
+                    error = error.violations[0]['message'];
+                }
+                commit('setError',error);
+                return error
             }
         },
         async findAllTags({commit}){

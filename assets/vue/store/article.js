@@ -30,7 +30,7 @@ export default {
             id: undefined ,
             title: '',
             content: '',
-            tags: [],
+            article_tags_iri: [],
             category: '',
             isPublished:undefined,
         },
@@ -69,9 +69,12 @@ export default {
         updateArticleField(state, field) {
             updateField(state.article, field);
         },
+        attachTagsForArticle(state,article_tags_iri){
+            state.article.article_tags_iri = article_tags_iri;
+        },
         [CREATING_ARTICLE](state,catId){
             state.article = {};
-            state.article.tags = [];
+            state.article.article_tags_iri = [];
             state.article.category = catId;
             state.article.isPublished = undefined;
             state.isLoading = false;
