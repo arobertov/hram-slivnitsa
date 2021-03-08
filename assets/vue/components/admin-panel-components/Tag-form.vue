@@ -28,17 +28,18 @@
             <b-button @click="on_create_tag({inputAttrs,addTag})" variant="outline-success">Създай Етикет !</b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-alert
+        <b-alert class="small"
             :show="isError"
             variant="danger"
-            class="small"
         >
           {{error}}
         </b-alert>
         <b-alert class="small"
-            :show="isSuccess"
+            :show="dismissCountDown"
             variant="success"
-            fade
+            dismissible
+                 @dismiss-count-down="countDownChanged"
+                 fade
         >
           {{successMessage}}
         </b-alert>
@@ -48,7 +49,10 @@
             :key="option.name"
             :id="option['@id']"
             @click="on_option_click({option, addTag})"
-        >{{option.name}}</b-dropdown-item-button>
+        >
+          {{option.name}}
+          <span @click="inputHandlers"><b-icon icon="trash-fill" aria-hidden="true"></b-icon></span>
+        </b-dropdown-item-button>
         <b-dropdown-text v-if="available_options.length === 0">
           Няма създадени етикети ! Добавете от полето по-долу !
         </b-dropdown-text>
@@ -56,7 +60,6 @@
     </template>
   </b-form-tags>
 </template>
-
 <script>
 
 export default {
@@ -65,6 +68,8 @@ export default {
     return{
       tag_value_3: [],
       search: '',
+      dismissCountDown: 0,
+      dismissSecs:5
     }
   },
   computed:{
@@ -122,9 +127,16 @@ export default {
       const result = await this.$store.dispatch("TagModule/createTag",inputAttrs.value);
       if(result !== null){
         addTag(this.tag.name);
+        if(this.isSuccess) this.showAlert();
         this.attach_article_tags(this.tag.name);
       }else (alert("Неуспешно създаване на етикет !!! Опитайте пак !"));
     },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs
+    }
   }
 
 }

@@ -37,9 +37,6 @@ export default {
         responseData:'',
     },
     getters: {
-        getResponseData(state){
-            return state.responseData;
-        },
         getArticleField(state){
             return getField(state.article)
         },
