@@ -57,7 +57,7 @@
           </b-button-group>
         </b-dropdown-item-button>
         <b-dropdown-text v-if="available_options.length === 0">
-          Няма създадени етикети ! Добавете от полето по-долу !
+          Няма създадени етикети ! Добавете от полето по-горе !
         </b-dropdown-text>
       </b-dropdown>
     </template>
@@ -101,7 +101,8 @@ export default {
       return this.search.trim().toLowerCase();
     },
     available_options () {
-      return this.tags;
+      return [];
+      //return this.tags;
     },
     searchDesc () {
       if (this.criteria && this.available_options.length === 0) {

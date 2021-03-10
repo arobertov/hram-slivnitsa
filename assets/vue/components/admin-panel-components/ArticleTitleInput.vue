@@ -3,7 +3,6 @@
       label="Заглавие на статия:"
       label-for="article_title"
       description="Заглавието трябва да бъде с дължина от 3 до 50 символа !"
-      class="col-sm-6"
   >
     <b-form-input
         id="article_title"

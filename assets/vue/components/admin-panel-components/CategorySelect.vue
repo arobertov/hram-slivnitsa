@@ -1,17 +1,25 @@
 <template>
-  <b-form-group
-      label="Категория на статията"
-      label-for="article_category"
-      class="col-sm-6"
-  >
-    <b-form-select
-        id="article_category"
-        v-bind:value="value"
-        v-on:input="$emit('input', $event)"
-        :options="categories"
+<div class="row">
+  <div class="col-md-8">
+    <b-form-group
+        v-if="categories"
+        label="Категория на статията"
+        label-for="article_category"
     >
-    </b-form-select>
-  </b-form-group>
+      <b-form-select
+          id="article_category"
+          v-bind:value="value"
+          v-on:input="$emit('input', $event)"
+          :options="categories"
+      >
+      </b-form-select>
+    </b-form-group>
+  </div>
+  <div class="col-md-4">
+    <b-button>Създай категория<b-icon icon="plus-square"></b-icon></b-button>
+  </div>
+</div>
+
 </template>
 
 <script>
@@ -20,6 +28,7 @@ export default {
   props:['value'],
   computed:{
     categories() {
+      //return null;
       return this.$store.getters["CategoryModule/getCategories"];
     },
   }

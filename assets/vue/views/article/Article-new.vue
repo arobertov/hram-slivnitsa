@@ -6,13 +6,9 @@
 
     <div class="container-sm ">
       <b-form>
-        <div class="row">
-          <article-title-input v-model="title" />
-          <category-select v-model="category" />
-        </div>
-        <div>
-          <tag-form/>
-        </div>
+        <article-title-input v-model="title" />
+        <category-select v-model="category" />
+        <tag-form/>
         <b-form-group
           label="Текст на статия:"
           label-for="article_content"
