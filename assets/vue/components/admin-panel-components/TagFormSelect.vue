@@ -50,8 +50,11 @@
             :id="option['@id']"
             @click="on_option_click({option, addTag})"
         >
-          {{option.name}}
-          <span @click="inputHandlers"><b-icon icon="trash-fill" aria-hidden="true"></b-icon></span>
+          <b-button-group class="small w-100">
+            <b-button variant="success">{{option.name}}</b-button>
+            <b-button variant="outline-primary"><b-icon icon="pencil-square"></b-icon></b-button>
+            <b-button variant="outline-danger"><b-icon icon="trash-fill" aria-hidden="true"></b-icon></b-button>
+          </b-button-group>
         </b-dropdown-item-button>
         <b-dropdown-text v-if="available_options.length === 0">
           Няма създадени етикети ! Добавете от полето по-долу !
@@ -126,7 +129,9 @@ export default {
     async on_create_tag({inputAttrs,addTag}){
       const result = await this.$store.dispatch("TagModule/createTag",inputAttrs.value);
       if(result !== null){
+        this.tags.unshift(this.tag);
         addTag(this.tag.name);
+        this.$store.commit("TagModule/updateTags",this.tags);
         if(this.isSuccess) this.showAlert();
         this.attach_article_tags(this.tag.name);
       }else (alert("Неуспешно създаване на етикет !!! Опитайте пак !"));
