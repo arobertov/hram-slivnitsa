@@ -9,19 +9,7 @@
         <article-title-input v-model="title" />
         <category-select v-model="category" />
         <tag-form/>
-        <b-form-group
-          label="Текст на статия:"
-          label-for="article_content"
-        >
-          <vue-editor
-              id="article_content"
-              :editorOptions="editorSettings"
-              v-model="content"
-              class="bg-white"
-              placeholder="Въведете текст на статия..."
-          >
-          </vue-editor>
-        </b-form-group>
+        <article-content-input v-model="content" />
       </b-form>
     </div>
   </div>
@@ -29,16 +17,11 @@
 
 <script>
 import {createHelpers} from 'vuex-map-fields';
-import {VueEditor, Quill} from "vue2-editor";
-import {ImageDrop} from "quill-image-drop-module";
-import ImageResize from "quill-image-resize-module";
+/*---------- import components -----------------*/
 import ArticleTitleInput from "../../components/admin-panel-components/ArticleTitleInput";
+import ArticleContentInput from "../../components/admin-panel-components/ArticleContentInput";
 import TagForm from "../../components/admin-panel-components/TagFormSelect";
 import CategorySelect from "../../components/admin-panel-components/CategorySelect";
-
-
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
 
 const {mapFields} = createHelpers({
   getterType: 'ArticleModule/getArticleField',
@@ -53,17 +36,7 @@ const items = [
 export default {
   name: "Article-new",
   components: {
-    VueEditor,ArticleTitleInput,CategorySelect,TagForm
-  },
-  data() {
-    return {
-      editorSettings: {
-        modules: {
-          imageDrop: true,
-          imageResize: {}
-        }
-      }
-    }
+    ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput
   },
   computed: {
     responseData() {
@@ -84,7 +57,9 @@ export default {
     let result = store.dispatch("CategoryModule/findAllCategories");
     let tags = store.dispatch("TagModule/findAllTags");
     result.then(function (e) {
-      store.commit("ArticleModule/CREATING_ARTICLE", e.length > 0 ? e[0]['@id'] : null);
+      if(e.length>0){
+        store.commit("ArticleModule/CREATING_ARTICLE", e[0].hasOwnProperty('@id') ? e[0]['@id'] : undefined);
+      }
       store.commit("MainModule/ATTACH_BREADS", items);
     })
   },
@@ -100,7 +75,13 @@ export default {
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }
-    }
+    },
+    async createCategory(){
+      const response = await this.$store.dispatch("CategoryModule/createCategory",this.category.name);
+      if(response!==null){
+
+      }
+    },
   }
 };
 

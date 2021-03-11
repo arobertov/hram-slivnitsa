@@ -26,20 +26,20 @@ export default {
     },
     mutations: {
         updateCategory(state, category) {
-            state.category.id = category;
+            state.category = category;
         },
         updateCategories(state,categories){
             state.categories = categories;
         }
     },
     actions:{
-        async createCategory({commit},categoryFormData){
+        async createCategory({commit},categoryName){
             try{
-             let response = await CategoryApi.createCategory(categoryFormData);
-             commit('updateCategory',categoryFormData);
+             let response = await CategoryApi.createCategory(categoryName);
+             commit('updateCategory',response.data);
              return response.data;
             } catch (e) {
-                return e;
+                return null;
             }
         },
         async findAllCategories({commit}){

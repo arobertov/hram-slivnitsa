@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export default {
-    createCategory(categoryFormData) {
+    createCategory(categoryName) {
         return axios.post("/api/categories", {
-            form_data: categoryFormData
+            name: categoryName
         });
     },
     findAllCategories() {
