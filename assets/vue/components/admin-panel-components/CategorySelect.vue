@@ -7,6 +7,7 @@
     ><b-form-select
           id="article_category"
           v-bind:value="value"
+          v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="categories"
       >
@@ -16,14 +17,21 @@
               v-if="categories.length===0"
               disabled
           >
-            --- Няма създадени категории --- Създайте от бутона  ---
+            - Няма създадени категории - Създайте от бутона  --->
+          </b-form-select-option>
+          <b-form-select-option
+              value=""
+              v-else-if="categories.length>0"
+              disabled
+          >
+            -- Изберете категория --
           </b-form-select-option>
         </template>
       </b-form-select>
     </b-form-group>
   </div>
   <div class="col-sm-3 m-0">
-    <category-input-modal @get-category-name="updateCategory"/>
+    <category-input-modal />
   </div>
 </div>
 </template>
@@ -45,9 +53,17 @@ export default {
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
     },
-    updateCategory(e){
-      this.categoryName = e.value;
+    getCategory(){
+      return undefined;
     }
+  },
+  created() {
+    let result = this.$store.dispatch("CategoryModule/findAllCategories");
+    result.then(function (e) {
+      if(e.length>0&&this.getCategory()!==undefined){
+        this.$store.commit("ArticleModule/CREATING_ARTICLE", e[0].hasOwnProperty('@id') ? e[0]['@id'] : undefined);
+      }
+    })
   }
 }
 </script>

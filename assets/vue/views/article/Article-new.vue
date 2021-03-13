@@ -54,14 +54,9 @@ export default {
   },
   created() {
     let store = this.$store;
-    let result = store.dispatch("CategoryModule/findAllCategories");
+
     let tags = store.dispatch("TagModule/findAllTags");
-    result.then(function (e) {
-      if(e.length>0){
-        store.commit("ArticleModule/CREATING_ARTICLE", e[0].hasOwnProperty('@id') ? e[0]['@id'] : undefined);
-      }
-      store.commit("MainModule/ATTACH_BREADS", items);
-    })
+    store.commit("MainModule/ATTACH_BREADS", items);
   },
   destroyed() {
     this.$store.commit("MainModule/DETACH_BREADS",items);

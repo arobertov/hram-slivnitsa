@@ -45,6 +45,13 @@ export default {
     }
   },
   methods: {
+    async createCategory(){
+      let result = await this.$store.dispatch("CategoryModule/createCategory",this.category.name);
+      if(result!==null){
+        await this.$store.dispatch("CategoryModule/findAllCategories");
+        this.$store.commit("ArticleModule/CREATING_ARTICLE",result['@id']);
+      }
+    },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
       this.categoryState = valid
@@ -67,7 +74,7 @@ export default {
       }
       // Push the name to submitted names
       this.submittedCategories.push(this.category.name);
-      this.$emit('get-category-name',this.category.name)
+      this.createCategory();
       // Hide the modal manually
       this.$nextTick(() => {
         this.$bvModal.hide('category-modal')

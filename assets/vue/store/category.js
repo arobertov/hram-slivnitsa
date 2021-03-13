@@ -4,7 +4,9 @@ export default {
     namespaced: true,
     state: {
         category: {},
-        categories:null
+        categories:null,
+        isError:false,
+        error:null
     },
     getters: {
         getCategoryId(state) {
@@ -30,6 +32,10 @@ export default {
         },
         updateCategories(state,categories){
             state.categories = categories;
+        },
+        setError(state,error){
+            state.isError = true;
+            state.error = error;
         }
     },
     actions:{
@@ -39,6 +45,11 @@ export default {
              commit('updateCategory',response.data);
              return response.data;
             } catch (e) {
+                let error = e.response.data;
+                if(error.hasOwnProperty('violations')){
+                    error = error.violations[0]['message'];
+                }
+                commit('setError',error);
                 return null;
             }
         },

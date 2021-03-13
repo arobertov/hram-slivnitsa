@@ -101,8 +101,8 @@ export default {
       return this.search.trim().toLowerCase();
     },
     available_options () {
-      return [];
-      //return this.tags;
+      //return [];
+      return this.tags;
     },
     searchDesc () {
       if (this.criteria && this.available_options.length === 0) {
