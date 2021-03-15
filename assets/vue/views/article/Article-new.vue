@@ -54,7 +54,6 @@ export default {
   },
   created() {
     let store = this.$store;
-
     let tags = store.dispatch("TagModule/findAllTags");
     store.commit("MainModule/ATTACH_BREADS", items);
   },

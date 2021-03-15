@@ -1,6 +1,18 @@
 <template>
 <div class="row">
   <div class="col-sm-9 m-0">
+    <div class="alerts">
+      <b-alert class="small"
+               v-if="isSuccess"
+               :show="dismissCountDown"
+               variant="success"
+               dismissible
+               @dismiss-count-down="countDownChanged"
+               fade
+      >
+        {{successMessage}}
+      </b-alert>
+    </div>
     <b-form-group
         label="Категория на статията"
         label-for="article_category"
@@ -42,7 +54,9 @@ export default {
   name: "CategorySelect",
   data(){
     return{
-      categoryName:''
+      categoryName:'',
+      dismissCountDown: 0,
+      dismissSecs:5
     }
   },
   components:{
@@ -55,7 +69,15 @@ export default {
     },
     getCategory(){
       return undefined;
-    }
+    },
+    isSuccess(){
+      const success = this.$store.getters["CategoryModule/getIsSuccess"];
+      if (success) this.showSuccessAlert();
+      return success ;
+    },
+    successMessage(){
+      return this.$store.getters["CategoryModule/getSuccessMessage"];
+    },
   },
   created() {
     let result = this.$store.dispatch("CategoryModule/findAllCategories");
@@ -64,6 +86,18 @@ export default {
         this.$store.commit("ArticleModule/CREATING_ARTICLE", e[0].hasOwnProperty('@id') ? e[0]['@id'] : undefined);
       }
     })
+  },
+  methods:{
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+      if(dismissCountDown===0){
+         this.$store.commit("CategoryModule/CREATION_SUCCESSFUL");
+      }
+    },
+    showSuccessAlert() {
+      this.dismissCountDown = this.dismissSecs;
+
+      }
   }
 }
 </script>

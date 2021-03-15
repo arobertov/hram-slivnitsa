@@ -44,18 +44,37 @@
           {{successMessage}}
         </b-alert>
         <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item-button
-            v-for="option in available_options"
-            :key="option.name"
-            :id="option['@id']"
-            @click="on_option_click({option, addTag})"
-        >
-          <b-button-group class="small w-100">
-            <b-button variant="success">{{option.name}}</b-button>
-            <b-button variant="outline-primary"><b-icon icon="pencil-square"></b-icon></b-button>
-            <b-button variant="outline-danger"><b-icon icon="trash-fill" aria-hidden="true"></b-icon></b-button>
-          </b-button-group>
-        </b-dropdown-item-button>
+        <table class="table table-borderless table-hover table-sm">
+          <tbody>
+          <tr
+              v-for="option in available_options"
+              :key="option.name"
+          >
+            <td class="w-80">
+              <b-button
+                  class="w-100"
+                  v-b-popover.hover="'Добави етикет !'"
+                  :id="option['@id']"
+                  variant="success"
+                  size="sm"
+                  @click="on_option_click({option, addTag})">
+                {{option.name}}
+              </b-button>
+            </td>
+            <td class="float-right">
+              <b-button size="sm"  v-b-popover.hover="'Редактирай етикет !'">
+                <b-icon icon="pen-fill"></b-icon>
+              </b-button>
+            </td>
+            <td>
+              <b-button size="sm" variant="danger" v-b-popover.hover="'Изтрий етикет !'">
+                <b-icon icon="trash-fill"></b-icon>
+              </b-button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
         <b-dropdown-text v-if="available_options.length === 0">
           Няма създадени етикети ! Добавете от полето по-горе !
         </b-dropdown-text>

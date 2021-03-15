@@ -1,4 +1,5 @@
 import CategoryApi from "../api/category_api";
+import * as mutation from "./mutation-type";
 
 export default {
     namespaced: true,
@@ -6,7 +7,9 @@ export default {
         category: {},
         categories:null,
         isError:false,
-        error:null
+        isSuccess:false,
+        successMessage:'',
+        error:'',
     },
     getters: {
         getCategoryId(state) {
@@ -24,16 +27,45 @@ export default {
             }
             return options;
             //return state.categories;
+        },
+        getIsSuccess(state){
+            return state.isSuccess;
+        },
+        getSuccessMessage(state){
+            return state.successMessage;
+        },
+        getIsError(state){
+            return state.isError;
+        },
+        getError(state){
+            return state.error;
         }
     },
     mutations: {
-        updateCategory(state, category) {
+        [mutation.CREATING](state,category){
             state.category = category;
+            state.isError = false;
+            state.isSuccess = true;
+            state.successMessage = 'Категорията '+state.category.name+' е създадена !';
         },
-        updateCategories(state,categories){
+        [mutation.CREATION_SUCCESSFUL](state){
+            state.isError = false;
+            state.isSuccess = false;
+            state.successMessage = ''
+        },
+        [mutation.UPDATING](state, category) {
+            state.category = category;
+            state.isError = false;
+            state.isSuccess = true;
+            state.successMessage = 'Категорията '+state.category.name+' е редактирана успешно !';
+        },
+        [mutation.UPDATING_ITEMS](state,categories){
             state.categories = categories;
+            state.isError = false;
+            state.isSuccess = false;
+            state.successMessage = ''
         },
-        setError(state,error){
+       [mutation.SET_ERROR](state,error){
             state.isError = true;
             state.error = error;
         }
@@ -42,21 +74,21 @@ export default {
         async createCategory({commit},categoryName){
             try{
              let response = await CategoryApi.createCategory(categoryName);
-             commit('updateCategory',response.data);
+             commit(mutation.CREATING,response.data);
              return response.data;
             } catch (e) {
                 let error = e.response.data;
                 if(error.hasOwnProperty('violations')){
                     error = error.violations[0]['message'];
                 }
-                commit('setError',error);
+                commit(mutation.SET_ERROR,error);
                 return null;
             }
         },
         async findAllCategories({commit}){
             try{
                 let response = await CategoryApi.findAllCategories();
-                commit('updateCategories', response.data['hydra:member']);
+                commit(mutation.UPDATING_ITEMS, response.data['hydra:member']);
                 return response.data['hydra:member'];
             } catch (e) {
                 return e;

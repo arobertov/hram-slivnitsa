@@ -12,6 +12,14 @@
         @hidden="resetModal"
         @ok="handleOk"
     >
+      <div class="alerts">
+        <b-alert class="small"
+                 :show="isError"
+                 variant="danger"
+        >
+          {{error}}
+        </b-alert>
+      </div>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
             label="Име на категория :"
@@ -27,6 +35,14 @@
           ></b-form-input>
         </b-form-group>
       </form>
+      <template #modal-footer="{ ok, cancel, hide }">
+        <b-button variant="info" @click="cancel()">
+          <b-icon icon="x-circle"></b-icon> Затвори
+        </b-button>
+        <b-button variant="success" @click="ok()">
+          <b-icon icon="plus-circle"></b-icon> Добави
+        </b-button>
+      </template>
     </b-modal>
   </div>
 
@@ -41,16 +57,29 @@ export default {
         name:''
       } ,
       categoryState: null,
-      submittedCategories: []
+      submittedCategories: [],
+    }
+  },
+  computed:{
+    isError(){
+      return this.$store.getters["CategoryModule/getIsError"];
+    },
+    error(){
+      return this.$store.getters["CategoryModule/getError"];
     }
   },
   methods: {
     async createCategory(){
-      let result = await this.$store.dispatch("CategoryModule/createCategory",this.category.name);
+      const store = this.$store;
+      let result = await store.dispatch("CategoryModule/createCategory",this.category.name);
       if(result!==null){
-        await this.$store.dispatch("CategoryModule/findAllCategories");
-        this.$store.commit("ArticleModule/CREATING_ARTICLE",result['@id']);
+        await store.dispatch("CategoryModule/findAllCategories");
+        await store.commit("ArticleModule/CREATING_ARTICLE",result['@id']);
+        this.$nextTick(() => {
+          this.$bvModal.hide('category-modal')
+        })
       }
+
     },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
@@ -75,11 +104,7 @@ export default {
       // Push the name to submitted names
       this.submittedCategories.push(this.category.name);
       this.createCategory();
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide('category-modal')
-      })
-    }
+    },
   }
 }
 </script>
