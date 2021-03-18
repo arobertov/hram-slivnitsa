@@ -47,7 +47,7 @@
         <table class="table table-borderless table-hover table-sm">
           <tbody>
           <tr
-              v-for="option in available_options"
+              v-for="option in available_options" v-if="option.show"
               :key="option.name"
           >
             <td class="w-80">
@@ -107,8 +107,13 @@ export default {
     error(){
       return this.$store.getters["TagModule/getError"];
     },
-    article_tags_iri(){
-      return this.$store.getters["ArticleModule/article"].article_tags_iri;
+    article_tags_iri:{
+      get:function(){
+        return this.$store.getters["ArticleModule/article"].article_tags_iri;
+      },
+      set:function (v){
+
+      }
     },
     tags(){
       return this.$store.getters["TagModule/getTags"];
@@ -131,30 +136,45 @@ export default {
     },
   },
   methods:{
-    attach_article_tags(name){
-      this.tags.forEach(t=>{if(t.name===name&&!this.article_tags_iri.includes(t["@id"])){this.article_tags_iri.push(t["@id"])}});
+    attach_article_tags({option, addTag}){
+      let name = option.name;
+      addTag(name);
+      this.tags.forEach(t=>{
+        if(t.name===name&&!this.article_tags_iri.includes(t["@id"]))
+        {
+          this.article_tags_iri.push(t["@id"])
+        }
+        if(t.id===option.id){
+          t.show = false;
+        }
+      });
       this.$store.commit('ArticleModule/attachTagsForArticle',this.article_tags_iri)
     },
     detach_article_tags({tag,removeTag}){
+      // tag -> tag.name;
       const removedTag = this.tags.filter(t=>t.name===tag);
       this.article_tags_iri = this.article_tags_iri.filter(ta=>ta!==removedTag[0]["@id"]);
+      this.tags.forEach(t=>{
+        if(t.name===tag){
+          t.show = true;
+        }
+      })
       removeTag(tag);
       this.$store.commit('ArticleModule/attachTagsForArticle',this.article_tags_iri)
     },
     on_option_click({option, addTag}) {
-      let name = option.name;
-      addTag(name);
-      this.attach_article_tags(name);
+      this.attach_article_tags({option,addTag});
     },
+
     async on_create_tag({inputAttrs,addTag}){
       const result = await this.$store.dispatch("TagModule/createTag",inputAttrs.value);
       if(result !== null){
         this.tags.unshift(this.tag);
-        addTag(this.tag.name);
+        let option = this.tag;
+        this.attach_article_tags({option,addTag});
         this.$store.commit("TagModule/updateTags",this.tags);
         if(this.isSuccess) this.showAlert();
-        this.attach_article_tags(this.tag.name);
-      }else (alert("Неуспешно създаване на етикет !!! Опитайте пак !"));
+      }
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown

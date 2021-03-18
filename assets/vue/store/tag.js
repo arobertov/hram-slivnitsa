@@ -8,7 +8,8 @@ export default {
             id:'',
             name:'',
             description:'',
-            iri:''
+            iri:'',
+            show: true
         },
         isError: false,
         isSuccess:false,
@@ -37,6 +38,7 @@ export default {
     },
     mutations:{
         updateTags(state,tags){
+            tags.forEach(t=>t.show=true);
             state.tags = tags;
             state.isError = false;
         },
@@ -70,7 +72,7 @@ export default {
                     error = error.violations[0]['message'];
                 }
                 commit('setError',error);
-                return error
+                return null
             }
         },
         async findAllTags({commit}){
