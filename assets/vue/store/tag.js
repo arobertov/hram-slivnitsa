@@ -54,6 +54,10 @@ export default {
             state.isSuccess = true;
             state.successMessage = 'Успешно редактирахте етикет '+state.tag.name+' !';
         },
+        deleteTag(state,tag){
+            state.isSuccess = true;
+            state.successMessage = 'Успешно изтрихте етикет '+tag.name+' !';
+        },
         setError(state,error){
             state.isError = true;
             state.error = error;
@@ -73,6 +77,17 @@ export default {
                 }
                 commit('setError',error);
                 return null
+            }
+        },
+        async deleteTag({commit},tag){
+            try {
+                let response = await  TagApi.delete(tag["@id"]);
+                commit('deleteTag',tag);
+                return response;
+            }catch(e){
+                let error = e.response.data;
+                console.log(error);
+                return null;
             }
         },
         async findAllTags({commit}){

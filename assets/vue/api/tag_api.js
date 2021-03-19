@@ -17,8 +17,8 @@ export default {
             name : tagFormData.name
         })
     },
-    delete(tagId){
-        return axios.delete("/api/tags/"+tagId);
+    delete(tagIri){
+        return axios.delete(tagIri);
     },
 
 }
