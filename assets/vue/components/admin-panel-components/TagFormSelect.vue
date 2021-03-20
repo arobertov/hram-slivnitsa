@@ -74,7 +74,7 @@
       </template>
     </b-form-tags>
     <b-modal
-        ref="success-tag-modal"
+        ref="success-create-tag-modal"
         title="Потвърждение !"
         size="lg"
         buttonSize="sm"
@@ -191,30 +191,36 @@ export default {
             alert(err);
           })
     },
+    showMsgBox(){
+      this.$bvModal.msgBoxOk(this.isSuccess?this.successMessage:this.isError?this.error['hydra:description']:'',{
+        id:'delete_info_modal',
+        bodyBgVariant:this.isError?'danger':'success',
+        bodyTextVariant:'light',
+        okVariant:this.isError?'danger':'success',
+        okTitle:'Добре',
+        title: this.isError?this.error['hydra:title']:this.isSuccess?'Успех !':'',
+
+      })
+    },
     async on_create_tag({inputAttrs,addTag}){
       const result = await this.$store.dispatch("TagModule/createTag",inputAttrs.value);
       if(result !== null){
         this.tags.unshift(this.tag);
         let option = this.tag;
         this.attach_article_tags({option,addTag});
-        this.$store.commit("TagModule/updateTags",this.tags);
+       // this.$store.commit("TagModule/updateTags",this.tags);
         if(this.isSuccess) {
-          this.$refs['success-create-tag-modal'].show();
-          setTimeout(()=>{this.$refs['success-create-tag-modal'].hide()},3000)
+          this.showMsgBox();
+          setTimeout(()=>{this.$bvModal.hide('delete_info_modal')},3000)
         }
       }
     },
     async on_delete_tag(tag){
-      const result = await this.$store.dispatch("TagModule/deleteTag",tag)
+      const result = await this.$store.dispatch("TagModule/deleteTag",tag);
+      this.showMsgBox();
       if(result!==null){
-        this.tags.filter(t=>tag.name!==t.name);
-        this.$bvModal.msgBoxOk('Успешно изтрихте етикет : '+tag.name+' !')
-            .then(value => {
-
-            })
-            .catch(err => {
-              // An error occurred
-            })
+        this.$store.commit("TagModule/updateTags",this.tags.filter(t=>tag.name!==t.name));
+        setTimeout(()=>{this.$bvModal.hide('delete_info_modal')},3000)
       }
     }
   }

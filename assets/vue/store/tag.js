@@ -41,6 +41,7 @@ export default {
             tags.forEach(t=>t.show=true);
             state.tags = tags;
             state.isError = false;
+            state.isSuccess = false;
         },
         createTag(state,tag){
             state.tag = tag;
@@ -59,6 +60,8 @@ export default {
             state.successMessage = 'Успешно изтрихте етикет '+tag.name+' !';
         },
         setError(state,error){
+            state.isSuccess = false;
+            state.successMessage = '';
             state.isError = true;
             state.error = error;
         }
@@ -85,9 +88,13 @@ export default {
                 commit('deleteTag',tag);
                 return response;
             }catch(e){
+                console.log(e);
                 let error = e.response.data;
-                console.log(error);
-                return null;
+                if(error.hasOwnProperty('violations')){
+                    error = error.violations[0]['message'];
+                }
+                commit('setError',error);
+                return null
             }
         },
         async findAllTags({commit}){
