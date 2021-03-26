@@ -35,17 +35,17 @@
                         <b-button squared @click="deleteModal(data.item.id)">Изтрий</b-button>
                     </b-button-group>
                 </template>
-                <template v-slot:cell(dateEdit)="data">
+                <template v-slot:cell(dateEdited)="data">
                     {{data.item.dateEdited | formatDate}}
                 </template>
                 <template v-slot:cell(owner)="data">
-                    {{data.item.owner.alias}}
+                  <span v-if="data.item.owner">{{data.item.owner.alias}}</span>
                 </template>
                 <template v-slot:cell(category)="data">
                     {{data.item.category.name}}
                 </template>
                 <template v-slot:cell(tags)="data">
-                    <div v-for="tag in data.item.tags">{{tag.name}}</div>
+                    <div v-for="tag in data.item.tags">{{tag}}</div>
                 </template>
                 <template v-slot:cell(isPublished)="data">
                     {{data.item.isPublished ? 'Публикувана':'Непубикувана'}}
@@ -133,7 +133,7 @@ const items = [{text:'Статии',to:{name:'admin_article_index'}}];
                         sortable: true,
                     },
                     {
-                        key:'dateEdit',
+                        key:'dateEdited',
                         label:'Последна редакция',
                         sortable:true
                     },

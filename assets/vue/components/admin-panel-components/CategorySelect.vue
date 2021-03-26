@@ -67,8 +67,8 @@ export default {
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
     },
-    getCategory(){
-      return undefined;
+    category(){
+      return this.$store.getters["CategoryModule/getCategory"];
     },
     isSuccess(){
       const success = this.$store.getters["CategoryModule/getIsSuccess"];
@@ -78,14 +78,6 @@ export default {
     successMessage(){
       return this.$store.getters["CategoryModule/getSuccessMessage"];
     },
-  },
-  created() {
-    let result = this.$store.dispatch("CategoryModule/findAllCategories");
-    result.then(function (e) {
-      if(e.length>0&&this.getCategory()!==undefined){
-        this.$store.commit("ArticleModule/CREATING_ARTICLE", e[0].hasOwnProperty('@id') ? e[0]['@id'] : undefined);
-      }
-    })
   },
   methods:{
     countDownChanged(dismissCountDown) {

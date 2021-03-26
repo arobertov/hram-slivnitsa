@@ -32,7 +32,7 @@ export default {
             content: '',
             article_tags_iri: [],
             category: '',
-            isPublished:undefined,
+            isPublished:true,
         },
         responseData:'',
     },
@@ -69,11 +69,15 @@ export default {
         attachTagsForArticle(state,article_tags_iri){
             state.article.article_tags_iri = article_tags_iri;
         },
-        [CREATING_ARTICLE](state,catId){
-            state.article = {};
-            state.article.article_tags_iri = [];
-            state.article.category = catId;
-            state.article.isPublished = undefined;
+        [CREATING_ARTICLE](state){
+            state.article = {
+                id: undefined ,
+                title: '',
+                content: '',
+                article_tags_iri: [],
+                category: '',
+                isPublished:true,
+            };
             state.isLoading = false;
             state.error = null;
         },

@@ -191,6 +191,7 @@ export default {
             alert(err);
           })
     },
+    // ----- Success & error message modal ----- //
     showMsgBox(){
       this.$bvModal.msgBoxOk(this.isSuccess?this.successMessage:this.isError?this.error['hydra:description']:'',{
         id:'delete_info_modal',

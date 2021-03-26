@@ -12,7 +12,7 @@
         </div>
         <div>
             <span>Автор</span>
-            {{article.owner.alias}}
+
         </div>
         <div>
             {{article.dateCreated | formatDate}}

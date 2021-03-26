@@ -4,7 +4,7 @@ import * as mutation from "./mutation-type";
 export default {
     namespaced: true,
     state: {
-        category: {},
+        category:null,
         categories:null,
         isError:false,
         isSuccess:false,
@@ -12,6 +12,9 @@ export default {
         error:'',
     },
     getters: {
+        getCategory(state){
+            return state.category;
+        },
         getCategoryId(state) {
             return state.id;
         },
@@ -91,7 +94,7 @@ export default {
                 commit(mutation.UPDATING_ITEMS, response.data['hydra:member']);
                 return response.data['hydra:member'];
             } catch (e) {
-                return e;
+                return null;
             }
         }
 

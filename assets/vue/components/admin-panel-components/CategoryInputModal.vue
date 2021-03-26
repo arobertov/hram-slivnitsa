@@ -74,7 +74,8 @@ export default {
       let result = await store.dispatch("CategoryModule/createCategory",this.category.name);
       if(result!==null){
         await store.dispatch("CategoryModule/findAllCategories");
-        await store.commit("ArticleModule/CREATING_ARTICLE",result['@id']);
+        store.state.ArticleModule.article.category = result['@id'];
+        //await store.commit("ArticleModule/CREATING_ARTICLE",result['@id']);
         this.$nextTick(() => {
           this.$bvModal.hide('category-modal')
         })

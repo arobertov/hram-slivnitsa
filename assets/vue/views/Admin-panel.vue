@@ -65,6 +65,8 @@
 export default {
   name: "Aside-nav",
   created() {
+    this.$store.dispatch("CategoryModule/findAllCategories");
+
     this.$store.dispatch("MainModule/fetchingBreads",[{text:'Администраторски панел',to:{name:'admin_panel'}}]);
   },
   computed:{

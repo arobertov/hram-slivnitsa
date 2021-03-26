@@ -10,6 +10,9 @@
         <category-select v-model="category" />
         <tag-form/>
         <article-content-input v-model="content" />
+        <b-button variant="info">Прегледай </b-button>
+        <b-button variant="success" @click="createArticle">Публикувай !</b-button>
+        <b-alert show>Default Alert</b-alert>
       </b-form>
     </div>
   </div>
@@ -56,6 +59,7 @@ export default {
     let store = this.$store;
     let tags = store.dispatch("TagModule/findAllTags");
     store.commit("MainModule/ATTACH_BREADS", items);
+    store.commit("ArticleModule/CREATING_ARTICLE");
   },
   destroyed() {
     this.$store.commit("MainModule/DETACH_BREADS",items);
