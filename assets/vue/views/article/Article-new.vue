@@ -10,7 +10,7 @@
         <category-select v-model="category" />
         <tag-form/>
         <article-content-input v-model="content" />
-        <b-button variant="info">Прегледай </b-button>
+        <b-button id="check-article-btn" variant="info" @click="createArticle">Прегледай !</b-button>
         <b-button variant="success" @click="createArticle">Публикувай !</b-button>
         <b-alert show>Default Alert</b-alert>
       </b-form>
@@ -66,10 +66,14 @@ export default {
   },
   methods: {
     async createArticle(event) {
+      let article = this.$store.state.ArticleModule.article;
       if (event) {
         event.preventDefault()
       }
-      const result = await this.$store.dispatch("ArticleModule/create", this.$store.state.ArticleModule.article);
+      if(event.target.id==="check-article-btn"){
+        article.isPublished = false;
+      }
+      const result = await this.$store.dispatch("ArticleModule/create",article );
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }

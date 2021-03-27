@@ -1,22 +1,17 @@
 import axios from "axios";
 
-let fields = function mapArticleFields(articleFormData){
-    return{
-        title:articleFormData.title,
-        content:articleFormData.content,
-        isPublished:articleFormData.isPublished,
-        tags:articleFormData.article_tags_iri,
-        category:articleFormData.category
-    }
-}
-
 export default {
-
     create(articleFormData) {
-        return axios.post("/api/articles", fields(articleFormData));
+        return axios.post("/api/articles",{
+            title:articleFormData.title,
+            content:articleFormData.content,
+            isPublished:articleFormData.isPublished,
+            tags:articleFormData.article_tags_iri,
+            category:articleFormData.category
+        });
     },
-    edit(articleId,articleFormData){
-        return axios.put("/api/articles/"+articleId,{
+    edit(articleFormData){
+        return axios.put("/api/articles/"+articleFormData.id, {
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,

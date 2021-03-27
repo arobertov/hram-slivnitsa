@@ -179,9 +179,9 @@ export default {
                 return null;
             }
         },
-        async edit({commit},articleData){
+        async edit({commit},articleFormData){
             try {
-                let response = await ArticleAPI.edit(articleData.articleId,articleData.articleFormData);
+                let response = await ArticleAPI.edit(articleFormData);
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
                 return response.data;
             } catch (error) {

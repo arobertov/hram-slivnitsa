@@ -15,12 +15,6 @@ export default {
         getCategory(state){
             return state.category;
         },
-        getCategoryId(state) {
-            return state.id;
-        },
-        getCategoryName(state) {
-            return state.name;
-        },
         getCategories(state){
             let options = [];
             if(Array.isArray(state.categories)){

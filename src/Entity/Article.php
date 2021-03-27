@@ -21,7 +21,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     itemOperations={
  *          "get"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
- *          "put"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
+ *          "put"={
+ *                  "security"="is_granted('EDIT',object)",
+ *                  "security_message"="Нямате необходимите права да редактирате статия."
+ *          },
  *          "patch"={"security"="is_granted('EDIT',object)","security_message"="Нямате необходимите права да редактирате статия."},
  *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате статия."}
  *     }

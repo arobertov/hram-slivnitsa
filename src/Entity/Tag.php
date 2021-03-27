@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Tag
 {
     /**
-     * @Groups({"tag:read"})
+     * @Groups({"tag:read","article:read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -38,7 +38,7 @@ class Tag
     private $id;
 
     /**
-     * @Groups({"tag:read","tag:write"})
+     * @Groups({"tag:read","tag:write","article:read"})
      * @ORM\Column(type="string", length=255,unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(
@@ -51,7 +51,7 @@ class Tag
     private $name;
 
     /**
-     * @Groups({"tag:read","tag:write"})
+     * @Groups({"tag:read","tag:write","article:read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;

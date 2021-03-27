@@ -45,7 +45,7 @@
                     {{data.item.category.name}}
                 </template>
                 <template v-slot:cell(tags)="data">
-                    <div v-for="tag in data.item.tags">{{tag}}</div>
+                    <div v-for="tag in data.item.tags">{{tag.name}}</div>
                 </template>
                 <template v-slot:cell(isPublished)="data">
                     {{data.item.isPublished ? 'Публикувана':'Непубикувана'}}
@@ -65,51 +65,7 @@
                   ></b-pagination>
                 </div>
             </div>
-
-            <!---
-            <div class="container-md bg-white">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Заглавие</th>
-                        <th scope="col">Дата</th>
-                        <th scope="col">Автор</th>
-                        <th scope="col">Категория</th>
-                        <th scope="col">Етикети</th>
-                        <th scope="col">Статус</th>
-                    </tr>
-                    </thead>
-                    <tr v-for="article in paginated('art_index')">
-                            <td>{{article.id}}</td>
-                            <td>
-                                <div>{{article.title}}</div>
-                                <div>|
-                                    <router-link :to="{name:'admin_article_show',params:{id:article.id}}" tag="a" >Прегледай</router-link>
-                                    |
-                                    <router-link :to="{name:'admin_article_edit',params:{id:article.id}}" tag="a">Редактирай</router-link>
-                                    |
-                                    <router-link :to="{name:'admin_article_delete',params:{id:article.id}}" tag="a">Изтрий</router-link>
-                                    |
-                                </div>
-                            </td>
-                            <td>{{article.dateCreated | formatDate }}</td>
-                            <td>{{article.author  }}</td>
-                            <td>
-                                <span v-if="article.category">{{article.category.name}}</span>
-                            </td>
-                            <td>
-                                <div v-for="tag in article.tags">
-                                    {{tag.name}}
-                                </div>
-                            </td>
-                            <td>{{article.isPublished ? 'Публикувана':'Непубикувана'}}</td>
-                        </tr>
-                </table>
-            </div>
-            --->
         </div>
-
     </div>
 </template>
 

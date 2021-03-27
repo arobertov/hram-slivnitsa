@@ -29,7 +29,10 @@
         </div>
         <div>
             <span v-if="article.isPublished">Публикувана</span>
-            <span v-else>Непубикувана</span>
+            <div v-else>
+              <span>Непубикувана</span>
+              <span><b-button variant="success" @click="setIsPublished">Публикувай !</b-button></span>
+            </div>
         </div>
     </div>
 </template>
@@ -41,7 +44,21 @@
             article: {
                 type: Object
             }
-        }
+        },
+      methods:{
+          async setIsPublished(){
+            let article = this.article;
+            article.isPublished = true;
+            article.category = article.category["@id"];
+            let tagsIri = [];
+            article.tags.forEach(tag=> tagsIri.push(tag["@id"]));
+            article.tags = tagsIri;
+            const result = await this.$store.dispatch("ArticleModule/edit",article);
+            if(result!==null){
+              console.log("success");
+            }
+          }
+      }
     }
 </script>
 
