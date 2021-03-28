@@ -78,12 +78,6 @@ export default {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }
     },
-    async createCategory(){
-      const response = await this.$store.dispatch("CategoryModule/createCategory",this.category.name);
-      if(response!==null){
-
-      }
-    },
   }
 };
 

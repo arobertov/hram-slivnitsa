@@ -23,7 +23,6 @@ export default {
                 })
             }
             return options;
-            //return state.categories;
         },
         getIsSuccess(state){
             return state.isSuccess;

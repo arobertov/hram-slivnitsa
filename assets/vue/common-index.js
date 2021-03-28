@@ -8,7 +8,7 @@ function vueCommonSets(){
     Vue.use(BootstrapVue);
     Vue.use(IconsPlugin);
     Vue.use(VuePaginate);
-    Vue.use(VeeValidate);
+    Vue.use(VeeValidate,{fieldsBagName: 'veeFields'});
     Validator.localize("bg",bg);
     //--------------  datetime filer  --------------------- //
     Vue.filter('formatDate', function (value) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-tags v-model="tag_value_3" no-outer-focus class="mb-2">
+    <b-form-tags  v-model="tag_value_3" no-outer-focus class="mb-2">
       <template v-slot="{tag, disabled,inputAttrs, inputHandlers, tagVariant, addTag, removeTag}">
 
         <ul v-if="tag_value_3.length > 0" class="list-inline d-inline-block mb-2">
@@ -26,15 +26,22 @@
                 class="form-control"
             ></b-form-input>
             <b-input-group-append>
-              <b-button @click="on_create_tag({inputAttrs,addTag})" variant="outline-success">Създай Етикет !</b-button>
+              <b-button @click="on_create_tag({inputAttrs,addTag})" variant="outline-success">
+                Създай Етикет !
+              </b-button>
             </b-input-group-append>
           </b-input-group>
-          <b-alert class="small"
-                   :show="isError"
-                   variant="danger"
-          >
-            {{error}}
-          </b-alert>
+          <div v-if="isLoading">
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-button class="w-100" variant="info"><b-spinner small></b-spinner>   <--- Извличане на етикети ! ---></b-button>
+            <b-alert class="small"
+                     :show="isError"
+                     variant="danger"
+            >
+              {{error}}
+            </b-alert>
+          </div>
+
           <b-dropdown-divider></b-dropdown-divider>
           <table class="table table-borderless table-hover table-sm">
             <tbody>
@@ -100,6 +107,9 @@ export default {
     }
   },
   computed:{
+    isLoading(){
+      return this.$store.getters["TagModule/getIsLoading"];
+    },
     isSuccess(){
       return this.$store.getters["TagModule/getIsSuccess"];
     },
