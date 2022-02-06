@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      normalizationContext={"groups"={"article:read"}},
+ *     normalizationContext={"groups"={"article:read"}},
  *     denormalizationContext={"groups"={"article:write"}},
  *      collectionOperations={
  *           "get",
@@ -137,13 +137,13 @@ class Article
 
     public function getIsPublished(): bool
     {
-        if ($this->isPublished===null){
+        if ($this->isPublished === null) {
             return false;
         }
         return $this->isPublished;
     }
 
-    public function setIsPublished(bool $isPublished=false): self
+    public function setIsPublished(bool $isPublished = false): self
     {
         $this->isPublished = $isPublished;
 
