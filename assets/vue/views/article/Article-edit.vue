@@ -1,57 +1,17 @@
 <template>
   <div class="main-content">
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2 caption-text">Редактирай статия</h1>
-    </div>
-
+    <b-alert show dismissible variant="danger" v-if="error">
+      {{error}}
+    </b-alert>
     <div class="container-sm ">
-      <form name="article">
-        <div id="article">
-          <div class="form-group row">
-            <label class="col-form-label col-sm-2" for="article_title">Title</label>
-            <div class="col-sm-10"><input v-model="title" type="text" id="article_title"
-                                          name="article[title]" class="form-control"></div>
-          </div>
-          <div class="form-group row"><label class="col-form-label col-sm-2"
-                                             for="article_contents">Contents</label>
-            <div class="col-sm-10">
-              <vue-editor :editorOptions="editorSettings" v-model="content" id="article_contents"
-                          class="bg-white"></vue-editor>
-            </div>
-          </div>
-          <div class="form-group row"><label class="col-form-label col-sm-2"
-                                             for="article_images">Images</label>
-            <div class="col-sm-10"><select id="article_images" name="article[images][]" class="form-control"
-                                           multiple="multiple"></select></div>
-          </div>
-          <div class="form-group row"><label class="col-form-label col-sm-2" for="article_tags">Tags</label>
-            <div class="col-sm-10">
-              <select v-model="tags" id="article_tags" name="article[tags][]" class="form-control"
-                      multiple>
-                <option v-for="t in tagsMod" v-bind:value="t.id">{{ t.name }}</option>
-              </select>
-            </div>
-          </div>
-          <b-form-select
-              v-model="category"
-              :options="categories"
-          >
-          </b-form-select>
-
-          <div class="form-group row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-10">
-              <div class="form-check"><input v-model="isPublished" type="checkbox"
-                                             id="article_isPublished"
-                                             name="article[isPublished]" class="form-check-input"
-                                             value="1">
-                <label class="form-check-label" for="article_isPublished">Is published</label></div>
-            </div>
-          </div>
-          <button class="btn btn-success" @click="editArticle($event)">Редактирай</button>
-        </div>
-      </form>
+      <b-form>
+        <article-title-input v-model="title" />
+        <category-select v-model="category" />
+        <tag-form/>
+        <article-content-input v-model="content" />
+        <b-button id="check-article-btn" variant="info" @click="editArticle">Прегледай</b-button>
+        <b-button variant="success" @click="editArticle">Редактирай</b-button>
+      </b-form>
     </div>
   </div>
 </template>
@@ -61,6 +21,10 @@ import {createHelpers} from 'vuex-map-fields';
 import {VueEditor, Quill} from "vue2-editor";
 import {ImageDrop} from "quill-image-drop-module";
 import ImageResize from "quill-image-resize-module";
+import ArticleTitleInput from "../../components/admin-panel-components/ArticleTitleInput";
+import CategorySelect from "../../components/admin-panel-components/CategorySelect";
+import TagForm from "../../components/admin-panel-components/TagFormSelect";
+import ArticleContentInput from "../../components/admin-panel-components/ArticleContentInput";
 
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
@@ -75,7 +39,9 @@ const items = [
 ];
 export default {
   name: "Article-edit",
-  components: {VueEditor},
+  components: {
+      ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput
+    },
   data() {
     return {
       editorSettings: {
@@ -84,17 +50,12 @@ export default {
           imageResize: {}
         }
       },
-      category: '/api/categories/4'
+
     }
   },
   computed: {
-    categories() {
-      let categories = this.$store.getters["CategoryModule/getCategories"]["hydra:member"];
-      let options = [];
-      categories.forEach(cat=>{
-        options.push({text:cat.name,value:cat['@id']});
-      })
-      return options;
+    error() {
+      return this.$store.getters["ArticleModule/error"];
     },
     tagsMod() {
       return this.$store.getters["TagModule/tags"];
@@ -116,6 +77,10 @@ export default {
       d.tags.forEach(e => tags.push(e.id));
       store.commit('ArticleModule/EDITING_ARTICLE', tags);
     })
+    this.$store.commit("ArticleModule/FETCHING_ARTICLES");
+    if(this.$store.getters["ArticleModule/articles"].length <= 1){
+      this.$store.dispatch("ArticleModule/findAll");
+    }
   },
   mounted() {
     this.$store.commit("MainModule/ATTACH_BREADS", items)
@@ -128,13 +93,10 @@ export default {
       if (event) {
         event.preventDefault()
       }
-      const articleData = {
-        articleId: this.$route.params.id,
-        articleFormData: this.$store.state.ArticleModule.article
-      };
-      const articleId = await this.$store.dispatch("ArticleModule/edit", articleData);
-      if (articleId !== null) {
-        await this.$router.push({name: "admin_article_show", params: {"id": articleId}});
+      let article = this.$store.state.ArticleModule.article;
+      const result = await this.$store.dispatch("ArticleModule/edit",article );
+      if (result !== null) {
+        await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
         this.updateSuccessModal();
       }
     },

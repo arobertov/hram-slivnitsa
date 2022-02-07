@@ -10,9 +10,8 @@
         <category-select v-model="category" />
         <tag-form/>
         <article-content-input v-model="content" />
-        <b-button id="check-article-btn" variant="info" @click="createArticle">Прегледай !</b-button>
-        <b-button variant="success" @click="createArticle">Публикувай !</b-button>
-        <b-alert show>Default Alert</b-alert>
+        <b-button id="check-article-btn" variant="info" @click="createArticle">Прегледай</b-button>
+        <b-button variant="success" @click="createArticle">Публикувай</b-button>
       </b-form>
     </div>
   </div>

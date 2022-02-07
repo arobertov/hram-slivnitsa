@@ -101,17 +101,17 @@ export default {
            state.article.tags = tags;
 
         },
-        [EDITING_ARTICLE_SUCCESS](state,articleId){
-            state.articles.forEach(function (e) {
-                if(e.id === articleId){
-                    state.articles.splice(e,1,state.article);
+        [EDITING_ARTICLE_SUCCESS](state,article){
+            state.articles['hydra:member'].forEach(function (e) {
+                if(e.id === article.id){
+                    state.articles['hydra:member'].splice(e,1,state.article);
                 }
             })
         },
-        [DELETING_ARTICLE](state,articleId){
-            state.articles.forEach(function (e) {
-                if(e.id===articleId){
-                    state.articles.splice(e,1);
+        [DELETING_ARTICLE](state,article){
+            state.articles['hydra:member'].forEach(function (e) {
+                if(e.id===article.id){
+                    state.articles['hydra:member'].splice(e,1);
                 }
             });
         },
@@ -185,12 +185,7 @@ export default {
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
                 return response.data;
             } catch (error) {
-                let errorData = error.response.data;
-                if(errorData.hasOwnProperty('title') || errorData.hasOwnProperty('contents')){
-                    commit(FETCHING_FORM_ERRORS,errorData);
-                } else {
-                    commit(CREATING_ARTICLE_ERROR, errorData);
-                }
+                commit(FETCHING_ARTICLES_ERROR,error);
                 return null;
             }
         },

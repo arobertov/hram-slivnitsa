@@ -19,7 +19,7 @@
     ><b-form-select
           id="article_category"
           v-bind:value="value"
-          v-bind:selected="true"
+          v-bind:selected="value"
           v-on:input="$emit('input', $event)"
           :options="categories"
       >
