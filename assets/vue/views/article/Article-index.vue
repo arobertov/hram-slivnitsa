@@ -1,13 +1,11 @@
 <template>
     <div class="main-content">
+        <div v-if="hasError" class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
         <div v-if="isLoading" class="alert alert-info">
             Зареждане на статий ...
         </div>
-
-        <div v-else-if="hasError" class="alert alert-danger" role="alert">
-            {{ error }}
-        </div>
-
         <div v-else-if="!hasArticles" class="row col">
             Няма публикувана статия !
         </div>

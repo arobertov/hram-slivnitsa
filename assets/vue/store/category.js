@@ -1,6 +1,7 @@
 import CategoryApi from "../api/category_api";
 import * as mutation from "./mutation-type";
 
+
 export default {
     namespaced: true,
     state: {
@@ -12,9 +13,6 @@ export default {
         error:'',
     },
     getters: {
-        getCategory(state){
-            return state.category;
-        },
         getCategories(state){
             let options = [];
             if(Array.isArray(state.categories)){

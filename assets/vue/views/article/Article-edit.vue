@@ -70,14 +70,14 @@ export default {
   },
   created() {
     let store = this.$store;
-    const data = store.dispatch('ArticleModule/findArticle', this.$route.params.id),
+    const data = store.dispatch('ArticleModule/loadEditingArticle', this.$route.params.id),
           tags = [];
-    store.dispatch("CategoryModule/findAllCategories");
+    //store.dispatch("CategoryModule/findAllCategories");
     data.then(function (d) {
       d.tags.forEach(e => tags.push(e.id));
       store.commit('ArticleModule/EDITING_ARTICLE', tags);
     })
-    this.$store.commit("ArticleModule/FETCHING_ARTICLES");
+    //this.$store.commit("ArticleModule/FETCHING_ARTICLES");
     if(this.$store.getters["ArticleModule/articles"].length <= 1){
       this.$store.dispatch("ArticleModule/findAll");
     }

@@ -15,8 +15,8 @@ export default {
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
-            tags:articleFormData.tags,
-            category:articleFormData.category.id
+            tags:articleFormData.article_tags_iri,
+            category:articleFormData.category
         })
     },
     show(articleId){

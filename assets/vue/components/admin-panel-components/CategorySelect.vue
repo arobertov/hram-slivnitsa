@@ -19,7 +19,7 @@
     ><b-form-select
           id="article_category"
           v-bind:value="value"
-          v-bind:selected="value"
+          v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="categories"
       >
@@ -50,6 +50,7 @@
 
 <script>
 import CategoryInputModal from "./CategoryInputModal";
+
 export default {
   name: "CategorySelect",
   data(){
@@ -66,9 +67,6 @@ export default {
   computed:{
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
-    },
-    category(){
-      return this.$store.getters["CategoryModule/getCategory"];
     },
     isSuccess(){
       const success = this.$store.getters["CategoryModule/getIsSuccess"];
@@ -88,7 +86,6 @@ export default {
     },
     showSuccessAlert() {
       this.dismissCountDown = this.dismissSecs;
-
       }
   }
 }

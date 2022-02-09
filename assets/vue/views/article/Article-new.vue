@@ -56,7 +56,10 @@ export default {
   },
   created() {
     let store = this.$store;
-    let tags = store.dispatch("TagModule/findAllTags");
+    if(store.getters["ArticleModule/articles"].length <= 1){
+      store.dispatch("ArticleModule/findAll");
+    }
+    store.dispatch("TagModule/findAllTags");
     store.commit("MainModule/ATTACH_BREADS", items);
     store.commit("ArticleModule/CREATING_ARTICLE");
   },
@@ -72,7 +75,7 @@ export default {
       if(event.target.id==="check-article-btn"){
         article.isPublished = false;
       }
-      const result = await this.$store.dispatch("ArticleModule/create",article );
+      const result = await this.$store.dispatch("ArticleModule/create",article);
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }

@@ -86,7 +86,7 @@ export default {
             state.error = null;
             state.responseData = data;
             if(data !== null) state.article = data;
-            state.articles.unshift(state.article);
+            state.articles['hydra:member'].unshift(state.article);
         },
         [CREATING_ARTICLE_ERROR](state, error) {
             state.isLoading = false;
@@ -108,10 +108,12 @@ export default {
                 }
             })
         },
-        [DELETING_ARTICLE](state,article){
-            state.articles['hydra:member'].forEach(function (e) {
-                if(e.id===article.id){
-                    state.articles['hydra:member'].splice(e,1);
+        [DELETING_ARTICLE](state,articleId){
+            let articles = state.articles['hydra:member'];
+            articles.forEach(function (e) {
+                console.log(articleId);
+                if(e.id===articleId){
+                    articles.splice(e,1);
                 }
             });
         },
@@ -159,12 +161,31 @@ export default {
                 commit(CREATING_ARTICLE_SUCCESS, response.data);
                 return response.data;
             } catch (error) {
+                commit(CREATING_ARTICLE_ERROR,error);
+                /*
                 let errorData = error.response.data;
                 if(errorData.hasOwnProperty('title') || errorData.hasOwnProperty('contents')){
                     commit(FETCHING_FORM_ERRORS,errorData);
                 } else {
-                    commit(CREATING_ARTICLE_ERROR, errorData);
+                    commit(CREATING_ARTICLE_ERROR,error);
                 }
+                 */
+                return null;
+            }
+        },
+        /*
+        *** load article for editing process
+         */
+        async loadEditingArticle({commit},articleId){
+            commit(FETCHING_ARTICLE);
+            try{
+                let response = await ArticleAPI.show(articleId);
+                commit(FETCHING_ARTICLE_SUCCESS,response.data);
+                //--- fetching only category IRI ------ //
+                response.data.category = response.data.category['@id'];
+                return response.data;
+            }catch (error) {
+                commit(FETCHING_ARTICLE_ERROR,error);
                 return null;
             }
         },
