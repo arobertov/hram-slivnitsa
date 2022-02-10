@@ -63,7 +63,6 @@ export default {
     ...mapFields([
       'title',
       'content',
-      'tags',
       'category',
       'isPublished'
     ]),
@@ -72,9 +71,8 @@ export default {
     let store = this.$store;
     const data = store.dispatch('ArticleModule/loadEditingArticle', this.$route.params.id),
           tags = [];
-    //store.dispatch("CategoryModule/findAllCategories");
     data.then(function (d) {
-      d.tags.forEach(e => tags.push(e.id));
+      d.tags.forEach(e => tags.push(e.name));
       store.commit('ArticleModule/EDITING_ARTICLE', tags);
     })
     //this.$store.commit("ArticleModule/FETCHING_ARTICLES");

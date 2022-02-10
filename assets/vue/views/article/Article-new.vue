@@ -59,7 +59,7 @@ export default {
     if(store.getters["ArticleModule/articles"].length <= 1){
       store.dispatch("ArticleModule/findAll");
     }
-    store.dispatch("TagModule/findAllTags");
+    //store.dispatch("TagModule/findAllTags");
     store.commit("MainModule/ATTACH_BREADS", items);
     store.commit("ArticleModule/CREATING_ARTICLE");
   },

@@ -101,12 +101,14 @@ export default {
   name: "Tag-form",
   data(){
     return{
-      tag_value_3: [],
       search: '',
       hasDeleteTag:false
     }
   },
   computed:{
+    tag_value_3(){
+      return this.$store.getters["ArticleModule/getTagsArticle"];
+    },
     isLoading(){
       return this.$store.getters["TagModule/getIsLoading"];
     },
@@ -149,6 +151,10 @@ export default {
       }
       return ''
     },
+  },
+  mounted() {
+    console.log('mounted here');
+    this.$store.dispatch("TagModule/findAllTags");
   },
   methods:{
     attach_article_tags({option, addTag}){

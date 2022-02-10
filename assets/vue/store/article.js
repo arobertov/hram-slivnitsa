@@ -60,6 +60,9 @@ export default {
         },
         article(state){
             return state.article;
+        },
+        getTagsArticle(state){
+            return state.article.tags
         }
     },
     mutations: {
