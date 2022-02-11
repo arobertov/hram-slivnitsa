@@ -71,10 +71,12 @@ export default {
     let store = this.$store;
     const data = store.dispatch('ArticleModule/loadEditingArticle', this.$route.params.id),
           tags = [];
+    /*
     data.then(function (d) {
       d.tags.forEach(e => tags.push(e.name));
       store.commit('ArticleModule/EDITING_ARTICLE', tags);
     })
+     */
     //this.$store.commit("ArticleModule/FETCHING_ARTICLES");
     if(this.$store.getters["ArticleModule/articles"].length <= 1){
       this.$store.dispatch("ArticleModule/findAll");

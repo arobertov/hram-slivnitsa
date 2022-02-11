@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     article() {
-      return this.$store.getters['ArticleModule/article'];
+      return this.$store.getters['ArticleModule/getArticle'];
     },
     isLoading() {
       return this.$store.getters['ArticleModule/isLoading'];
@@ -48,7 +48,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('ArticleModule/findArticle', this.$route.params.id);
+    this.$store.dispatch('ArticleModule/loadReadingArticle', this.$route.params.id);
     this.$store.commit("MainModule/ATTACH_BREADS", items);
   },
   destroyed() {

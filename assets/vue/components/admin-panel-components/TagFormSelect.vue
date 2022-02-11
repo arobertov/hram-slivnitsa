@@ -1,22 +1,27 @@
 <template>
   <div>
-    <b-form-tags  v-model="tag_value_3" no-outer-focus class="mb-2">
-      <template v-slot="{tag, disabled,inputAttrs, inputHandlers, tagVariant, addTag, removeTag}">
-
-        <ul v-if="tag_value_3.length > 0" class="list-inline d-inline-block mb-2">
-          <li v-for="tag in tag_value_3" :key="tag" class="list-inline-item">
+    <b-form-tags v-model="tags" no-outer-focus add-on-change class="mb-2">
+      <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
+        <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+          <!------- render tag ------------->
+          <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
                 @remove="detach_article_tags({tag,removeTag})"
                 :title="tag"
                 :disabled="disabled"
                 variant="info"
-            >{{tag}}</b-form-tag>
+            >
+              {{ tag }}
+            </b-form-tag>
           </li>
+          <!------- render tag ------------->
         </ul>
         <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
           <template v-slot:button-content>
-            <b-icon icon="tag-fill"></b-icon> Изберете Етикети
+            <b-icon icon="tag-fill"></b-icon>
+            Изберете Етикети
           </template>
+          <!--------- create tags form field ---------------->
           <b-input-group prepend="Създай етикет:" class="mt-3">
             <b-form-input
                 id="add-tag-input"
@@ -24,21 +29,26 @@
                 v-on="inputHandlers"
                 placeholder="Създайте и добавете нов етикет !"
                 class="form-control"
-            ></b-form-input>
+            >
+            </b-form-input>
             <b-input-group-append>
               <b-button @click="on_create_tag({inputAttrs,addTag})" variant="outline-success">
                 Създай Етикет !
               </b-button>
             </b-input-group-append>
           </b-input-group>
+          <!------- end create tag form field --------------->
           <div v-if="isLoading">
             <b-dropdown-divider></b-dropdown-divider>
-            <b-button class="w-100" variant="info"><b-spinner small></b-spinner>   <--- Извличане на етикети ! ---></b-button>
+            <b-button class="w-100" variant="info">
+              <b-spinner small></b-spinner>
+              <--- Извличане на етикети ! --->
+            </b-button>
             <b-alert class="small"
                      :show="isError"
                      variant="danger"
             >
-              {{error}}
+              {{ error }}
             </b-alert>
           </div>
 
@@ -56,17 +66,19 @@
                     :id="option['@id']"
                     variant="success"
                     size="sm"
-                    @click="on_option_click({option, addTag})">
-                  {{option.name}}
+                    @click="attach_article_tags({option,addTag})"
+                >
+                  {{ option.name }}
                 </b-button>
               </td>
               <td class="float-right">
-                <b-button size="sm"  v-b-popover.hover="'Редактирай етикет !'">
+                <b-button size="sm" v-b-popover.hover="'Редактирай етикет !'">
                   <b-icon icon="pen-fill"></b-icon>
                 </b-button>
               </td>
               <td>
-                <b-button size="sm" variant="danger" v-b-popover.hover="'Изтрий етикет !'" @click="on_confirm_delete_modal(option)">
+                <b-button size="sm" variant="danger" v-b-popover.hover="'Изтрий етикет !'"
+                          @click="on_confirm_delete_modal(option)">
                   <b-icon icon="trash-fill"></b-icon>
                 </b-button>
               </td>
@@ -90,7 +102,7 @@
         footerClass="p-2 border-top-0"
         centered
     >
-      {{successMessage}}
+      {{ successMessage }}
     </b-modal>
   </div>
 
@@ -99,53 +111,68 @@
 
 export default {
   name: "Tag-form",
-  data(){
-    return{
+  data() {
+    return {
       search: '',
-      hasDeleteTag:false
+      hasDeleteTag: false
     }
   },
-  computed:{
-    tag_value_3(){
-      return this.$store.getters["ArticleModule/getTagsArticle"];
+  computed: {
+    tags() {
+      if (Array.isArray(this.tagsArticle) && this.tagsArticle.length > 0) {
+        let tags = [], tagsIri = [];
+        this.tagsArticle.forEach(e => {
+          tags.push(e.name);
+          tagsIri.push(e["@id"])
+        });
+        this.article_tags_iri = tagsIri
+        return tags;
+      }
+      return [];
     },
-    isLoading(){
+    tagsArticle: {
+      get: function () {
+        let tagsArticle = this.$store.getters["ArticleModule/getTagsArticle"]
+        if (tagsArticle) return tagsArticle;
+        return [];
+      },
+      set: function (v) {
+
+      }
+    },
+    article_tags_iri: {
+      get: function () {
+        return this.$store.getters["ArticleModule/getArticle"].article_tags_iri;
+      },
+      set: function (tagIri) {
+        this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
+      }
+    },
+    isLoading() {
       return this.$store.getters["TagModule/getIsLoading"];
     },
-    isSuccess(){
+    isSuccess() {
       return this.$store.getters["TagModule/getIsSuccess"];
     },
-    successMessage(){
+    successMessage() {
       return this.$store.getters["TagModule/getSuccessMessage"];
     },
     isError() {
       return this.$store.getters["TagModule/getIsError"];
     },
-    error(){
+    error() {
       return this.$store.getters["TagModule/getError"];
     },
-    article_tags_iri:{
-      get:function(){
-        return this.$store.getters["ArticleModule/article"].article_tags_iri;
-      },
-      set:function (v){
-
-      }
-    },
-    tags(){
-      return this.$store.getters["TagModule/getTags"];
-    },
-    tag(){
-      return this.$store.getters["TagModule/getTag"];
-    },
-    criteria () {
+    criteria() {
       return this.search.trim().toLowerCase();
     },
-    available_options () {
-      //return [];
-      return this.tags;
+    fetchingTags() {
+      return this.$store.getters["TagModule/getTags"];
     },
-    searchDesc () {
+    available_options() {
+      return this.fetchingTags;
+    },
+    searchDesc() {
       if (this.criteria && this.available_options.length === 0) {
         return 'There are no tags matching your search criteria'
       }
@@ -153,41 +180,35 @@ export default {
     },
   },
   mounted() {
-    console.log('mounted here');
     this.$store.dispatch("TagModule/findAllTags");
   },
-  methods:{
-    attach_article_tags({option, addTag}){
-      let name = option.name;
+  methods: {
+    attach_article_tags({option, addTag}) {
+      let name = option.name, tagIri = this.article_tags_iri;
       addTag(name);
-      this.tags.forEach(t=>{
-        if(t.name===name&&!this.article_tags_iri.includes(t["@id"]))
-        {
-          this.article_tags_iri.push(t["@id"])
+      this.fetchingTags.forEach(tag => {
+        if (tag.name === name && !tagIri.includes(tag["@id"])) {
+          tagIri.push(tag["@id"])
         }
-        if(t.id===option.id){
-          t.show = false;
+        if (tag.id === option.id) {
+          tag.show = false;
         }
       });
-      this.$store.commit('ArticleModule/attachTagsForArticle',this.article_tags_iri)
+      this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
     },
-    detach_article_tags({tag,removeTag}){
-      // tag -> tag.name;
-      const removedTag = this.tags.filter(t=>t.name===tag);
-      let article_tags = this.article_tags_iri.filter(ta=> ta !== removedTag[0]["@id"]);
-      this.tags.forEach(t=>{
-        if(t.name===tag){
+    detach_article_tags({tag, removeTag}) {
+      removeTag(tag);
+      const removedTag = this.fetchingTags.filter(t => t.name === tag);
+      let tagIri = this.article_tags_iri.filter(ta => ta !== removedTag[0]["@id"]);
+      this.fetchingTags.forEach(t => {
+        if (t.name === tag) {
           t.show = true;
         }
       })
-      removeTag(tag);
-      this.$store.commit('ArticleModule/attachTagsForArticle',article_tags);
+      this.$store.commit('ArticleModule/attachTagsForArticle', tagIri);
     },
-    on_option_click({option, addTag}) {
-      this.attach_article_tags({option,addTag});
-    },
-    on_confirm_delete_modal(tag){
-      this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : '+tag.name, {
+    on_confirm_delete_modal(tag) {
+      this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {
         title: 'МОЛЯ ПОТВЪРДЕТЕ !',
         size: 'ld',
         buttonSize: 'lg',
@@ -199,7 +220,7 @@ export default {
         centered: true
       })
           .then(value => {
-            if(value){
+            if (value) {
               this.on_delete_tag(tag);
             }
           })
@@ -207,37 +228,41 @@ export default {
             alert(err);
           })
     },
-    // ----- Success & error message modal ----- //
-    showMsgBox(){
-      this.$bvModal.msgBoxOk(this.isSuccess?this.successMessage:this.isError?this.error['hydra:description']:'',{
-        id:'delete_info_modal',
-        bodyBgVariant:this.isError?'danger':'success',
-        bodyTextVariant:'light',
-        okVariant:this.isError?'danger':'success',
-        okTitle:'Добре',
-        title: this.isError?this.error['hydra:title']:this.isSuccess?'Успех !':'',
+// ----- Success & error message modal ----- //
+    showMsgBox() {
+      this.$bvModal.msgBoxOk(this.isSuccess ? this.successMessage : this.isError ? this.error['hydra:description'] : '', {
+        id: 'delete_info_modal',
+        bodyBgVariant: this.isError ? 'danger' : 'success',
+        bodyTextVariant: 'light',
+        okVariant: this.isError ? 'danger' : 'success',
+        okTitle: 'Добре',
+        title: this.isError ? this.error['hydra:title'] : this.isSuccess ? 'Успех !' : '',
 
       })
     },
-    async on_create_tag({inputAttrs,addTag}){
-      const result = await this.$store.dispatch("TagModule/createTag",inputAttrs.value);
-      if(result !== null){
-        this.tags.unshift(this.tag);
+    async on_create_tag({inputAttrs, addTag}) {
+      const result = await this.$store.dispatch("TagModule/createTag", inputAttrs.value);
+      if (result !== null) {
+        this.fetchingTags.unshift(this.tag);
         let option = this.tag;
-        this.attach_article_tags({option,addTag});
-       // this.$store.commit("TagModule/updateTags",this.tags);
-        if(this.isSuccess) {
+        this.attach_article_tags({option, addTag});
+        // this.$store.commit("TagModule/updateTags",this.tags);
+        if (this.isSuccess) {
           this.showMsgBox();
-          setTimeout(()=>{this.$bvModal.hide('delete_info_modal')},3000)
+          setTimeout(() => {
+            this.$bvModal.hide('delete_info_modal')
+          }, 3000)
         }
       }
     },
-    async on_delete_tag(tag){
-      const result = await this.$store.dispatch("TagModule/deleteTag",tag);
+    async on_delete_tag(tag) {
+      const result = await this.$store.dispatch("TagModule/deleteTag", tag);
       this.showMsgBox();
-      if(result!==null){
-        this.$store.commit("TagModule/updateTags",this.tags.filter(t=>tag.name!==t.name));
-        setTimeout(()=>{this.$bvModal.hide('delete_info_modal')},3000)
+      if (result !== null) {
+        this.$store.commit("TagModule/updateTags", this.fetchingTags.filter(t => tag.name !== t.name));
+        setTimeout(() => {
+          this.$bvModal.hide('delete_info_modal')
+        }, 3000)
       }
     }
   }

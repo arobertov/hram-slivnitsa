@@ -58,7 +58,7 @@ export default {
         articles(state) {
             return state.articles;
         },
-        article(state){
+        getArticle(state){
             return state.article;
         },
         getTagsArticle(state){
@@ -192,7 +192,7 @@ export default {
                 return null;
             }
         },
-        async findArticle({commit},articleId){
+        async loadReadingArticle({commit}, articleId){
             commit(FETCHING_ARTICLE);
             try{
                 let response = await ArticleAPI.show(articleId);
