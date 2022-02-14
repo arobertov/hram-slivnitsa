@@ -1,21 +1,21 @@
 <template>
   <div>
-    <b-form-tags v-model="tags" no-outer-focus add-on-change class="mb-2">
+    <b-form-tags id="tags-with-dropdown" v-model="tagsArticle" no-outer-focus add-on-change class="mb-2">
       <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
-          <!------- render tag ------------->
-          <li v-for="tag in tags" :key="tag" class="list-inline-item">
+          <!------- render tag------------->
+          <li v-for="tag in tags" :key="JSON.parse(tag).name" class="list-inline-item">
             <b-form-tag
                 @remove="detach_article_tags({tag,removeTag})"
-                :title="tag"
+                :title="JSON.parse(tag).name"
                 :disabled="disabled"
                 variant="info"
             >
-              {{ tag }}
             </b-form-tag>
           </li>
           <!------- render tag ------------->
         </ul>
+        {{inputHandlers}}
         <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
           <template v-slot:button-content>
             <b-icon icon="tag-fill"></b-icon>
@@ -113,39 +113,28 @@ export default {
   name: "Tag-form",
   data() {
     return {
+      value:[],
       search: '',
-      hasDeleteTag: false
+      hasDeleteTag: false,
     }
   },
   computed: {
-    tags() {
-      if (Array.isArray(this.tagsArticle) && this.tagsArticle.length > 0) {
-        let tags = [], tagsIri = [];
-        this.tagsArticle.forEach(e => {
-          tags.push(e.name);
-          tagsIri.push(e["@id"])
-        });
-        this.article_tags_iri = tagsIri
-        return tags;
-      }
-      return [];
-    },
     tagsArticle: {
       get: function () {
         let tagsArticle = this.$store.getters["ArticleModule/getTagsArticle"]
         if (tagsArticle) return tagsArticle;
         return [];
       },
-      set: function (v) {
-
+      set: function (tags) {
+        this.$store.commit('ArticleModule/attachTagsForArticle', tags);
       }
     },
-    article_tags_iri: {
-      get: function () {
-        return this.$store.getters["ArticleModule/getArticle"].article_tags_iri;
+    allTags:{
+      get:function (){
+        return this.$store.getters["TagModule/getTags"];
       },
-      set: function (tagIri) {
-        this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
+      set:function (tags){
+        this.$store.commit('TagModule/UPDATING_ITEMS',tags);
       }
     },
     isLoading() {
@@ -166,11 +155,8 @@ export default {
     criteria() {
       return this.search.trim().toLowerCase();
     },
-    fetchingTags() {
-      return this.$store.getters["TagModule/getTags"];
-    },
     available_options() {
-      return this.fetchingTags;
+      return this.allTags.filter(tag=>tag.id!==this.tagsArticle.id);
     },
     searchDesc() {
       if (this.criteria && this.available_options.length === 0) {
@@ -184,28 +170,30 @@ export default {
   },
   methods: {
     attach_article_tags({option, addTag}) {
-      let name = option.name, tagIri = this.article_tags_iri;
+      let name = option.name;
       addTag(name);
-      this.fetchingTags.forEach(tag => {
-        if (tag.name === name && !tagIri.includes(tag["@id"])) {
-          tagIri.push(tag["@id"])
+      this.allTags.forEach(tag => {
+        if (tag.name === name && !this.tagsArticle.includes(tag["@id"])) {
+          this.tagsArticle = tag;
         }
         if (tag.id === option.id) {
           tag.show = false;
         }
       });
-      this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
+      //this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
     },
     detach_article_tags({tag, removeTag}) {
       removeTag(tag);
-      const removedTag = this.fetchingTags.filter(t => t.name === tag);
-      let tagIri = this.article_tags_iri.filter(ta => ta !== removedTag[0]["@id"]);
-      this.fetchingTags.forEach(t => {
-        if (t.name === tag) {
+      //const parseTag = JSON.parse(tag)
+      let editTagsArticle = this.tagsArticle.filter(t => t !== tag);
+      this.allTags.forEach(t => {
+        if (t.id === tag.id) {
           t.show = true;
         }
       })
-      this.$store.commit('ArticleModule/attachTagsForArticle', tagIri);
+      console.log(editTagsArticle)
+      this.tagsArticle = editTagsArticle;
+      //this.$store.commit('ArticleModule/attachTagsForArticle', editTagsArticle);
     },
     on_confirm_delete_modal(tag) {
       this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {
@@ -243,8 +231,8 @@ export default {
     async on_create_tag({inputAttrs, addTag}) {
       const result = await this.$store.dispatch("TagModule/createTag", inputAttrs.value);
       if (result !== null) {
-        this.fetchingTags.unshift(this.tag);
         let option = this.tag;
+        this.allTags.unshift(option);
         this.attach_article_tags({option, addTag});
         // this.$store.commit("TagModule/updateTags",this.tags);
         if (this.isSuccess) {
@@ -259,7 +247,7 @@ export default {
       const result = await this.$store.dispatch("TagModule/deleteTag", tag);
       this.showMsgBox();
       if (result !== null) {
-        this.$store.commit("TagModule/updateTags", this.fetchingTags.filter(t => tag.name !== t.name));
+        this.$store.commit("TagModule/updateTags", this.allTags.filter(t => tag.name !== t.name));
         setTimeout(() => {
           this.$bvModal.hide('delete_info_modal')
         }, 3000)

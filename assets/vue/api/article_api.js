@@ -6,7 +6,7 @@ export default {
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
-            tags:articleFormData.article_tags_iri,
+            tags:articleFormData.tags["@id"],
             category:articleFormData.category
         });
     },

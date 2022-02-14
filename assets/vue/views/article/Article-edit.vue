@@ -94,7 +94,7 @@ export default {
         event.preventDefault()
       }
       let article = this.$store.state.ArticleModule.article;
-      const result = await this.$store.dispatch("ArticleModule/edit",article );
+      const result = await this.$store.dispatch("ArticleModule/editArticle",article );
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
         this.updateSuccessModal();

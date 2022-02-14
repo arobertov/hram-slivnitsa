@@ -30,7 +30,7 @@ export default {
             id: undefined ,
             title: '',
             content: '',
-            article_tags_iri: [],
+            tags: [],
             category: '',
             isPublished:true,
         },
@@ -69,15 +69,15 @@ export default {
         updateArticleField(state, field) {
             updateField(state.article, field);
         },
-        attachTagsForArticle(state,article_tags_iri){
-            state.article.article_tags_iri = article_tags_iri;
+        attachTagsForArticle(state,tags){
+            state.article.tags = tags;
         },
         [CREATING_ARTICLE](state){
             state.article = {
                 id: undefined ,
                 title: '',
                 content: '',
-                article_tags_iri: [],
+                tags: [],
                 category: '',
                 isPublished:true,
             };
@@ -105,19 +105,21 @@ export default {
 
         },
         [EDITING_ARTICLE_SUCCESS](state,article){
+            let counter = 0;
             state.articles['hydra:member'].forEach(function (e) {
                 if(e.id === article.id){
-                    state.articles['hydra:member'].splice(e,1,state.article);
+                    state.articles['hydra:member'].splice(counter,1,article);
                 }
+                counter++;
             })
         },
         [DELETING_ARTICLE](state,articleId){
-            let articles = state.articles['hydra:member'];
-            articles.forEach(function (e) {
-                console.log(articleId);
+            let counter = 0;
+            state.articles['hydra:member'].forEach(function (e) {
                 if(e.id===articleId){
-                    articles.splice(e,1);
+                    state.articles['hydra:member'].splice(counter,1);
                 }
+                counter++;
             });
         },
         [FETCHING_ARTICLES](state) {
@@ -203,7 +205,7 @@ export default {
                 return null;
             }
         },
-        async edit({commit},articleFormData){
+        async editArticle({commit}, articleFormData){
             try {
                 let response = await ArticleAPI.edit(articleFormData);
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
@@ -226,6 +228,7 @@ export default {
         },
         async deleteArticle({commit},articleId){
             try{
+                console.log('ArticleId = '+articleId)
                 commit(DELETING_ARTICLE,articleId);
                 let response = await ArticleAPI.delete(articleId);
                 return response.data;
