@@ -1,5 +1,6 @@
-var Encore = require('@symfony/webpack-encore');
-var webpack = require('webpack')
+const Encore = require('@symfony/webpack-encore');
+const webpack = require('webpack');
+const path = require('path');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -14,14 +15,12 @@ Encore
             Quill: "quill/dist/quill.js"
         })
     )
-    /*
     .configureDevServerOptions(options=>{
+        //options.firewall = false;
        options.https={
-           cert:'/.symfony/certs/default.p12'
-           // encore dev-server --https --pfx=%UserProfile%\.symfony\certs\default.p12
+           pfx: path.join(process.env.HOMEPATH, '.symfony/certs/default.p12'),
         }
     })
-    */
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path

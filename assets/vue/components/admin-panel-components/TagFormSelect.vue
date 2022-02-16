@@ -4,7 +4,7 @@
       <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
           <!------- render tag------------->
-          <li v-for="tag in tags" :key="JSON.parse(tag).name" class="list-inline-item">
+          <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
                 @remove="detach_article_tags({tag,removeTag})"
                 :title="JSON.parse(tag).name"
@@ -15,7 +15,6 @@
           </li>
           <!------- render tag ------------->
         </ul>
-        {{inputHandlers}}
         <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
           <template v-slot:button-content>
             <b-icon icon="tag-fill"></b-icon>
@@ -113,7 +112,6 @@ export default {
   name: "Tag-form",
   data() {
     return {
-      value:[],
       search: '',
       hasDeleteTag: false,
     }
@@ -126,7 +124,7 @@ export default {
         return [];
       },
       set: function (tags) {
-        this.$store.commit('ArticleModule/attachTagsForArticle', tags);
+          this.$store.commit('ArticleModule/attachTagsForArticle', tags);
       }
     },
     allTags:{
@@ -170,28 +168,33 @@ export default {
   },
   methods: {
     attach_article_tags({option, addTag}) {
-      let name = option.name;
+      let name = option.name,tagsArticle = this.tagsArticle;
       addTag(name);
       this.allTags.forEach(tag => {
         if (tag.name === name && !this.tagsArticle.includes(tag["@id"])) {
-          this.tagsArticle = tag;
+          tagsArticle.push(tag)
         }
         if (tag.id === option.id) {
           tag.show = false;
         }
       });
-      //this.$store.commit('ArticleModule/attachTagsForArticle', tagIri)
+     this.tagsArticle = tagsArticle;
     },
     detach_article_tags({tag, removeTag}) {
       removeTag(tag);
-      //const parseTag = JSON.parse(tag)
-      let editTagsArticle = this.tagsArticle.filter(t => t !== tag);
+      let editTagsArticle = this.tagsArticle,counter = 0;
+      this.tagsArticle.forEach(e=>{
+        if(e.id === tag.id){
+          console.log(editTagsArticle)
+          editTagsArticle.splice(counter,1);
+        }
+        counter++;
+      })
       this.allTags.forEach(t => {
         if (t.id === tag.id) {
           t.show = true;
         }
       })
-      console.log(editTagsArticle)
       this.tagsArticle = editTagsArticle;
       //this.$store.commit('ArticleModule/attachTagsForArticle', editTagsArticle);
     },
