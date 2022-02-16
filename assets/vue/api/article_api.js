@@ -6,16 +6,17 @@ export default {
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
-            tags:articleFormData.tags["@id"],
+            tags:articleFormData.tags,
             category:articleFormData.category
         });
     },
     edit(articleFormData){
+        console.log(articleFormData.tags)
         return axios.put("/api/articles/"+articleFormData.id, {
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
-            tags:articleFormData.article_tags_iri,
+            tags:articleFormData.tags,
             category:articleFormData.category
         })
     },

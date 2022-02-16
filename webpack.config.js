@@ -15,12 +15,14 @@ Encore
             Quill: "quill/dist/quill.js"
         })
     )
+/*
     .configureDevServerOptions(options=>{
-        //options.firewall = false;
-       options.https={
+        options.https={
            pfx: path.join(process.env.HOMEPATH, '.symfony/certs/default.p12'),
         }
     })
+
+ */
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path

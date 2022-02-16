@@ -1,6 +1,26 @@
 import ArticleAPI from "../api/article_api";
 import { getField, updateField } from 'vuex-map-fields';
-
+function mapTags(article){
+    let mappedTags = [];
+    article.tags.forEach(t=>{
+        try{
+            mappedTags.push(JSON.parse(t)['@id']);
+        }catch (e){
+            console.log(e)
+            mappedTags.push(t['@id'])
+        }
+    })
+    return {
+        category: article.category,
+        content: article.content,
+        dateCreated: article.dateCreated,
+        dateEdited: article.dateEdited,
+        id: article.id,
+        tags: mappedTags,
+        isPublished: article.isPublished,
+        title: article.title,
+    }
+}
 const
     CREATING_ARTICLE = "CREATING_ARTICLE",
     CREATING_ARTICLE_SUCCESS = "CREATING_ARTICLE_SUCCESS",
@@ -159,10 +179,11 @@ export default {
             state.formErrors = error;
         }
     },
+
     actions: {
-        async create({ commit }, articleFormData) {
+        async create({ commit }, article) {
             try {
-                let response = await ArticleAPI.create(articleFormData);
+                let response = await ArticleAPI.create(mapTags(article));
                 commit(CREATING_ARTICLE_SUCCESS, response.data);
                 return response.data;
             } catch (error) {
@@ -175,6 +196,19 @@ export default {
                     commit(CREATING_ARTICLE_ERROR,error);
                 }
                  */
+                return null;
+            }
+        },
+        async editArticle({commit}, article){
+            try {
+                let mp = mapTags(article)
+                console.log(mp)
+
+                let response = await ArticleAPI.edit(mp);
+                commit(EDITING_ARTICLE_SUCCESS,response.data)
+                return response.data;
+            } catch (error) {
+                commit(FETCHING_ARTICLES_ERROR,error);
                 return null;
             }
         },
@@ -202,16 +236,6 @@ export default {
                 return response.data;
             }catch (error) {
                 commit(FETCHING_ARTICLE_ERROR,error);
-                return null;
-            }
-        },
-        async editArticle({commit}, articleFormData){
-            try {
-                let response = await ArticleAPI.edit(articleFormData);
-                commit(EDITING_ARTICLE_SUCCESS,response.data)
-                return response.data;
-            } catch (error) {
-                commit(FETCHING_ARTICLES_ERROR,error);
                 return null;
             }
         },

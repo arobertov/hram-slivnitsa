@@ -1,15 +1,17 @@
 <template>
   <div>
-    <h1 v-if="isLogin"> Влезли сте като {{user.username}}</h1>
     <div v-if="isLogin">
-      <a href="/admin">
-        <b-button variant="outline-primary">Админ панел</b-button>
-      </a>
-    </div>
-    <div v-if="isLogin">
-      <a href="/logout">
-        <span  class="btn  btn-success">Logout</span>
-      </a>
+      <h1> Влезли сте като {{user.username}}</h1>
+      <div>
+        <a href="/admin">
+          <b-button variant="outline-primary">Админ панел</b-button>
+        </a>
+      </div>
+      <div>
+        <a href="/logout">
+          <span  class="btn  btn-success">Logout</span>
+        </a>
+      </div>
     </div>
     <div v-else>
       <a data-toggle="modal" data-target="#loginModal">

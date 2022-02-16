@@ -119,20 +119,18 @@ export default {
   computed: {
     tagsArticle: {
       get: function () {
-        let tagsArticle = this.$store.getters["ArticleModule/getTagsArticle"]
-        if (tagsArticle) return tagsArticle;
-        return [];
+        return this.$store.getters["ArticleModule/getTagsArticle"];
       },
       set: function (tags) {
-          this.$store.commit('ArticleModule/attachTagsForArticle', tags);
+        this.$store.commit('ArticleModule/attachTagsForArticle', tags);
       }
     },
-    allTags:{
-      get:function (){
+    allTags: {
+      get: function () {
         return this.$store.getters["TagModule/getTags"];
       },
-      set:function (tags){
-        this.$store.commit('TagModule/UPDATING_ITEMS',tags);
+      set: function (tags) {
+        this.$store.commit('TagModule/UPDATING_ITEMS', tags);
       }
     },
     isLoading() {
@@ -154,7 +152,7 @@ export default {
       return this.search.trim().toLowerCase();
     },
     available_options() {
-      return this.allTags.filter(tag=>tag.id!==this.tagsArticle.id);
+      return this.allTags;
     },
     searchDesc() {
       if (this.criteria && this.available_options.length === 0) {
@@ -168,35 +166,18 @@ export default {
   },
   methods: {
     attach_article_tags({option, addTag}) {
-      let name = option.name,tagsArticle = this.tagsArticle;
+      let tagsArticle = this.tagsArticle,name = option.name;
       addTag(name);
       this.allTags.forEach(tag => {
         if (tag.name === name && !this.tagsArticle.includes(tag["@id"])) {
-          tagsArticle.push(tag)
-        }
-        if (tag.id === option.id) {
-          tag.show = false;
+          option.show = false
+          tagsArticle.push(option)
         }
       });
-     this.tagsArticle = tagsArticle;
+      this.tagsArticle = tagsArticle;
     },
     detach_article_tags({tag, removeTag}) {
       removeTag(tag);
-      let editTagsArticle = this.tagsArticle,counter = 0;
-      this.tagsArticle.forEach(e=>{
-        if(e.id === tag.id){
-          console.log(editTagsArticle)
-          editTagsArticle.splice(counter,1);
-        }
-        counter++;
-      })
-      this.allTags.forEach(t => {
-        if (t.id === tag.id) {
-          t.show = true;
-        }
-      })
-      this.tagsArticle = editTagsArticle;
-      //this.$store.commit('ArticleModule/attachTagsForArticle', editTagsArticle);
     },
     on_confirm_delete_modal(tag) {
       this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {
