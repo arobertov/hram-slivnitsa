@@ -130,6 +130,7 @@ export default {
         return this.$store.getters["TagModule/getTags"];
       },
       set: function (tags) {
+        console.log(tags)
         this.$store.commit('TagModule/UPDATING_ITEMS', tags);
       }
     },
@@ -165,19 +166,29 @@ export default {
     this.$store.dispatch("TagModule/findAllTags");
   },
   methods: {
-    attach_article_tags({option, addTag}) {
-      let tagsArticle = this.tagsArticle,name = option.name;
-      addTag(name);
+    setTagsVisible(option,condition){
+      let tagsArticle = [],setValue;
+      try{
+        setValue = JSON.parse(option)
+      }catch (e) {
+        setValue = option
+      }
       this.allTags.forEach(tag => {
-        if (tag.name === name && !this.tagsArticle.includes(tag["@id"])) {
-          option.show = false
-          tagsArticle.push(option)
+        if (tag.id === setValue.id) {
+            tag.show = condition
         }
+        tagsArticle.push(tag)
       });
-      this.tagsArticle = tagsArticle;
+      return tagsArticle;
+    },
+    attach_article_tags({option, addTag}) {
+      addTag(option.name);
+      this.tagsArticle.push(option);
+      this.allTags = this.setTagsVisible(option,false);
     },
     detach_article_tags({tag, removeTag}) {
       removeTag(tag);
+      this.allTags = this.setTagsVisible(tag,true);
     },
     on_confirm_delete_modal(tag) {
       this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {

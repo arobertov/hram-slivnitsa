@@ -42,22 +42,23 @@ export default {
         }
     },
     mutations:{
-        [mutation.FETCHING_ITEMS](state){
+        [mutation.FETCHING_TAGS](state){
             if(state.tags.length === 0){
                 state.isLoading = true;
             }
             state.isError = false;
             state.isSuccess = false;
         },
-        [mutation.FETCHING_ITEMS_SUCCESS](state,tags){
-            tags.forEach(t=>t.show=true);
+        [mutation.FETCHING_TAGS_SUCCESS](state, tags){
+            tags.forEach(tag=>{
+                tag.show = true
+            })
             state.tags = tags;
             state.isLoading = false;
             state.isError = false;
             state.isSuccess = false;
         },
-        [mutation.UPDATING_ITEMS](state,tags){
-            tags.forEach(t=>t.show=true);
+        [mutation.UPDATING_TAGS](state, tags){
             state.tags = tags;
             state.isLoading = false;
             state.isError = false;
@@ -122,10 +123,10 @@ export default {
             }
         },
         async findAllTags({commit}){
-            commit(mutation.FETCHING_ITEMS);
+            commit(mutation.FETCHING_TAGS);
             try{
                 let response = await TagApi.findAll();
-                commit(mutation.FETCHING_ITEMS_SUCCESS,response.data[HYDRA_MEMBER]);
+                commit(mutation.FETCHING_TAGS_SUCCESS,response.data[HYDRA_MEMBER]);
                 return response.data[HYDRA_MEMBER];
             }catch (e) {
                 return e;

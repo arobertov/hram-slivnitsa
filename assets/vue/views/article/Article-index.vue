@@ -53,7 +53,10 @@
                 <div class="col-md-3">
                   <b-button variant="success">Намерени са <b-badge variant="light">{{rows}}</b-badge> статии</b-button>
                 </div>
-                <div class="col-md-9">
+              <router-link :to="{ name:'admin_article_new' }" class="col-md-4" tag="div">
+                <b-button variant="secondary">Създай статия<span class="ml-3 mb-2"><b-icon-plus-square></b-icon-plus-square></span></b-button>
+              </router-link>
+                <div class="col-md-5">
                   <b-pagination
                                    v-model="currentPage"
                                    :total-rows="rows"
