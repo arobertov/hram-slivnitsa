@@ -127,10 +127,18 @@ export default {
     },
     allTags: {
       get: function () {
-        return this.$store.getters["TagModule/getTags"];
+        let allTags = this.$store.getters["TagModule/getTags"];
+        this.tagsArticle.forEach(t=>{
+          allTags.forEach(allTg=>{
+            if(allTg.id===this.getParsedTag(t).id){
+              allTg.show = false
+            }
+          })
+        })
+        console.log(allTags)
+        return allTags;
       },
       set: function (tags) {
-        console.log(tags)
         this.$store.commit('TagModule/UPDATING_ITEMS', tags);
       }
     },
@@ -166,13 +174,16 @@ export default {
     this.$store.dispatch("TagModule/findAllTags");
   },
   methods: {
+    getParsedTag(tag){
+      try {
+        return JSON.parse(tag);
+      }catch (e){
+        return tag;
+      }
+    },
     setTagsVisible(option,condition){
       let tagsArticle = [],setValue;
-      try{
-        setValue = JSON.parse(option)
-      }catch (e) {
-        setValue = option
-      }
+      setValue = this.getParsedTag(option);
       this.allTags.forEach(tag => {
         if (tag.id === setValue.id) {
             tag.show = condition
