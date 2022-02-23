@@ -9,7 +9,6 @@ export default {
             id:'',
             name:'',
             description:'',
-            iri:'',
             show: true
         },
         isLoading:false,
@@ -65,9 +64,10 @@ export default {
             state.isSuccess = false;
         },
         createTag(state,tag){
-            state.tag = tag;
+            state.tags.push(tag.show = false);
             state.isLoading = false;
             state.isError = false;
+            state.error = '';
             state.isSuccess = true;
             state.successMessage = 'Успешно създадохте етикет '+state.tag.name+' !';
         },

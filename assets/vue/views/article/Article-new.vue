@@ -1,18 +1,20 @@
 <template>
   <div class="main-content">
     <b-alert show dismissible variant="danger" v-if="error">
-      {{error}}
+      {{ error }}
     </b-alert>
 
     <div class="container-sm ">
-      <b-form>
-        <article-title-input v-model="title" />
-        <category-select v-model="category" />
-        <tag-form/>
-        <article-content-input v-model="content" />
-        <b-button id="check-article-btn" variant="info" @click="createArticle">Прегледай</b-button>
-        <b-button variant="success" @click="createArticle">Публикувай</b-button>
-      </b-form>
+      <validation-observer ref="observer" v-slot="{ handleSubmit,invalid }">
+        <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
+          <article-title-input v-model="title"/>
+          <category-select v-model="category"/>
+          <tag-form/>
+          <article-content-input v-model="content"/>
+          <b-button id="check-article-btn" variant="info">Прегледай</b-button>
+          <b-button type="submit" variant="success" :disabled="invalid" >Публикувай</b-button>
+        </b-form>
+      </validation-observer>
     </div>
   </div>
 </template>
@@ -31,14 +33,14 @@ const {mapFields} = createHelpers({
 });
 
 const items = [
-  {text:'Статии',to:{name:'admin_article_index'}},
-  {text:'Създай статия',to:{name:'admin_article_new'}}
+  {text: 'Статии', to: {name: 'admin_article_index'}},
+  {text: 'Създай статия', to: {name: 'admin_article_new'}}
 ];
 
 export default {
   name: "Article-new",
   components: {
-    ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput
+    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput
   },
   computed: {
     responseData() {
@@ -56,7 +58,7 @@ export default {
   },
   created() {
     let store = this.$store;
-    if(store.getters["ArticleModule/articles"].length <= 1){
+    if (store.getters["ArticleModule/articles"].length <= 1) {
       store.dispatch("ArticleModule/findAll");
     }
     //store.dispatch("TagModule/findAllTags");
@@ -64,18 +66,15 @@ export default {
     store.commit("ArticleModule/CREATING_ARTICLE");
   },
   destroyed() {
-    this.$store.commit("MainModule/DETACH_BREADS",items);
+    this.$store.commit("MainModule/DETACH_BREADS", items);
   },
   methods: {
-    async createArticle(event) {
+    onSubmit() {
+      this.createArticle()
+    },
+    async createArticle() {
       let article = this.$store.state.ArticleModule.article;
-      if (event) {
-        event.preventDefault()
-      }
-      if(event.target.id==="check-article-btn"){
-        article.isPublished = false;
-      }
-      const result = await this.$store.dispatch("ArticleModule/create",article);
+      const result = await this.$store.dispatch("ArticleModule/create", article);
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-tags id="tags-with-dropdown" v-model="tagsArticle" no-outer-focus add-on-change class="mb-2">
+    <b-form-tags ref="tagForm" id="tags-with-dropdown" v-model="tagsArticle" no-outer-focus add-on-change class="mb-2">
       <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
           <!------- render tag------------->
@@ -15,7 +15,7 @@
           </li>
           <!------- render tag ------------->
         </ul>
-        <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
+        <b-dropdown ref="dropdown" size="sm" variant="outline-secondary" block menu-class="w-100">
           <template v-slot:button-content>
             <b-icon icon="tag-fill"></b-icon>
             Изберете Етикети
@@ -24,18 +24,25 @@
           <b-input-group prepend="Създай етикет:" class="mt-3">
             <b-form-input
                 id="add-tag-input"
-                v-bind="inputAttrs"
-                v-on="inputHandlers"
+                v-model="inputTag"
                 placeholder="Създайте и добавете нов етикет !"
                 class="form-control"
             >
             </b-form-input>
             <b-input-group-append>
-              <b-button @click="on_create_tag({inputAttrs,addTag})" variant="outline-success">
+              <b-button @click="on_create_tag({inputTag,addTag})" variant="outline-success">
                 Създай Етикет !
               </b-button>
             </b-input-group-append>
           </b-input-group>
+          <b-alert
+              show dismissible
+              class="small"
+              :show="isError"
+              variant="danger"
+          >
+            {{ error }}
+          </b-alert>
           <!------- end create tag form field --------------->
           <div v-if="isLoading">
             <b-dropdown-divider></b-dropdown-divider>
@@ -43,12 +50,6 @@
               <b-spinner small></b-spinner>
               <--- Извличане на етикети ! --->
             </b-button>
-            <b-alert class="small"
-                     :show="isError"
-                     variant="danger"
-            >
-              {{ error }}
-            </b-alert>
           </div>
 
           <b-dropdown-divider></b-dropdown-divider>
@@ -113,7 +114,7 @@ export default {
   data() {
     return {
       search: '',
-      hasDeleteTag: false,
+      inputTag: ''
     }
   },
   computed: {
@@ -128,19 +129,22 @@ export default {
     allTags: {
       get: function () {
         let allTags = this.$store.getters["TagModule/getTags"];
-        this.tagsArticle.forEach(t=>{
-          allTags.forEach(allTg=>{
-            if(allTg.id===this.getParsedTag(t).id){
+        this.tagsArticle.forEach(t => {
+          allTags.forEach(allTg => {
+            if (allTg.id === this.getParsedTag(t).id) {
               allTg.show = false
             }
           })
         })
-        console.log(allTags)
         return allTags;
       },
       set: function (tags) {
         this.$store.commit('TagModule/UPDATING_ITEMS', tags);
       }
+    },
+    state() {
+      // Overall component validation state
+      return this.dirty ? (this.inputTag.length > 2 && this.inputTag.length < 9) : null
     },
     isLoading() {
       return this.$store.getters["TagModule/getIsLoading"];
@@ -174,19 +178,19 @@ export default {
     this.$store.dispatch("TagModule/findAllTags");
   },
   methods: {
-    getParsedTag(tag){
+    getParsedTag(tag) {
       try {
         return JSON.parse(tag);
-      }catch (e){
+      } catch (e) {
         return tag;
       }
     },
-    setTagsVisible(option,condition){
-      let tagsArticle = [],setValue;
+    setTagsVisible(option, condition) {
+      let tagsArticle = [], setValue;
       setValue = this.getParsedTag(option);
       this.allTags.forEach(tag => {
         if (tag.id === setValue.id) {
-            tag.show = condition
+          tag.show = condition
         }
         tagsArticle.push(tag)
       });
@@ -195,11 +199,11 @@ export default {
     attach_article_tags({option, addTag}) {
       addTag(option.name);
       this.tagsArticle.push(option);
-      this.allTags = this.setTagsVisible(option,false);
+      this.allTags = this.setTagsVisible(option, false);
     },
     detach_article_tags({tag, removeTag}) {
       removeTag(tag);
-      this.allTags = this.setTagsVisible(tag,true);
+      this.allTags = this.setTagsVisible(tag, true);
     },
     on_confirm_delete_modal(tag) {
       this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {
@@ -234,14 +238,18 @@ export default {
 
       })
     },
-    async on_create_tag({inputAttrs, addTag}) {
-      const result = await this.$store.dispatch("TagModule/createTag", inputAttrs.value);
-      if (result !== null) {
-        let option = this.tag;
-        this.allTags.unshift(option);
-        this.attach_article_tags({option, addTag});
-        // this.$store.commit("TagModule/updateTags",this.tags);
+    async on_create_tag({inputTag, addTag}) {
+      const option = await this.$store.dispatch("TagModule/createTag", inputTag);
+      if (option !== null) {
+        try {
+          this.attach_article_tags({option, addTag});
+          this.inputTag = '';
+          this.$refs.dropdown.hide(true);
+        } catch (e) {
+          console.log(e)
+        }
         if (this.isSuccess) {
+          this.allTags.unshift(option);
           this.showMsgBox();
           setTimeout(() => {
             this.$bvModal.hide('delete_info_modal')
@@ -252,8 +260,10 @@ export default {
     async on_delete_tag(tag) {
       const result = await this.$store.dispatch("TagModule/deleteTag", tag);
       this.showMsgBox();
+      let allTags = this.allTags.filter(t => tag.name !== t.name)
       if (result !== null) {
-        this.$store.commit("TagModule/updateTags", this.allTags.filter(t => tag.name !== t.name));
+        this.$store.commit("TagModule/updateTags", allTags);
+        this.allTags = allTags;
         setTimeout(() => {
           this.$bvModal.hide('delete_info_modal')
         }, 3000)
