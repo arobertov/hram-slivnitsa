@@ -18,7 +18,7 @@
           :state="getValidationState(validationContext)"
           aria-describedby="title-live-feedback"
       ></b-form-input>
-      <b-form-invalid-feedback id="title-1-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback id="title-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
     </b-form-group>
   </validation-provider>
 </template>

@@ -1,18 +1,28 @@
 <template>
-  <b-form-group
-      label="Текст на статия:"
-      label-for="article_content"
+  <validation-provider
+      name="Текст на статия"
+      :rules="{ required: true, min: 3 }"
+      v-slot="validationContext"
   >
-    <vue-editor
-        id="article_content"
-        :editorOptions="editorSettings"
-        v-bind:value="value"
-        v-on:input="$emit('input', $event)"
-        class="bg-white"
-        placeholder="Въведете текст на статия..."
+    <b-form-group
+        label="Текст на статия:"
+        label-for="article_content"
     >
-    </vue-editor>
-  </b-form-group>
+      <vue-editor
+          id="article_content"
+          name="article-content"
+          :editorOptions="editorSettings"
+          v-bind:value="value"
+          v-on:input="$emit('input', $event)"
+          :state="getValidationState(validationContext)"
+          class="bg-white"
+          placeholder="Въведете текст на статия..."
+          aria-describedby="content-live-feedback"
+      >
+      </vue-editor>
+      <b-form-invalid-feedback id="content-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+    </b-form-group>
+  </validation-provider>
 </template>
 
 <script>
@@ -34,9 +44,14 @@ export default {
       }
     }
   },
-  props:["value"],
-  components:{
+  props: ["value"],
+  components: {
     VueEditor
+  },
+  methods:{
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    },
   }
 }
 </script>
