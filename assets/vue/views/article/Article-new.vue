@@ -5,14 +5,14 @@
     </b-alert>
 
     <div class="container-sm ">
-      <validation-observer ref="observer" v-slot="{ handleSubmit,invalid }">
+      <validation-observer ref="newArticle" v-slot="{ handleSubmit ,invalid}">
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <article-title-input v-model="title"/>
           <category-select v-model="category"/>
           <tag-form/>
           <article-content-input v-model="content"/>
           <b-button id="check-article-btn" variant="info">Прегледай</b-button>
-          <b-button type="submit" variant="success" :disabled="invalid" >Публикувай</b-button>
+          <b-button type="submit" variant="success" id="new-article-submit-btn" >Публикувай</b-button>
         </b-form>
       </validation-observer>
     </div>
@@ -70,7 +70,11 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.createArticle()
+      this.$refs.newArticle.validate().then(success=>{
+        if(success){
+          this.createArticle();
+        }
+      })
     },
     async createArticle() {
       let article = this.$store.state.ArticleModule.article;
@@ -78,6 +82,8 @@ export default {
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }
+
+
     },
   }
 };

@@ -43,7 +43,7 @@ class Tag
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 3,
-     *      max = 20,
+     *      max = 15,
      *      minMessage = "Tag name must be at least {{ limit }} characters long",
      *      maxMessage = "Tag name cannot be longer than {{ limit }} characters"
      * )

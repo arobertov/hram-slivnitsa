@@ -4,10 +4,10 @@
       <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
           <!------- render tag------------->
-          <li v-for="tag in tagsArticle" :key="tag" class="list-inline-item">
+          <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
                 @remove="detach_article_tags({tag,removeTag})"
-                :title="JSON.parse(tag).name"
+                :title="tag"
                 :disabled="disabled"
                 variant="info"
             >
@@ -21,23 +21,22 @@
             Изберете Етикети
           </template>
           <!--------- create tags form field ---------------->
-            <b-form @submit.stop.prevent="on_create_tag({inputTag,addTag})">
-                <b-input-group prepend="Създай етикет:" class="mt-3">
-                  <b-form-input
-                        id="add-tag-input"
-                        v-model="inputTag"
-                        placeholder="Създайте и добавете нов етикет !"
-                        class="form-control"
-                        :state="state"
-                    >
-                    </b-form-input>
-                <b-input-group-append>
-                  <b-button type="submit" variant="outline-success" >
-                    Създай Етикет !
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form>
+          <b-form @submit.stop.prevent="on_create_tag({inputTag,addTag})">
+            <b-input-group prepend="Създай етикет:" class="mt-3">
+              <b-form-input
+                  id="add-tag-input"
+                  v-model="inputTag"
+                  placeholder="Създайте и добавете нов етикет !"
+                  class="form-control"
+              >
+              </b-form-input>
+              <b-input-group-append>
+                <b-button type="submit" variant="outline-success" >
+                  Създай Етикет !
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </b-form>
           <b-alert
               show dismissible
               class="small"
@@ -145,10 +144,6 @@ export default {
         this.$store.commit('TagModule/updatingTags', tags);
       }
     },
-    state() {
-      // Overall component validation state
-      return this.dirty ? (this.inputTag.length > 2 && this.inputTag.length < 9) : null
-    },
     isLoading() {
       return this.$store.getters["TagModule/getIsLoading"];
     },
@@ -164,23 +159,17 @@ export default {
     error() {
       return this.$store.getters["TagModule/getError"];
     },
-    criteria() {
-      return this.search.trim().toLowerCase();
-    },
     available_options() {
       return this.allTags;
-    },
-    searchDesc() {
-      if (this.criteria && this.available_options.length === 0) {
-        return 'There are no tags matching your search criteria'
-      }
-      return ''
-    },
+    }
   },
   mounted() {
     this.$store.dispatch("TagModule/findAllTags");
   },
   methods: {
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    },
     getParsedTag(tag) {
       try {
         return JSON.parse(tag);
@@ -242,6 +231,7 @@ export default {
       })
     },
     async on_create_tag({inputTag, addTag}) {
+      //------- create tag an save to DB --------------------- //
       const option = await this.$store.dispatch("TagModule/createTag", inputTag);
       if (option !== null) {
         try {

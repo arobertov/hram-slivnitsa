@@ -57,7 +57,7 @@ export default {
             state.isError = false;
             state.isSuccess = false;
         },
-        [mutation.UPDATING_TAGS](state, tags){
+        updatingTags(state, tags){
             state.tags = tags;
             state.isLoading = false;
             state.isError = false;
@@ -113,7 +113,6 @@ export default {
                 commit('deleteTag',tag);
                 return response;
             }catch(e){
-                console.log(e);
                 let error = e.response.data;
                 if(error.hasOwnProperty('violations')){
                     error = error.violations[0]['message'];

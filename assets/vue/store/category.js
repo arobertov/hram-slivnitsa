@@ -53,7 +53,7 @@ export default {
             state.isSuccess = true;
             state.successMessage = 'Категорията '+state.category.name+' е редактирана успешно !';
         },
-        [mutation.UPDATING_TAGS](state, categories){
+        [mutation.updatingTags](state, categories){
             state.categories = categories;
             state.isError = false;
             state.isSuccess = false;
@@ -82,7 +82,7 @@ export default {
         async findAllCategories({commit}){
             try{
                 let response = await CategoryApi.findAllCategories();
-                commit(mutation.UPDATING_TAGS, response.data['hydra:member']);
+                commit(mutation.updatingTags, response.data['hydra:member']);
                 return response.data['hydra:member'];
             } catch (e) {
                 return null;
