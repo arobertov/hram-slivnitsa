@@ -19,7 +19,9 @@ Encore
        options.https={
            //cert:'/.symfony/certs/default.p12'
            pfx: path.join(process.env.HOMEPATH, '.symfony/certs/default.p12'),
-        }
+        };
+
+
     })
 
     // directory where compiled assets will be stored

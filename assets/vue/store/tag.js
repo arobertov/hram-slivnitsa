@@ -57,31 +57,26 @@ export default {
             state.isError = false;
             state.isSuccess = false;
         },
-        updatingTags(state, tags){
-            state.tags = tags;
-            state.isLoading = false;
-            state.isError = false;
-            state.isSuccess = false;
-        },
         createTag(state,tag){
-            state.tags.push(tag.show = false);
+            state.tags.push(tag);
             state.isLoading = false;
             state.isError = false;
             state.error = '';
             state.isSuccess = true;
-            state.successMessage = 'Успешно създадохте етикет '+state.tag.name+' !';
+            state.successMessage = 'Успешно създадохте етикет '+tag.name+' !';
         },
         updateTag(state,tag){
             state.tag = tag;
             state.isLoading = false;
             state.isError = false;
             state.isSuccess = true;
-            state.successMessage = 'Успешно редактирахте етикет '+state.tag.name+' !';
+            state.successMessage = 'Успешно редактирахте етикет '+tag.name+' !';
         },
         deleteTag(state,tag){
             state.isSuccess = true;
             state.isLoading = false;
             state.successMessage = 'Успешно изтрихте етикет '+tag.name+' !';
+            state.tags = state.tags.filter(t=>t.name!==tag.name)
         },
         setError(state,error){
             state.isLoading = false;
