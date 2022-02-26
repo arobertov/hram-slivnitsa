@@ -1,13 +1,13 @@
 <template>
   <div>
-    <b-form-tags ref="tagForm" id="tags-with-dropdown" v-model="tagsArticle" no-outer-focus add-on-change class="mb-2">
+    <b-form-tags ref="tagForm" id="tags-with-dropdown" v-model="tags" no-outer-focus add-on-change class="mb-2">
       <template v-slot="{tags, inputAttrs, inputHandlers, disabled,addTag, removeTag}">
         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
           <!------- render tag------------->
-          <li v-for="tag in tagsArticle" :key="tag" class="list-inline-item">
+          <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
-                @remove="detach_article_tags({tag,removeTag})"
-                :title="JSON.parse(tag).name"
+                @remove="removeTag(tag)"
+                :title="tag"
                 :disabled="disabled"
                 variant="info"
             >
@@ -69,7 +69,7 @@
                     :id="option['@id']"
                     variant="success"
                     size="sm"
-                    @click="attach_article_tags({option,addTag})"
+                    @click="addTag(option.name)"
                 >
                   {{ option.name }}
                 </b-button>
@@ -116,33 +116,19 @@ export default {
   name: "Tag-form",
   data() {
     return {
-      search: '',
       inputTag: ''
     }
   },
   computed: {
-    tagsArticle: {
-      get: function () {
-        return this.$store.getters["ArticleModule/getTagsArticle"];
+    tags: {
+      get: function() {
+        return this.$store.getters["ArticleModule/getTagsArticle"].map(t=>t.name);
       },
-      set: function (tags) {
-        this.$store.commit('ArticleModule/attachTagsForArticle', tags);
-      }
-    },
-    allTags: {
-      get: function () {
-        let allTags = this.$store.getters["TagModule/getTags"];
-        this.tagsArticle.forEach(t => {
-          allTags.forEach(allTg => {
-            if (allTg.id === this.getParsedTag(t).id) {
-              allTg.show = false
-            }
-          })
-        })
-        return allTags;
-      },
-      set: function (tags) {
-        this.$store.commit('TagModule/updatingTags', tags);
+      set: function(tags){
+        this.$store.commit(
+            'ArticleModule/attachTagsForArticle',
+            this.allTags.filter(tag=>tags.includes(tag.name))
+        );
       }
     },
     state() {
@@ -164,11 +150,11 @@ export default {
     error() {
       return this.$store.getters["TagModule/getError"];
     },
-    criteria() {
-      return this.search.trim().toLowerCase();
+    allTags(){
+      return this.$store.getters["TagModule/getTags"]
     },
     available_options() {
-      return this.allTags;
+      return this.allTags.filter(tag=>! this.tags.includes(tag.name));
     },
     searchDesc() {
       if (this.criteria && this.available_options.length === 0) {
@@ -181,33 +167,6 @@ export default {
     this.$store.dispatch("TagModule/findAllTags");
   },
   methods: {
-    getParsedTag(tag) {
-      try {
-        return JSON.parse(tag);
-      } catch (e) {
-        return tag;
-      }
-    },
-    setTagsVisible(option, condition) {
-      let tagsArticle = [], setValue;
-      setValue = this.getParsedTag(option);
-      this.allTags.forEach(tag => {
-        if (tag.id === setValue.id) {
-          tag.show = condition
-        }
-        tagsArticle.push(tag)
-      });
-      return tagsArticle;
-    },
-    attach_article_tags({option, addTag}) {
-      addTag(option.name);
-      this.tagsArticle.push(option);
-      this.allTags = this.setTagsVisible(option, false);
-    },
-    detach_article_tags({tag, removeTag}) {
-      removeTag(tag);
-      this.allTags = this.setTagsVisible(tag, true);
-    },
     on_confirm_delete_modal(tag) {
       this.$bvModal.msgBoxConfirm('МОЛЯ ПОТВЪРДЕТЕ ЧЕ ЖЕЛАЕТЕ ДА ИЗТРИЕТЕ ЕТИКЕТА : ' + tag.name, {
         title: 'МОЛЯ ПОТВЪРДЕТЕ !',
@@ -237,7 +196,7 @@ export default {
         bodyTextVariant: 'light',
         okVariant: this.isError ? 'danger' : 'success',
         okTitle: 'Добре',
-        title: this.isError ? this.error['hydra:title'] : this.isSuccess ? 'Успех !' : '',
+        title: this.isError ? this.error['hydra:title'] : this.isSuccess ? 'Готово !!!' : '',
 
       })
     },
@@ -245,15 +204,13 @@ export default {
       const option = await this.$store.dispatch("TagModule/createTag", inputTag);
       if (option !== null) {
         try {
-          this.attach_article_tags({option, addTag});
+          addTag(option.name);
           this.inputTag = '';
           this.$refs.dropdown.hide(true);
         } catch (e) {
           console.log(e)
         }
         if (this.isSuccess) {
-          console.log(option)
-          this.allTags.unshift(option);
           this.showMsgBox();
           setTimeout(() => {
             this.$bvModal.hide('delete_info_modal')
@@ -264,10 +221,7 @@ export default {
     async on_delete_tag(tag) {
       const result = await this.$store.dispatch("TagModule/deleteTag", tag);
       this.showMsgBox();
-      let allTags = this.allTags.filter(t => tag.name !== t.name)
       if (result !== null) {
-        this.$store.commit("TagModule/updatingTags", allTags);
-        this.allTags = allTags;
         setTimeout(() => {
           this.$bvModal.hide('delete_info_modal')
         }, 3000)
