@@ -13,15 +13,23 @@
         {{successMessage}}
       </b-alert>
     </div>
-    <b-form-group
-        label="Категория на статията"
-        label-for="article_category"
-    ><b-form-select
+    <validation-provider
+        name="Категория"
+        :rules="{ required:true }"
+        v-slot="validationContext"
+    >
+      <b-form-group
+          label="Категория на статията"
+          label-for="article_category"
+      ><b-form-select
           id="article_category"
+          name="article_category"
           v-bind:value="value"
           v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="categories"
+          :state="getValidationState(validationContext)"
+          aria-describedby="category-live-feedback"
       >
         <template #first>
           <b-form-select-option
@@ -40,7 +48,9 @@
           </b-form-select-option>
         </template>
       </b-form-select>
-    </b-form-group>
+        <b-form-invalid-feedback id="category-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+      </b-form-group>
+    </validation-provider>
   </div>
   <div class="col-sm-3 m-0">
     <category-input-modal />
@@ -78,6 +88,9 @@ export default {
     },
   },
   methods:{
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
       if(dismissCountDown===0){

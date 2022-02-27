@@ -201,10 +201,9 @@ export default {
         },
         async editArticle({commit}, article){
             try {
-                let mp = mapTags(article)
-                console.log(mp)
+                let mapedTags = mapTags(article)
 
-                let response = await ArticleAPI.edit(mp);
+                let response = await ArticleAPI.edit(mapedTags);
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
                 return response.data;
             } catch (error) {
