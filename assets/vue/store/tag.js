@@ -49,9 +49,6 @@ export default {
             state.isSuccess = false;
         },
         [mutation.FETCHING_TAGS_SUCCESS](state, tags){
-            tags.forEach(tag=>{
-                tag.show = true
-            })
             state.tags = tags;
             state.isLoading = false;
             state.isError = false;

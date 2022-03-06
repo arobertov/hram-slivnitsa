@@ -47,15 +47,10 @@
         },
       methods:{
           async setIsPublished(){
-            let article = this.article;
-            article.isPublished = true;
-            article.category = article.category["@id"];
-            let tagsIri = [];
-            article.tags.forEach(tag=> tagsIri.push(tag["@id"]));
-            article.tags = tagsIri;
-            const result = await this.$store.dispatch("ArticleModule/edit",article);
-            if(result!==null){
-              console.log("success");
+            this.article.isPublished = true
+            const result = await this.$store.dispatch("ArticleModule/editArticle",this.article);
+            if (result !== null) {
+              await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
             }
           }
       }
