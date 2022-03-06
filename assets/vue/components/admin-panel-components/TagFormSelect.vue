@@ -63,7 +63,7 @@
           <table class="table table-borderless table-hover table-sm">
             <tbody>
             <tr
-                v-for="option in available_options" v-if="option.show"
+                v-for="option in available_options"
                 :key="option.name"
             >
               <td class="w-80">
