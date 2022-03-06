@@ -1,6 +1,5 @@
 <template>
-<div class="row">
-  <div class="col-sm-9 m-0">
+  <div>
     <div class="alerts">
       <b-alert class="small"
                v-if="isSuccess"
@@ -10,13 +9,14 @@
                @dismiss-count-down="countDownChanged"
                fade
       >
-        {{successMessage}}
+        {{ successMessage }}
       </b-alert>
     </div>
     <b-form-group
         label="Категория на статията"
         label-for="article_category"
-    ><b-form-select
+    >
+      <b-form-select
           id="article_category"
           v-bind:value="value"
           v-bind:selected="true"
@@ -29,7 +29,7 @@
               v-if="categories.length===0"
               disabled
           >
-            - Няма създадени категории - Създайте от бутона  --->
+            - Няма създадени категории - Създайте от бутона --->
           </b-form-select-option>
           <b-form-select-option
               value=""
@@ -41,11 +41,8 @@
         </template>
       </b-form-select>
     </b-form-group>
+    <category-input-modal/>
   </div>
-  <div class="col-sm-3 m-0">
-    <category-input-modal />
-  </div>
-</div>
 </template>
 
 <script>
@@ -53,40 +50,40 @@ import CategoryInputModal from "./CategoryInputModal";
 
 export default {
   name: "CategorySelect",
-  data(){
-    return{
-      categoryName:'',
+  data() {
+    return {
+      categoryName: '',
       dismissCountDown: 0,
-      dismissSecs:5
+      dismissSecs: 5
     }
   },
-  components:{
+  components: {
     CategoryInputModal
   },
-  props:['value'],
-  computed:{
+  props: ['value'],
+  computed: {
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
     },
-    isSuccess(){
+    isSuccess() {
       const success = this.$store.getters["CategoryModule/getIsSuccess"];
       if (success) this.showSuccessAlert();
-      return success ;
+      return success;
     },
-    successMessage(){
+    successMessage() {
       return this.$store.getters["CategoryModule/getSuccessMessage"];
     },
   },
-  methods:{
+  methods: {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
-      if(dismissCountDown===0){
-         this.$store.commit("CategoryModule/CREATION_SUCCESSFUL");
+      if (dismissCountDown === 0) {
+        this.$store.commit("CategoryModule/CREATION_SUCCESSFUL");
       }
     },
     showSuccessAlert() {
       this.dismissCountDown = this.dismissSecs;
-      }
+    }
   }
 }
 </script>

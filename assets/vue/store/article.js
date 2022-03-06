@@ -100,6 +100,7 @@ export default {
                 tags: [],
                 category: '',
                 isPublished:true,
+                owner:''
             };
             state.isLoading = false;
             state.error = null;

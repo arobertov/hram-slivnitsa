@@ -2,8 +2,8 @@
   <div class="container-fluid bg-yellow-white">
     <div class="row">
       <!-----------------------  ASIDE MENU ----------------------------------------------------------------------->
-      <nav id="aside-menu" class="col-md-2 bg-green sidebar">
-        <div class="sidebar-sticky overflow-hidden">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-green sidebar collapse">
+        <div class="sidebar-sticky pt-3">
           <ul class="nav flex-column">
             <router-link :to="{ name: 'admin_panel' }" class="nav-item" tag="li" active-class="active">
               <a class="nav-link" href="#">
@@ -66,7 +66,9 @@ export default {
   name: "Aside-nav",
   created() {
     this.$store.dispatch("CategoryModule/findAllCategories");
-
+    if(this.$store.getters["ArticleModule/articles"].length <= 1){
+      this.$store.dispatch("ArticleModule/findAll");
+    }
     this.$store.dispatch("MainModule/fetchingBreads",[{text:'Администраторски панел',to:{name:'admin_panel'}}]);
   },
   computed:{

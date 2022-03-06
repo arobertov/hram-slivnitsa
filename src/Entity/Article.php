@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\ArticleRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,7 +33,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате статия."}
  *     }
  * )
+ * @ApiFilter(OrderFilter::class,properties={"dateEdited":"DESC"})
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @ORM\EntityListeners({"App\Listener\ArticleListener"})
  */
 class Article
 {
@@ -92,7 +98,7 @@ class Article
     private $category;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"article:read"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
      */
     private $owner;
@@ -101,9 +107,11 @@ class Article
     public function __construct()
     {
         $this->tags = new ArrayCollection();
-        $this->setDateCreated(new DateTime('now'));
-        $this->setDateEdited(new DateTime('now'));
+        //$this->setDateCreated(new DateTime('now'));
+        //$this->setDateEdited(new DateTime('now'));
     }
+
+
 
     public function getId(): ?int
     {
@@ -218,10 +226,26 @@ class Article
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(?UserInterface $owner): self
     {
         $this->owner = $owner;
 
         return $this;
+    }
+
+    /**
+     * @return Security
+     */
+    public function getSecurity(): Security
+    {
+        return $this->security;
+    }
+
+    /**
+     * @param Security $security
+     */
+    public function setSecurity(Security $security): void
+    {
+        $this->security = $security;
     }
 }

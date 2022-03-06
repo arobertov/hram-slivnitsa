@@ -6,6 +6,9 @@ import * as rules from 'vee-validate/dist/rules';
 import VuePaginate from 'vue-paginate';
 import moment from 'moment';
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule]);
 });

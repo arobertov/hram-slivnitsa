@@ -15,29 +15,33 @@
           </li>
           <!------- render tag ------------->
         </ul>
-        <b-dropdown ref="dropdown" size="sm" variant="outline-secondary" block menu-class="w-100">
+        <b-dropdown ref="dropdown" size="sm" variant="outline-secondary" block no-flip menu-class="w-100">
           <template v-slot:button-content>
             <b-icon icon="tag-fill"></b-icon>
             Изберете Етикети
           </template>
           <!--------- create tags form field ---------------->
-            <b-form @submit.stop.prevent="on_create_tag({inputTag,addTag})">
-                <b-input-group prepend="Създай етикет:" class="mt-3">
+          <b-dropdown-form @submit.stop.prevent="on_create_tag({inputTag,addTag})">
+              <b-form-group
+                  id="fieldset-horizontal"
+              >
+                <b-input-group class="mt-3">
                   <b-form-input
                         id="add-tag-input"
                         v-model="inputTag"
-                        placeholder="Създайте и добавете нов етикет !"
+                        placeholder="Създайте нов етикет !"
                         class="form-control"
                         :state="state"
                     >
-                    </b-form-input>
-                <b-input-group-append>
-                  <b-button type="submit" variant="outline-success" >
-                    Създай Етикет !
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form>
+                  </b-form-input>
+                  <b-input-group-append>
+                    <b-button type="submit" variant="outline-success" >
+                      Създай!
+                    </b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </b-dropdown-form>
           <b-alert
               show dismissible
               class="small"
@@ -88,7 +92,6 @@
             </tr>
             </tbody>
           </table>
-
           <b-dropdown-text v-if="available_options.length === 0">
             Няма създадени етикети ! Добавете от полето по-горе !
           </b-dropdown-text>

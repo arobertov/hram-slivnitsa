@@ -3,19 +3,29 @@
     <b-alert show dismissible variant="danger" v-if="error">
       {{ error }}
     </b-alert>
-
-    <div class="container-sm ">
+    <b-container>
       <validation-observer ref="newArticle" v-slot="{ handleSubmit ,invalid}">
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
-          <article-title-input v-model="title"/>
-          <category-select v-model="category"/>
-          <tag-form/>
-          <article-content-input v-model="content"/>
-          <b-button id="check-article-btn" variant="info">Прегледай</b-button>
-          <b-button type="submit" variant="success" id="new-article-submit-btn" >Публикувай</b-button>
+          <b-form-row>
+            <b-col md="8">
+              <article-title-input v-model="title"/>
+              <article-content-input v-model="content"/>
+            </b-col>
+            <b-col md="4">
+              <category-select v-model="category"/>
+              <tag-form/>
+              <image-manager/>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <div>
+              <b-button id="check-article-btn" variant="info">Прегледай</b-button>
+              <b-button type="submit" variant="success" id="new-article-submit-btn" >Публикувай</b-button>
+            </div>
+          </b-form-row>
         </b-form>
       </validation-observer>
-    </div>
+    </b-container>
   </div>
 </template>
 
@@ -26,6 +36,7 @@ import ArticleTitleInput from "../../components/admin-panel-components/ArticleTi
 import ArticleContentInput from "../../components/admin-panel-components/ArticleContentInput";
 import TagForm from "../../components/admin-panel-components/TagFormSelect";
 import CategorySelect from "../../components/admin-panel-components/CategorySelect";
+import ImageManager from "../../components/admin-panel-components/ImageManager";
 
 const {mapFields} = createHelpers({
   getterType: 'ArticleModule/getArticleField',
@@ -40,7 +51,7 @@ const items = [
 export default {
   name: "Article-new",
   components: {
-    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput
+    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput,ImageManager
   },
   computed: {
     responseData() {

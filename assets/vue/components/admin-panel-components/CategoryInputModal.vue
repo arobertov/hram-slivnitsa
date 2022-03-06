@@ -1,9 +1,11 @@
 <template>
   <div>
-    <b-button v-b-modal.category-modal variant="info" class="mt-4">
-      <b-icon icon="plus-square" aria-hidden="true"></b-icon>
-      Добави категория
-    </b-button>
+    <div class="text-right mb-4 ">
+      <b-button v-b-modal.category-modal variant="info">
+        <b-icon icon="plus-square" aria-hidden="true"></b-icon>
+        Добави категория
+      </b-button>
+    </div>
     <validation-observer ref="observer" v-slot="{ handleSubmit }">
       <b-form ref="form" @submit.stop.prevent="handleSubmit(onSubmit)">
         <b-modal

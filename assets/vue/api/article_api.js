@@ -11,7 +11,6 @@ export default {
         });
     },
     edit(articleFormData){
-        console.log(articleFormData.tags)
         return axios.put("/api/articles/"+articleFormData.id, {
             title:articleFormData.title,
             content:articleFormData.content,
@@ -27,6 +26,6 @@ export default {
         return axios.delete("/api/articles/"+articleId);
     },
     findAll() {
-        return axios.get("/api/articles");
+        return axios.get("/api/articles?order%5BdateEdited%5D=desc");
     }
 };

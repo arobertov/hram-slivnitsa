@@ -27,3 +27,5 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\Listener\ArticleListener:
+        tags: [doctrine.orm.entity_listener]

@@ -11,7 +11,7 @@
             <span v-html="article.content"></span>
         </div>
         <div>
-            <span>Автор</span>
+            <span>Автор : <span v-if="article.owner">{{article.owner.alias}}</span></span>
 
         </div>
         <div>
