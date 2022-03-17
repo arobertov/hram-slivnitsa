@@ -20,7 +20,7 @@
           <b-form-row>
             <div>
               <b-button id="check-article-btn" variant="info">Прегледай</b-button>
-              <b-button type="submit" variant="success" id="new-article-submit-btn" >Публикувай</b-button>
+              <b-button type="submit" variant="success" id="new-article-submit-btn">Публикувай</b-button>
             </div>
           </b-form-row>
         </b-form>
@@ -51,7 +51,7 @@ const items = [
 export default {
   name: "Article-new",
   components: {
-    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput,ImageManager
+    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput, ImageManager
   },
   computed: {
     responseData() {
@@ -64,15 +64,15 @@ export default {
       'title',
       'content',
       'category',
-      'isPublished'
+      'isPublished',
+
     ]),
   },
   created() {
     let store = this.$store;
-    if (store.getters["ArticleModule/articles"].length <= 1) {
+    if (store.getters["ArticleModule/articles"].length < 1) {
       store.dispatch("ArticleModule/findAll");
     }
-    //store.dispatch("TagModule/findAllTags");
     store.commit("MainModule/ATTACH_BREADS", items);
     store.commit("ArticleModule/CREATING_ARTICLE");
   },
@@ -81,24 +81,21 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$refs.newArticle.validate().then(success=>{
-        if(success){
+      this.$refs.newArticle.validate().then(success => {
+        if (success) {
           this.createArticle();
         }
       })
     },
     async createArticle() {
-      let article = this.$store.state.ArticleModule.article;
+      let article = this.$store.getters["ArticleModule/getArticle"];
       const result = await this.$store.dispatch("ArticleModule/create", article);
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }
-
-
     },
   }
 };
-
 </script>
 
 <style scoped>

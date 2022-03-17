@@ -2,12 +2,14 @@ import axios from "axios";
 
 export default {
     create(articleFormData) {
+        console.log(articleFormData)
         return axios.post("/api/articles",{
             title:articleFormData.title,
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
             tags:articleFormData.tags,
-            category:articleFormData.category
+            category:articleFormData.category,
+            images:articleFormData.images
         });
     },
     edit(articleFormData){
@@ -16,7 +18,8 @@ export default {
             content:articleFormData.content,
             isPublished:articleFormData.isPublished,
             tags:articleFormData.tags,
-            category:articleFormData.category
+            category:articleFormData.category,
+            images:[articleFormData.images]
         })
     },
     show(articleId){

@@ -5,7 +5,7 @@ import UserModule from "./user";
 import ArticleModule from "./article";
 import CategoryModule from "./category";
 import TagModule from "./tag";
-
+import ImageModule from "./image"
 Vue.use(Vuex);
 
 export default  new Vuex.Store({
@@ -15,5 +15,6 @@ export default  new Vuex.Store({
         ArticleModule: ArticleModule,
         CategoryModule: CategoryModule,
         TagModule: TagModule,
+        ImageModule : ImageModule,
     }
 })

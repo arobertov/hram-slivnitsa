@@ -18,9 +18,6 @@ class ArticleListener
     }
 
     public function prePersist(Article $article){
-        if($article->getOwner()){
-            return;
-        }
         if($this->security->getUser()){
             $article->setOwner($this->security->getUser());
         }

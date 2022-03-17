@@ -6,8 +6,10 @@ import Common from './common-index';
 // ***** import components  ******** //
 import Aside from './views/Admin-panel';
 
+
 Common.vueCommonSets();
 Vue.use(VueImageManager);
+
 Vue.prototype.$siteUser = window.user;
 
 new Vue({

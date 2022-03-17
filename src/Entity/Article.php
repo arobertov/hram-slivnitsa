@@ -6,7 +6,6 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\ArticleRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,7 +44,7 @@ class Article
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Groups({"article:read","article:write"})
@@ -58,32 +57,32 @@ class Article
      *      maxMessage = "Article title cannot be longer than {{ limit }} characters"
      * )
      */
-    private $title;
+    private string $title;
 
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      */
-    private $content;
+    private string $content;
 
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column (type="boolean",nullable=true)
      */
-    private $isPublished;
+    private bool  $isPublished;
 
     /**
      * @Groups({"article:read"})
      * @ORM\Column(type="datetime")
      */
-    private $dateCreated;
+    private \DateTimeInterface $dateCreated;
 
     /**
      * @Groups({"article:read"})
      * @ORM\Column(type="datetime")
      */
-    private $dateEdited;
+    private \DateTimeInterface $dateEdited;
 
     /**
      * @Groups({"article:read","article:write"})
@@ -93,25 +92,27 @@ class Article
 
     /**
      * @Groups({"article:read","article:write"})
+     * @ORM\ManyToMany(targetEntity=Image::class, mappedBy="articles")
+     */
+    private $images;
+
+    /**
+     * @Groups({"article:read","article:write"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
      */
-    private $category;
+    private Category $category;
 
     /**
      * @Groups({"article:read"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
      */
-    private $owner;
-
+    private  $owner;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
-        //$this->setDateCreated(new DateTime('now'));
-        //$this->setDateEdited(new DateTime('now'));
+        $this->images = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -145,9 +146,6 @@ class Article
 
     public function getIsPublished(): bool
     {
-        if ($this->isPublished === null) {
-            return false;
-        }
         return $this->isPublished;
     }
 
@@ -190,6 +188,10 @@ class Article
         return $this->tags;
     }
 
+    /**
+     * @param Tag $tag
+     * @return $this
+     */
     public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
@@ -204,6 +206,40 @@ class Article
     {
         if ($this->tags->removeElement($tag)) {
             $tag->removeArticle($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection | Tag[]
+     */
+    public function getImages() :Collection
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param Image $image
+     * @return $this
+     */
+    public function addImage(Image $image): self
+    {
+        if(!$this->images->contains($image)){
+            $this->images[] = $image;
+            $image->addArticle($this);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Image $image
+     * @return $this
+     */
+    public function removeImage(Image $image): self
+    {
+        if($this->images->removeElement($image)){
+            $image->removeArticle($this);
         }
 
         return $this;

@@ -92,7 +92,7 @@
             </tr>
             </tbody>
           </table>
-          <b-dropdown-text v-if="available_options.length === 0">
+          <b-dropdown-text v-if="allTags.length === 0">
             Няма създадени етикети ! Добавете от полето по-горе !
           </b-dropdown-text>
         </b-dropdown>
@@ -167,7 +167,9 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("TagModule/findAllTags");
+    if( ! this.$store.getters["TagModule/getTags"].length > 0){
+      this.$store.dispatch("TagModule/findAllTags");
+    }
   },
   methods: {
     on_confirm_delete_modal(tag) {

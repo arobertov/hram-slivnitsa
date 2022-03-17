@@ -1,6 +1,22 @@
 var Encore = require('@symfony/webpack-encore');
 var webpack = require('webpack');
 const path = require('path');
+const options = {
+    transformAssetUrls: {
+        video: ['src', 'poster'],
+        source: 'src',
+        img: 'src',
+        image: 'xlink:href',
+        'b-avatar': 'src',
+        'b-img': 'src',
+        'b-img-lazy': ['src', 'blank-src'],
+        'b-card': 'img-src',
+        'b-card-img': 'src',
+        'b-card-img-lazy': ['src', 'blank-src'],
+        'b-carousel-slide': 'img-src',
+        'b-embed': 'src'
+    }
+}
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -20,10 +36,7 @@ Encore
            //cert:'/.symfony/certs/default.p12'
            pfx: path.join(process.env.HOMEPATH, '.symfony/certs/default.p12'),
         };
-
-
     })
-
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -42,7 +55,12 @@ Encore
     .addEntry('dashboard','./assets/js/dashboard-css.js')
     .addEntry('vue','./assets/vue/index.js')
     .addEntry('vue-admin','./assets/vue/index-admin.js')
-
+    .copyFiles({
+        from: './assets/images',
+        pattern: /\.(png|jpg|jpeg)$/,
+        // to path is relative to the build directory
+        to: 'images/[path][name].[ext]'
+    })
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
@@ -52,7 +70,9 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-
+    .addAliases({
+        '@images': path.resolve(__dirname, 'assets','images'),
+    })
     /*
      * FEATURE CONFIG
      *
@@ -95,7 +115,9 @@ Encore
     // requires WebpackEncoreBundle 1.4 or higher
     //.enableIntegrityHashes(Encore.isProduction())
 
-    .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
+    .enableVueLoader(() => {
+        return options;
+    }, { runtimeCompilerBuild: true })
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()

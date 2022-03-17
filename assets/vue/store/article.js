@@ -19,6 +19,7 @@ function mapTags(article){
         tags: mappedTags,
         isPublished: article.isPublished,
         title: article.title,
+        images: article.images
     }
 }
 const
@@ -51,6 +52,7 @@ export default {
             title: '',
             content: '',
             tags: [],
+            images:[],
             category: '',
             isPublished:true,
         },
@@ -82,8 +84,11 @@ export default {
             return state.article;
         },
         getTagsArticle(state){
-            return state.article.tags
-        }
+            return state.article.tags;
+        },
+        getImagesArticle(state){
+            return state.article.images;
+        },
     },
     mutations: {
         updateArticleField(state, field) {
@@ -92,12 +97,16 @@ export default {
         attachTagsForArticle(state,tags){
             state.article.tags = tags;
         },
+        attachImagesForArticles(state,images){
+            state.article.images.push(images);
+        },
         [CREATING_ARTICLE](state){
             state.article = {
                 id: undefined ,
                 title: '',
                 content: '',
                 tags: [],
+                images:[],
                 category: '',
                 isPublished:true,
                 owner:''
