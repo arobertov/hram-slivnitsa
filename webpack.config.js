@@ -1,6 +1,7 @@
 var Encore = require('@symfony/webpack-encore');
 var webpack = require('webpack');
 const path = require('path');
+const {resolve} = require("vue-paginate/webpack.config");
 const options = {
     transformAssetUrls: {
         video: ['src', 'poster'],
@@ -70,8 +71,13 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
+
+    //add assets directory aliases
     .addAliases({
         '@images': path.resolve(__dirname, 'assets','images'),
+        '@vue':path.resolve(__dirname,'assets','vue'),
+        '@js':path.resolve(__dirname,'assets','js'),
+        '@styles':path.resolve(__dirname,'assets','styles'),
     })
     /*
      * FEATURE CONFIG

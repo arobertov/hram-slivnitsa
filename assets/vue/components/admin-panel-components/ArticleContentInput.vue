@@ -18,7 +18,6 @@
           class="bg-white"
           placeholder="Въведете текст на статия..."
           aria-describedby="content-live-feedback"
-          @input="handleImageAdded"
       >
       </vue-editor>
       <b-form-invalid-feedback id="content-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>

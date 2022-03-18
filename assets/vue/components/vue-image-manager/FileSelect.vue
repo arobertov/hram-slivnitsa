@@ -113,6 +113,7 @@
 <script>
 
 export default {
+  name:"FileSelect",
   mounted() {
     if (this.$store.getters["ImageModule/getImages"].length < 1) {
       this.$store.dispatch("ImageModule/findAllImages");

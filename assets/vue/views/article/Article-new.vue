@@ -65,7 +65,6 @@ export default {
       'content',
       'category',
       'isPublished',
-
     ]),
   },
   created() {

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import FileInput from '../../components/vue-image-manager/FileInput';
+import FileInput from '@vue/components/vue-image-manager/FileInput';
 
 export default {
   name: "ImageManager",

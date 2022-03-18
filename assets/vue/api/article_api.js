@@ -2,7 +2,6 @@ import axios from "axios";
 
 export default {
     create(articleFormData) {
-        console.log(articleFormData)
         return axios.post("/api/articles",{
             title:articleFormData.title,
             content:articleFormData.content,

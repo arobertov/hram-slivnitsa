@@ -6,12 +6,12 @@
       <div class="preview" v-if="files_selected">
         <template v-if="multiple">
           <div class="image" v-for="(file, i) in selected_files" :key="i">
-            <img :src="server.home+file.contentUrl" alt="Image" height="150px">
+            <img :src="require(`@images/${file.filePath}`).default" alt="Image" height="150px">
           </div>
         </template>
         <template v-if="! multiple">
           <div class="image">
-            <img :src="server.home+selected_files.contentUrl" alt="Image" height="150px">
+            <img :src="require(`@images/${selected_files.filePath}`).default" alt="Image" height="150px">
           </div>
         </template>
       </div>
@@ -21,9 +21,10 @@
 </template>
 
 <script>
-import FileSelect from '../../components/vue-image-manager/FileSelect'
+import FileSelect from '@vue/components/vue-image-manager/FileSelect'
 
 export default {
+  name:'FileInput',
   components: {
     FileSelect
   },

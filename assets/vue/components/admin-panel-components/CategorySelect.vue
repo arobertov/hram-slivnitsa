@@ -29,7 +29,7 @@
               v-if="categories.length===0"
               disabled
           >
-            - Няма създадени категории - Създайте от бутона --->
+            - Няма създадени категории
           </b-form-select-option>
           <b-form-select-option
               value=""

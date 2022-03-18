@@ -5,6 +5,7 @@ import bg from 'vee-validate/dist/locale/bg.json';
 import * as rules from 'vee-validate/dist/rules';
 import VuePaginate from 'vue-paginate';
 import moment from 'moment';
+import VueBreadcrumbs from 'vue-breadcrumbs';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -17,6 +18,7 @@ function vueCommonSets(){
     Vue.use(BootstrapVue);
     Vue.use(IconsPlugin);
     Vue.use(VuePaginate);
+    Vue.use(VueBreadcrumbs);
     Vue.component('ValidationObserver', ValidationObserver);
     Vue.component('ValidationProvider', ValidationProvider);
     //--------------  datetime filer  --------------------- //

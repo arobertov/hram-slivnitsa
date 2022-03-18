@@ -12,39 +12,54 @@ import AdminArticleEdit from "../views/article/Article-edit";
 Vue.use(VueRouter);
 
 export default new VueRouter({
-    mode:"history",
+    mode: "history",
     routes: [
         {
-            path:"/",
-            name:"homepage",
-            component:HomePage,
+            path: "/",
+            name: "homepage",
+            component: HomePage,
 
         },
         {
             path: "/admin",
             name: "admin_panel",
-            component: AdminHome
+            component: AdminHome,
+            meta: {
+                breadcrumb: 'Админ панел',
+            },
         },
         {
             path: "/admin/articles",
             name: "admin_article_index",
-            component: AdminArticleIndex
+            component: AdminArticleIndex,
+            meta: {
+                breadcrumb: 'Статии',
+            },
         },
         {
             path: "/admin/articles/:id/show",
             name: "admin_article_show",
-            component: AdminArticleShow
+            component: AdminArticleShow,
+            meta: {
+                breadcrumb: 'Прегледай статия',
+            },
         },
         {
             path: "/admin/articles/create",
             name: "admin_article_new",
-            component: AdminArticleNew
+            component: AdminArticleNew,
+            meta: {
+                breadcrumb: 'Създай статия',
+            },
         },
         {
             path: "/admin/articles/:id/edit",
             name: "admin_article_edit",
-            component:AdminArticleEdit,
+            component: AdminArticleEdit,
+            meta: {
+                breadcrumb: 'Редактирай статия',
+            },
         },
-     ]
+    ]
 
 });

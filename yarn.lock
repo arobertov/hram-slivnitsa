@@ -9015,6 +9015,11 @@ vue-axios@^3.2.2:
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-3.4.1.tgz#e092ec4060b42e941ea5059df9b8f09058c3eea9"
   integrity sha512-8YZYUOQrBEJktxoQtrM4rr2LfVcDaWfJqv8MqtLlgLlkuBvCYKFSZSo6AXQ4YcCzdgccDqstmuaEh68lcH9xWA==
 
+vue-breadcrumbs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-breadcrumbs/-/vue-breadcrumbs-1.2.0.tgz#7d33a4499e2448a3f0fb637d19885d7263dd257c"
+  integrity sha512-5vh3ZKQYfJK5NBJdgyB0fgLgsLQnabdrlRMh3kZVekUxHiYW1NskKCITGcnjbPUscwjys5isOb2Ts0+/6oHG7w==
+
 vue-functional-data-merge@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz#08a7797583b7f35680587f8a1d51d729aa1dc657"

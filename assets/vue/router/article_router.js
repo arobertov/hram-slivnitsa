@@ -8,22 +8,22 @@ export default [
         {
             path: "/admin",
             name: "admin_panel",
-            component: AdminPanel
+            component: AdminPanel,
         },
         {
             path: "/admin/articles",
             name: "admin_article_index",
-            component: AdminArticleIndex
+            component: AdminArticleIndex,
         },
         {
             path: "/admin/articles/:id",
             name: "admin_article_show",
-            component: AdminArticleShow
+            component: AdminArticleShow,
         },
         {
             path: "/admin/articles/new",
             name: "admin_article_new",
-            component: AdminArticleNew
+            component: AdminArticleNew,
         },
         {
             path: "/админ/статии/:id/редактирай",

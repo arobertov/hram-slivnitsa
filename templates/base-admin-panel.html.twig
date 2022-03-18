@@ -6,12 +6,29 @@
     <meta name="description" content="Администраторски панел">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
-        {{ encore_entry_link_tags('dashboard') }}
-        {{ encore_entry_link_tags('palette') }}
+        {{ encore_entry_link_tags('dashboard')}}
+        {{encore_entry_link_tags('palette')}}
         {{ encore_entry_link_tags('vue-admin') }}
     {% endblock %}
+
 </head>
 <body>
 {% block body %}{% endblock %}

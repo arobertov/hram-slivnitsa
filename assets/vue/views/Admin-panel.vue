@@ -42,7 +42,7 @@
               </a>
             </router-link>
             <li class="nav-item" >
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="#" @click="show_image_modal = true">
                 <span class="nav-icon"><b-icon-image></b-icon-image></span>
                 Изображения
               </a>
@@ -50,6 +50,7 @@
           </ul>
         </div>
       </nav>
+      <file-select :showModal="show_image_modal" @close="show_image_modal=false" :multiple="false" :server="server"></file-select>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="main-content">
           <b-breadcrumb :items="items" ></b-breadcrumb>
@@ -62,8 +63,23 @@
 
 
 <script>
+import FileSelect from "@vue/components/vue-image-manager/FileSelect";
+
 export default {
   name: "Aside-nav",
+  components:{
+    FileSelect
+  },
+  data(){
+    return{
+      show_image_modal:false,
+      server: {
+        home: 'https://localhost:8080',
+        add_folder: '/api/public/files',
+        file_uploads: '/api/images'
+      }
+    }
+  },
   created() {
     this.$store.dispatch("CategoryModule/findAllCategories");
     if(this.$store.getters["ArticleModule/articles"].length <= 1){

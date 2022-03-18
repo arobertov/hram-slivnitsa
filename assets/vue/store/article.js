@@ -1,26 +1,17 @@
 import ArticleAPI from "../api/article_api";
 import { getField, updateField } from 'vuex-map-fields';
-function mapTags(article){
+function mapTags(article) {
     let mappedTags = [];
-    article.tags.forEach(t=>{
-        try{
+    article.tags.forEach(t => {
+        try {
             mappedTags.push(JSON.parse(t)['@id']);
-        }catch (e){
-            console.log(e)
+        } catch (e) {
             mappedTags.push(t['@id'])
         }
     })
-    return {
-        category: article.category,
-        content: article.content,
-        dateCreated: article.dateCreated,
-        dateEdited: article.dateEdited,
-        id: article.id,
-        tags: mappedTags,
-        isPublished: article.isPublished,
-        title: article.title,
-        images: article.images
-    }
+    article.tags = mappedTags;
+    console.log(article)
+    return article
 }
 const
     CREATING_ARTICLE = "CREATING_ARTICLE",
@@ -98,7 +89,7 @@ export default {
             state.article.tags = tags;
         },
         attachImagesForArticles(state,images){
-            state.article.images.push(images);
+                state.article.images.push(images);
         },
         [CREATING_ARTICLE](state){
             state.article = {
@@ -193,6 +184,7 @@ export default {
     actions: {
         async create({ commit }, article) {
             try {
+                console.log(mapTags(article))
                 let response = await ArticleAPI.create(mapTags(article));
                 commit(CREATING_ARTICLE_SUCCESS, response.data);
                 return response.data;
