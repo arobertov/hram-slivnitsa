@@ -8,7 +8,7 @@
               <b-icon-x></b-icon-x>
             </a>
             <div class="modal-header">
-              <h4>Избери изображение</h4>
+              <slot name="header"></slot>
             </div>
             <div class="modal-body">
               <div class="navigation">
@@ -76,13 +76,16 @@
                       style="display: none;"
                   />
                   <label :for="`file_${file.id}`">
-                    <span class="preview">
+                    <div class="preview">
+                      <a href="#" class="modal-close" @click.prevent="$emit('close')">
+                        <b-icon-x-square></b-icon-x-square>
+                    </a>
                       <b-img
-                          thumbnail fluid
+                          fluid
                           :src="require(`@images/${file.filePath}`).default"
                           :alt="file.filePath">
                       </b-img>
-                    </span>
+                    </div>
                     <span class="name" :title="file.id">{{ $_truncate.line(file.filePath, 8) }}</span>
                   </label>
                 </div>
@@ -95,14 +98,16 @@
                   @click.prevent="$emit('close')">
                 <b-icon-x-circle></b-icon-x-circle> Затвори
               </b-button>
-              <b-button
-                  variant="success"
-                  size="sm"
-                  :disabled="selected_files.length===0"
-                  @click.prevent="$emit('selected', selected_files)"
-              >
-                <b-icon-check2></b-icon-check2> Избор
-              </b-button>
+              <slot name="checkButton">
+                <b-button
+                    variant="success"
+                    size="sm"
+                    :disabled="selected_files.length===0"
+                    @click.prevent="$emit('selected', selected_files)"
+                >
+                  <b-icon-check2></b-icon-check2> Избор
+                </b-button>
+              </slot>
             </div>
           </div>
         </div>

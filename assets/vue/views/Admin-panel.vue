@@ -50,7 +50,18 @@
           </ul>
         </div>
       </nav>
-      <file-select :showModal="show_image_modal" @close="show_image_modal=false" :multiple="false" :server="server"></file-select>
+      <file-select
+          :showModal="show_image_modal"
+          @close="show_image_modal=false"
+          :multiple="false"
+          :server="server">
+        <template #header>
+          <h2>Библиотека с изображения</h2>
+        </template>
+        <template #checkButton>
+          <p></p>
+        </template>
+      </file-select>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="main-content">
           <b-breadcrumb :items="items" ></b-breadcrumb>

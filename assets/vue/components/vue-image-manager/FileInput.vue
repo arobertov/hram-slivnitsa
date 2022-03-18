@@ -16,7 +16,15 @@
         </template>
       </div>
     </div>
-    <file-select :showModal="show_modal" @close="show_modal = false" @selected="selectFiles" :multiple="multiple" :server="server" />
+    <file-select
+        :showModal="show_modal"
+        @close="show_modal = false"
+        @selected="selectFiles"
+        :multiple="multiple"
+        :server="server"
+    >
+      <template #header><h4>Избери изображение</h4></template>
+    </file-select>
   </div>
 </template>
 
@@ -89,4 +97,5 @@ export default {
     padding: 10px;
   }
 }
+
 </style>
