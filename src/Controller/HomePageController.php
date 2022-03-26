@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class HomePageController extends AbstractController
 {
     /**
-     * @Route("/", name="home_page")
+     * @Route("/{vueRouting}",requirements={"vueRouting"="^(?!api)(?!logout)(?!login).*"}, name="home_page")
      * @param SerializerInterface $serializer
      * @return Response
      */

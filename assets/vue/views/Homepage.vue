@@ -1,56 +1,38 @@
 <template>
-  <div>
-    <div v-if="isLogin">
-      <h1> Влезли сте като {{user.username}}</h1>
+  <body>
+    <b-container fluid="md">
+      <navbar-top-menu/>
       <div>
-        <a href="/admin">
-          <b-button variant="outline-primary">Админ панел</b-button>
-        </a>
+        <router-view/>
       </div>
-      <div>
-        <a href="/logout">
-          <span  class="btn  btn-success">Logout</span>
-        </a>
-      </div>
-    </div>
-    <div v-else>
-      <a data-toggle="modal" data-target="#loginModal">
-        <span  class="btn  btn-success">Login</span>
-      </a>
-    </div>
-   <login-form></login-form>
-    <register-form></register-form>
-    <button
-        type="button"
-        class="btn btn-outline-secondary"
-        data-toggle="modal"
-        data-target="#registerModal"
-    >
-      Регистрация
-    </button>
-    <test></test>
-  </div>
+    </b-container>
+    <login-form/>
+    <register-form/>
+  </body>
 </template>
 
 <script>
-import Test from "./Test";
-import LoginForm from "./security/LoginForm";
-import RegisterForm from "./security/RegisterForm";
+
+import loginForm from "@vue/views/security/LoginForm";
+import registerForm from "@vue/views/security/RegisterForm";
+import navbarTopMenu from "@vue/components/site-components/NavbarTopMenuComponent";
 
 export default {
 name: "homepage",
-  components: {RegisterForm, LoginForm, Test},
-  computed: {
-    user() {
-      return this.$siteUser == null ? this.$store.getters["UserModule/getUser"] : this.$siteUser  ;
-    },
-    isLogin() {
-      return this.$siteUser !== null ? this.$siteUser : this.$store.getters["UserModule/getIsLogin"];
-    },
-  }
+  components: {
+    navbarTopMenu,
+    loginForm,
+    registerForm
+  },
 }
 </script>
 
-<style scoped>
-
+<style>
+  #site-article{
+    border: 1px solid #111111;
+    box-shadow: 0px 0px 7px 4px #efefee;
+    border-radius: 5px;
+    background-color: #718a76;
+    margin:auto;
+  }
 </style>

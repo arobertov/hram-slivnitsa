@@ -11,56 +11,56 @@
         <div class="modal-body">
           <div v-if="formIsError" id="err_message" class="alert alert-danger" role="alert">{{formError.error}}</div>
           <ValidationObserver ref="observer">
-          <b-form ref="form"
-                  slot-scope="{ validate }"
-                  @submit.prevent="validate().then(handleSubmit)"
-          >
-            <ValidationProvider rules="required|min:4|max:30" name="Username">
-              <b-form-group
-                  label="Потребителско име"
-                  label-for="input-username"
-                  slot-scope="{ valid, errors }"
-                  description="Потебителско име : от 4 до 30 символа"
-              >
-                <b-form-input
-                    name="username"
-                    id="input-username"
-                    v-model="user.username"
-                    :state="errors[0] ? false : (valid ? true : null)"
-                    placeholder="Въведете потребителско име">
-                  >
-                </b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">
-                  {{ errors[0] }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </ValidationProvider>
-            <ValidationProvider rules="required|min:4|max:30" name="Password">
-              <b-form-group
-                  label="Парола:"
-                  label-for="input-password"
-                  slot-scope="{ valid, errors }"
-                  description="Парола : от 6 до 30 символа"
-              >
-                <b-form-input
-                    name="password"
-                    type="password"
-                    id="input-password"
-                    v-model="user.password"
-                    :state="errors[0] ? false : (valid ? true : null)"
-                    placeholder="Въведете парола" >
-                  >
-                </b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">
-                  {{ errors[0] }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </ValidationProvider>
-            <b-button variant="success" type="submit">
-              Влез
-            </b-button>
-          </b-form>
-        </ValidationObserver>
+            <b-form ref="form"
+                    slot-scope="{ validate }"
+                    @submit.prevent="validate().then(handleSubmit)"
+            >
+              <ValidationProvider rules="required|min:4|max:30" name="Username">
+                <b-form-group
+                    label="Потребителско име"
+                    label-for="input-username"
+                    slot-scope="{ valid, errors }"
+                    description="Потебителско име : от 4 до 30 символа"
+                >
+                  <b-form-input
+                      name="username"
+                      id="input-username"
+                      v-model="user.username"
+                      :state="errors[0] ? false : (valid ? true : null)"
+                      placeholder="Въведете потребителско име">
+                    >
+                  </b-form-input>
+                  <b-form-invalid-feedback id="inputLiveFeedback">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider rules="required|min:4|max:30" name="Password">
+                <b-form-group
+                    label="Парола:"
+                    label-for="input-password"
+                    slot-scope="{ valid, errors }"
+                    description="Парола : от 6 до 30 символа"
+                >
+                  <b-form-input
+                      name="password"
+                      type="password"
+                      id="input-password"
+                      v-model="user.password"
+                      :state="errors[0] ? false : (valid ? true : null)"
+                      placeholder="Въведете парола" >
+                    >
+                  </b-form-input>
+                  <b-form-invalid-feedback id="inputLiveFeedback">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <b-button variant="success" type="submit">
+                Влез
+              </b-button>
+            </b-form>
+          </ValidationObserver>
         </div>
 
         <div class="modal-footer m-auto">
@@ -90,12 +90,10 @@
 <script>
 import {createHelpers} from 'vuex-map-fields';
 import {ValidationObserver, ValidationProvider} from 'vee-validate';
-
 const {mapFields} = createHelpers({
   getterType: "UserModule/getLoginField",
   mutationType: 'UserModule/updateLoginField',
 });
-
 export default {
   name: "LoginForm",
   components: {
@@ -123,7 +121,7 @@ export default {
       // Exit when the form isn't valid
       const result = await this.$store.dispatch("UserModule/sendLoginForm", this.$store.state.UserModule.user);
       if(result !== undefined){
-        await this.$store.dispatch("UserModule/getUser",result);
+        await this.$store.dispatch("UserModule/fetchingUser",result);
         this.$nextTick(() => {
           $('#loginModal').modal('hide');
         })
@@ -134,5 +132,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

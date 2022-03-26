@@ -14,12 +14,12 @@ class UserDataPersister implements DataPersisterInterface
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $userPasswordEncoder;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     /**
      * UserDataPersister constructor.

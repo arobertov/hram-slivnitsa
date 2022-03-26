@@ -8,7 +8,7 @@ export default {
             isPublished:articleFormData.isPublished,
             tags:articleFormData.tags,
             category:articleFormData.category,
-            images:articleFormData.images
+            images:articleFormData.images.map(image=>image["@id"])
         });
     },
     edit(articleFormData){
@@ -18,7 +18,7 @@ export default {
             isPublished:articleFormData.isPublished,
             tags:articleFormData.tags,
             category:articleFormData.category,
-            images:[articleFormData.images]
+            images:articleFormData.images.map(image=>image["@id"])
         })
     },
     show(articleId){

@@ -1,8 +1,7 @@
 <template>
   <form @submit.prevent="submit">
     <file-input
-        v-model="image"
-        @input="attachImageForArticles"
+        v-model="images"
         :server="server"
     />
   </form>
@@ -18,7 +17,6 @@ export default {
   },
   data() {
     return {
-      image: null,
       server: {
         home: 'https://localhost:8080',
         add_folder: '/api/public/files',
@@ -32,17 +30,10 @@ export default {
         return this.$store.getters["ArticleModule/getImagesArticle"];
       },
       set:function (image){
-        this.$store.commit("ArticleModule/attachImagesForArticles",image["@id"])
+        this.$store.commit("ArticleModule/attachImagesForArticles",image);
       }
     }
   },
-  methods:{
-    attachImageForArticles() {
-      if(this.image){
-        this.images=this.image;
-      }
-    }
-  }
 }
 </script>
 

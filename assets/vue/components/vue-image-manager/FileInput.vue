@@ -1,19 +1,14 @@
 <template>
   <div>
-    <a href="#" class="btn btn-warning float-right btn-sm" @click.prevent="clearFiles" v-if="files_selected">изчисти</a>
+    <a href="#" class="btn btn-warning float-right btn-sm" @click.prevent="clearFiles" v-if="value.length>0">изчисти</a>
     <div class="input-field" @click="show_modal = true">
-      <div class="helper" v-if="! files_selected">КЛИКНЕТЕ ЗА ИЗБОР НА ИЗОБРАЖЕНИЕ</div>
-      <div class="preview" v-if="files_selected">
-        <template v-if="multiple">
-          <div class="image" v-for="(file, i) in selected_files" :key="i">
-            <img :src="require(`@images/${file.filePath}`).default" alt="Image" height="150px">
-          </div>
-        </template>
-        <template v-if="! multiple">
+      <div class="helper" v-if="value.length === 0">КЛИКНЕТЕ ЗА ИЗБОР НА ИЗОБРАЖЕНИЕ</div>
+      <div class="preview" v-else>
+        <div>
           <div class="image">
-            <img :src="require(`@images/${selected_files.filePath}`).default" alt="Image" height="150px">
+            <img :src="require(`@images/${value[0].filePath}`).default" alt="Image" height="150px">
           </div>
-        </template>
+        </div>
       </div>
     </div>
     <file-select
@@ -44,33 +39,25 @@ export default {
     },
     value: {
       type: Object | Array ,
-      default() { return null }
+      default() { return [] }
     },
     server: {
       type: Object,
       default() { return { home: '', add_folder: '', file_uploads: '' }}
     }
   },
-
   data() {
     return {
       show_modal: false,
-      selected_files: this.value,
-      files_selected: false
     }
   },
-
   methods: {
     selectFiles(files) {
-      this.selected_files = files;
-      this.$emit('input', this.selected_files);
-      this.files_selected= true;
+      this.$emit('input', files);
       this.show_modal = false;
     },
 
     clearFiles() {
-      this.selected_files = [];
-      this.files_selected = false;
       this.$emit('input', []);
     }
   }

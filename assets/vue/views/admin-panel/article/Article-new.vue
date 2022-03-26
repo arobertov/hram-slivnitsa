@@ -1,10 +1,10 @@
 <template>
-  <div class="main-content">
+  <div>
     <b-alert show dismissible variant="danger" v-if="error">
       {{ error }}
     </b-alert>
     <b-container>
-      <validation-observer ref="newArticle" v-slot="{ handleSubmit ,invalid}">
+      <validation-observer ref="newArticle" v-slot="{ handleSubmit, invalid}">
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-form-row>
             <b-col md="8">
@@ -32,11 +32,11 @@
 <script>
 import {createHelpers} from 'vuex-map-fields';
 /*---------- import components -----------------*/
-import ArticleTitleInput from "../../components/admin-panel-components/ArticleTitleInput";
-import ArticleContentInput from "../../components/admin-panel-components/ArticleContentInput";
-import TagForm from "../../components/admin-panel-components/TagFormSelect";
-import CategorySelect from "../../components/admin-panel-components/CategorySelect";
-import ImageManager from "../../components/admin-panel-components/ImageManager";
+import ArticleTitleInput from "../../../components/admin-panel-components/ArticleTitleInput";
+import ArticleContentInput from "../../../components/admin-panel-components/ArticleContentInput";
+import TagForm from "../../../components/admin-panel-components/TagFormSelect";
+import CategorySelect from "../../../components/admin-panel-components/CategorySelect";
+import ImageManager from "../../../components/admin-panel-components/ImageManager";
 
 const {mapFields} = createHelpers({
   getterType: 'ArticleModule/getArticleField',

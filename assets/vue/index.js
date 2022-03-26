@@ -1,24 +1,17 @@
 import Vue from 'vue';
-import router from './router/routes';
-import store from './store';
-import Common from './common-index';
+import router from '@vue/router/site-routes';
+import store from '@vue/store';
+import Common from '@vue/common-index';
 // ***** import components  ******** //
-import Homepage from "./views/Homepage";
-import LoginForm from "./views/security/LoginForm";
-import RegisterForm from "./views/security/RegisterForm";
-import Test from "./views/Test";
+import Homepage from "@vue/views/Homepage";
 
 Common.vueCommonSets();
-
 
 Vue.prototype.$siteUser = window.user;
 
 new Vue({
     components:{
-        Homepage,
-        LoginForm,
-        RegisterForm,
-        Test,
+        Homepage
     },
     template:"<Homepage/>",
     router,

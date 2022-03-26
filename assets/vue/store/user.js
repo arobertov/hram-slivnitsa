@@ -1,5 +1,5 @@
 import { getField, updateField } from 'vuex-map-fields';
-import user_api from "../api/user_api";
+import user_api from "@vue/api/user_api";
 
 const
     USER_LOGIN = "USER_LOGIN",
@@ -82,9 +82,9 @@ export default {
                 commit(FETCHING_FORM_ERROR,error);
             }
         },
-        async getUser({commit},response){
+        async fetchingUser({commit}, userIri){
             try{
-                const user = await user_api.findUser(response);
+                const user = await user_api.findUser(userIri);
                 commit(USER_LOGIN,user.data)
             } catch (error){
                console.log(error);

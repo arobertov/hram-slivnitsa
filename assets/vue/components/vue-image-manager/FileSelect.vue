@@ -69,9 +69,9 @@
                 </div>
                 <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
                   <input
-                      :type="multiple ? 'checkbox' : 'radio'"
+                      type="radio"
                       :id="`file_${file.id}`"
-                      :value="file"
+                      :value="[file]"
                       v-model="selected_files"
                       style="display: none;"
                   />
@@ -177,7 +177,7 @@ export default {
     },
     successMessage(){
       return this.$store.getters["ImageModule/getSuccessMessage"];
-    }
+    },
   },
 
   methods: {

@@ -12,8 +12,8 @@ use Symfony\Component\Security\Core\Security;
 class UserVoter extends Voter
 {
 
-    private $voterHelper;
-    private $security;
+    private VoterHelperInterface $voterHelper;
+    private Security $security;
 
     public function __construct(VoterHelperInterface $voterHelper,Security $security)
     {

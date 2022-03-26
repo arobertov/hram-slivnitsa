@@ -1,25 +1,13 @@
-import Vue from "vue";
 import VueRouter from "vue-router";
-
-import HomePage from "../views/Homepage"
-import AdminHome from "../views/admin-panel/Admin-home";
-import AdminArticleIndex from "../views/article/Article-index";
-import AdminArticleShow from "../views/article/Article-show";
-import AdminArticleNew from "../views/article/Article-new";
-import AdminArticleEdit from "../views/article/Article-edit";
-
-
-Vue.use(VueRouter);
+import AdminHome from "@vue/views/admin-panel/Admin-home";
+import AdminArticleIndex from "@vue/views/admin-panel/article/Article-index";
+import AdminArticleShow from "@vue/views/admin-panel/article/Article-show";
+import AdminArticleNew from "@vue/views/admin-panel/article/Article-new";
+import AdminArticleEdit from "@vue/views/admin-panel/article/Article-edit";
 
 export default new VueRouter({
     mode: "history",
     routes: [
-        {
-            path: "/",
-            name: "homepage",
-            component: HomePage,
-
-        },
         {
             path: "/admin",
             name: "admin_panel",

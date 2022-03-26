@@ -1,18 +1,32 @@
 <template>
-  <div class="main-content">
+  <div>
     <b-alert show dismissible variant="danger" v-if="error">
       {{error}}
     </b-alert>
-    <div class="container-sm ">
-      <b-form>
-        <article-title-input v-model="title" />
-        <category-select v-model="category" />
-        <tag-form/>
-        <article-content-input v-model="content" />
-        <b-button id="check-article-btn" variant="info" @click="editArticle">Прегледай</b-button>
-        <b-button variant="success" @click="editArticle">Редактирай</b-button>
-      </b-form>
-    </div>
+    <b-container>
+      <validation-observer ref="editArticle" v-slot="{ handleSubmit, invalid }">
+        <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
+          <b-form-row>
+            <b-col md="8">
+              <article-title-input v-model="title" />
+              <article-content-input v-model="content" />
+            </b-col>
+            <b-col md="4">
+              <category-select v-model="category" />
+              <tag-form/>
+              <image-manager/>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <div>
+              <b-button id="check-article-btn" variant="info">Прегледай</b-button>
+              <b-button variant="success" type="submit" id="edit-article-submit-btn">Редактирай</b-button>
+            </div>
+          </b-form-row>
+        </b-form>
+      </validation-observer>
+
+    </b-container>
   </div>
 </template>
 
@@ -21,11 +35,11 @@ import {createHelpers} from 'vuex-map-fields';
 import {VueEditor, Quill} from "vue2-editor";
 import {ImageDrop} from "quill-image-drop-module";
 import ImageResize from "quill-image-resize-module";
-import ArticleTitleInput from "../../components/admin-panel-components/ArticleTitleInput";
-import CategorySelect from "../../components/admin-panel-components/CategorySelect";
-import TagForm from "../../components/admin-panel-components/TagFormSelect";
-import ArticleContentInput from "../../components/admin-panel-components/ArticleContentInput";
-
+import ArticleTitleInput from "../../../components/admin-panel-components/ArticleTitleInput";
+import CategorySelect from "../../../components/admin-panel-components/CategorySelect";
+import TagForm from "../../../components/admin-panel-components/TagFormSelect";
+import ArticleContentInput from "../../../components/admin-panel-components/ArticleContentInput";
+import imageManager from "@vue/components/admin-panel-components/ImageManager";
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
 
@@ -40,7 +54,7 @@ const items = [
 export default {
   name: "Article-edit",
   components: {
-      ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput
+      ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput,imageManager
     },
   data() {
     return {
@@ -71,13 +85,7 @@ export default {
     let store = this.$store;
     const data = store.dispatch('ArticleModule/loadEditingArticle', this.$route.params.id),
           tags = [];
-    /*
-    data.then(function (d) {
-      d.tags.forEach(e => tags.push(e.name));
-      store.commit('ArticleModule/EDITING_ARTICLE', tags);
-    })
-     */
-    //this.$store.commit("ArticleModule/FETCHING_ARTICLES");
+
     if(this.$store.getters["ArticleModule/articles"].length <= 1){
       this.$store.dispatch("ArticleModule/findAll");
     }
@@ -89,10 +97,15 @@ export default {
     this.$store.commit("MainModule/DETACH_BREADS", items);
   },
   methods: {
-    async editArticle(event) {
-      if (event) {
-        event.preventDefault()
-      }
+    onSubmit() {
+      this.$refs.editArticle.validate().then(success => {
+        if (success) {
+          this.editArticle();
+        }
+      })
+    },
+    async editArticle() {
+
       let article = this.$store.state.ArticleModule.article;
       const result = await this.$store.dispatch("ArticleModule/editArticle",article );
       if (result !== null) {

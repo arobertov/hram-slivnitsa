@@ -10,7 +10,6 @@ function mapTags(article) {
         }
     })
     article.tags = mappedTags;
-    console.log(article)
     return article
 }
 const
@@ -89,7 +88,10 @@ export default {
             state.article.tags = tags;
         },
         attachImagesForArticles(state,images){
-                state.article.images.push(images);
+                state.article.images = images;
+        },
+        detachImagesForArticles(state,images){
+
         },
         [CREATING_ARTICLE](state){
             state.article = {
@@ -184,7 +186,6 @@ export default {
     actions: {
         async create({ commit }, article) {
             try {
-                console.log(mapTags(article))
                 let response = await ArticleAPI.create(mapTags(article));
                 commit(CREATING_ARTICLE_SUCCESS, response.data);
                 return response.data;
@@ -203,9 +204,7 @@ export default {
         },
         async editArticle({commit}, article){
             try {
-                let mapedTags = mapTags(article)
-
-                let response = await ArticleAPI.edit(mapedTags);
+                let response = await ArticleAPI.edit(mapTags(article));
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
                 return response.data;
             } catch (error) {

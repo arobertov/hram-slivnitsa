@@ -51,13 +51,13 @@ class User implements UserInterface
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
      * )
      */
-    private $username;
+    private string $username;
 
     /**
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @Groups({"user:write"})
@@ -65,7 +65,7 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      *
      */
-    private $password;
+    private string $password;
 
     /**
      * @SerializedName("password")
@@ -78,7 +78,7 @@ class User implements UserInterface
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
      */
-    private $plainPassword;
+    private ?string $plainPassword;
 
     /**
      * @Groups({"user:read", "user:write"})
@@ -88,7 +88,7 @@ class User implements UserInterface
      *     message = "The email '{{ value }}' is not a valid email."
      * )
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @Groups({"user:read", "user:write","article:read"})
@@ -101,7 +101,7 @@ class User implements UserInterface
      *      maxMessage = "Your alias cannot be longer than {{ limit }} characters"
      * )
      */
-    private $alias;
+    private ?string $alias;
 
     /**
      * @ORM\OneToMany(targetEntity=Article::class, mappedBy="owner")
@@ -131,7 +131,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     public function setUsername(string $username): self

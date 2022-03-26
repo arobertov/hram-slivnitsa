@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import router from './router/routes';
+import router from './router/admin-routes';
 import store from './store';
 import VueImageManager from 'vue-image-manager';
 import Common from './common-index';
