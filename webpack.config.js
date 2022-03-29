@@ -78,6 +78,7 @@ Encore
         '@vue':path.resolve(__dirname,'assets','vue'),
         '@js':path.resolve(__dirname,'assets','js'),
         '@styles':path.resolve(__dirname,'assets','styles'),
+        '@fonts':path.resolve(__dirname,'assets','fonts'),
     })
     /*
      * FEATURE CONFIG

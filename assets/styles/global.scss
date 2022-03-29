@@ -1,1 +1,21 @@
-@import "~bootstrap/scss/bootstrap";
+$navbar-light-color: #fff;
+$navbar-light-hover-color: #aeaeb4;
+
+
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+
+@font-face {
+  font-family: "BukyVedeLight";
+  src: url("~@fonts/Bukyvede_Light.ttf") format("woff2");
+}
+@font-face {
+  font-family: "BukyVedeRegular";
+  src: url("~@fonts/BukyvedeRegular.ttf") format("woff2");
+}
+
+@font-face {
+  font-family: "Izhitsa";
+  src: url("~@fonts/izhitsa.ttf") format("woff2");
+}

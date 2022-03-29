@@ -1,3 +1,4 @@
+
 bg-main{
     background-color: #533c34 !important;
 }
@@ -9,4 +10,10 @@ bg-main{
  }
 .bg-yellow-white{
     background-color: #dbd69b !important;
+}
+
+:root {
+    --bg-main:#533c34;
+    --bg-yellow:#b5a363;
+    --bg-yellow-white:#dbd69b;
 }

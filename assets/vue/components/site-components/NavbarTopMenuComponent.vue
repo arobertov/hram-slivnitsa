@@ -1,16 +1,15 @@
 <template>
-  <nav>
-    <b-navbar toggleable="lg" type="dark" variant="info" class="bg-green">
-      <router-link :to="{name:'site_index'}">
-        <b-navbar-brand>NavBar </b-navbar-brand>
-      </router-link>
-
+    <b-navbar toggleable="md" type="dark" variant="green" sticky >
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item><router-link :to="{name:'something_else'}">Link</router-link></b-nav-item>
-          <b-nav-item href="#">Disabled</b-nav-item>
+          <b-nav-item :to="{name:'site_index'}">Начало</b-nav-item>
+          <b-nav-item :to="{name:'something_else'}">Статии</b-nav-item>
+          <b-nav-item>Новини</b-nav-item>
+          <b-nav-item>Галерия</b-nav-item>
+          <b-nav-item>Контакти</b-nav-item>
+          <b-nav-item>За Храма</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -18,31 +17,16 @@
           <b-nav-item-dropdown right v-if="isLogin">
             <!-- Using 'button-content' slot -->
             <template #button-content >
-              <em> Влезли сте като {{user.username}}</em>
+              <em> {{user.alias}}</em>
             </template>
             <div v-if="isLogin">
-              <b-dropdown-item :href="adminRoute">Профил</b-dropdown-item>
+              <b-dropdown-item :href="adminRoute">Контролен панел</b-dropdown-item>
               <b-dropdown-item href="/logout">Излизане</b-dropdown-item>
             </div>
           </b-nav-item-dropdown>
-          <div v-else>
-            <b-button
-                data-toggle="modal"
-                data-target="#loginModal"
-            >
-              Вход
-            </b-button>
-            <b-button
-                data-toggle="modal"
-                data-target="#registerModal"
-            >
-              Регистрация
-            </b-button>
-          </div>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-  </nav>
 </template>
 
 <script>
@@ -63,5 +47,24 @@ export default {
 </script>
 
 <style scoped>
+
+  .navbar-dark .navbar-nav .nav-link,
+  .navbar-dark .navbar-nav .nav-link{
+    font-family: Izhitsa, Helvetica sans-serif;
+    font-size: 1.3rem;
+    padding: 0 1rem;
+    color: #fff;
+  }
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .nav-link:focus
+  .navbar-dark .navbar-nav .show > .nav-link,
+  .navbar-dark .navbar-nav .active > .nav-link,
+  .navbar-dark .navbar-nav .nav-link.show,
+  .navbar-dark .navbar-nav .nav-link.active{
+    color: #ccc;
+  }
+  .ml-auto {
+    font-family: Helvetica,sans-serif;
+  }
 
 </style>
