@@ -7,7 +7,7 @@
           <b-nav-item :to="{name:'site_index'}">Начало</b-nav-item>
           <b-nav-item :to="{name:'something_else'}">Статии</b-nav-item>
           <b-nav-item>Новини</b-nav-item>
-          <b-nav-item>Галерия</b-nav-item>
+          <b-nav-item :to="{name:'prayer_book'}">Галерия</b-nav-item>
           <b-nav-item>Контакти</b-nav-item>
           <b-nav-item>За Храма</b-nav-item>
         </b-navbar-nav>
