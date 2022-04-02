@@ -39,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article
 {
     /**
-     * @Groups("article:read")
+     * @Groups({"article:read","category:read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -47,7 +47,7 @@ class Article
     private int $id;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"article:read","article:write","category:read"})
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(

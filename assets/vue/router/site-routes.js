@@ -1,28 +1,41 @@
-
 import VueRouter from "vue-router";
 
 /* ---- import components --------- */
-import SiteIndex from "@vue/views/site-views/Site-index";
-import SomethingComponent from "@vue/components/site-components/SomethingComponent";
+import IndexPage from "@vue/views/site-views/IndexPageView";
 import PrayerBookView from "@vue/views/site-views/PrayerBookView";
+import ListByFrameView from "@vue/views/site-views/ListByFrameView";
+import ListByCategory from "@vue/components/site-components/RelatedByCategoryComponent";
+import ArticlePageView from "@vue/views/site-views/article-views/ArticlePageView";
 
 export default new VueRouter({
-    mode:'history',
-    routes:[
+    mode: 'history',
+    routes: [
         {
             path: "/",
             name: "site_index",
-            component: SiteIndex,
+            component: IndexPage,
         },
         {
-            path:"/molitvenik",
+           path:"/article/:id",
+           name:"article_preview",
+           component: ArticlePageView
+        },
+        {
+            path: "/molitvenik",
             name: "prayer_book",
-            component:PrayerBookView
+            component: PrayerBookView
         },
         {
-            path:"/something",
-            name:"something_else",
-            component:SomethingComponent
+            path: "/list/",
+            name: "list_frame",
+            component: ListByFrameView,
+            children: [
+                {
+                    path: "category/:id",
+                    name: "list_by_category",
+                    component: ListByCategory,
+                }
+            ],
         }
     ]
 

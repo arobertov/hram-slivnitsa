@@ -21,19 +21,19 @@
           v-bind:value="value"
           v-bind:selected="true"
           v-on:input="$emit('input', $event)"
-          :options="categories"
+          :options="options"
       >
         <template #first>
           <b-form-select-option
               value=""
-              v-if="categories.length===0"
+              v-if="options.length===0"
               disabled
           >
             - Няма създадени категории
           </b-form-select-option>
           <b-form-select-option
               value=""
-              v-else-if="categories.length>0"
+              v-else-if="options.length>0"
               disabled
           >
             -- Изберете категория --
@@ -64,6 +64,15 @@ export default {
   computed: {
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
+    },
+    options(){
+      let options = [];
+      if(Array.isArray(this.categories)){
+        this.categories.forEach(cat=>{
+          options.push({text:cat.name,value:cat['@id']});
+        })
+      }
+      return options;
     },
     isSuccess() {
       const success = this.$store.getters["CategoryModule/getIsSuccess"];

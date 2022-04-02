@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ArticlePreview from "../../../components/admin-panel-components/ArticlePreview";
+import ArticlePreview from "@vue/components/admin-panel-components/ArticlePreview";
 
 const items = [
   {text: 'Статии', to: {name: 'admin_article_index'}},
