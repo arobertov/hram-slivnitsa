@@ -9,25 +9,7 @@
             </span>Публикувай статия
           </button>
         </router-link>
-        <div class="card">
-          <div class="card-header bg-sub-caption sub-title">
-            Последни статии
-          </div>
-          <div v-if="lastArticles">
-            <div class="card-body border-bottom" v-for="lastArticle in lastArticles">
-              <h5 class="card-title">
-                <router-link :to="{name:'admin_article_show',params:{id:lastArticle.id}}">{{lastArticle.title}}</router-link>
-              </h5>
-              <p class="card-text">
-                <span v-html="lastArticle.content.slice(0,70)+' .....'"></span>
-                <router-link :to="{name:'admin_article_show',params:{id:lastArticle.id}}">към статията >></router-link>
-              </p>
-            </div>
-          </div>
-          <div class="card-body" v-else>
-            <p class="card-text">Все още няма публикувани статии!</p>
-          </div>
-        </div>
+        <last-articles/>
       </div>
       <div class="col-md-4">
         <router-link :to="{ name:'admin_article_new' }" tag="div">
@@ -86,16 +68,12 @@
 </template>
 
 <script>
+import LastArticles from "../../components/LastArticlesComponent";
+
 export default {
   name: "Admin-home",
-  computed:{
-    lastArticles(){
-      const lastArticles = this.$store.getters["ArticleModule/articles"]["hydra:member"];
-      if(Array.isArray(lastArticles) && lastArticles.length > 0 ){
-        return lastArticles.slice(0,3);
-      }
-      return null;
-    }
+  components:{
+    LastArticles
   }
 }
 </script>

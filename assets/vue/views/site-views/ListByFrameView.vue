@@ -1,10 +1,10 @@
 <template>
   <b-container fluid="lg" class="frame-list">
     <b-row class="index-page-content">
-      <b-col lg="2">
+      <b-col lg="3">
         <category-list/>
       </b-col>
-      <b-col lg="10" class="border">
+      <b-col lg="9" class="border">
         <router-view/>
       </b-col>
     </b-row>

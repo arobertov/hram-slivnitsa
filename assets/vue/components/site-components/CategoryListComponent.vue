@@ -1,9 +1,11 @@
 <template>
   <b-card header="Категории">
     <b-card-text>
+
       <b-nav vertical v-if="hasCategories">
         <b-nav-item
           v-for="category in categories"
+          v-if="category.articles.length>0"
           :key="category.id"
           :to="{name:'list_by_category',params:{id:category.id}}"
           >
