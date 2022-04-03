@@ -12,14 +12,17 @@
                alt=""
           >
         </div>
-
-        <h5 class="card-title">
-          <router-link :to="{name:'admin_article_show',params:{id:lastArticle.id}}">{{lastArticle.title}}</router-link>
-        </h5>
-        <p class="card-text">
-          <span v-html="lastArticle.content.slice(0,70)+' .....'"></span>
-          <router-link :to="{name:'admin_article_show',params:{id:lastArticle.id}}">към статията >></router-link>
-        </p>
+        <div class="card-content">
+          <h5 class="card-title">
+            <router-link :to="{name:routeName,params:{id:lastArticle.id}}">{{lastArticle.title}}</router-link>
+          </h5>
+          <p class="card-text">
+            <span v-html="lastArticle.content.slice(0,150)+ '....'"></span>
+            <router-link :to="{name:routeName,params:{id:lastArticle.id}}" class="d-block mb-3">
+              прочети >>>
+            </router-link>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -29,6 +32,11 @@
 <script>
 export default {
   name: "LastArticles",
+  props:{
+    routeName:{
+      type: String
+    }
+  },
   computed:{
     lastArticles(){
       const lastArticles = this.$store.getters["ArticleModule/articles"]["hydra:member"];
@@ -36,7 +44,7 @@ export default {
         return lastArticles.slice(0,3);
       }
       return null;
-    }
+    },
   }
 }
 </script>
@@ -45,8 +53,11 @@ export default {
   .card-body{
     padding: 0;
   }
+  .card-content{
+    padding: 0 22px;
+  }
   .image-container{
-    margin-bottom: 1.5rem;
+    margin-bottom: 14px;
     text-align: center;
     background-color: var(--bg-main);
   }

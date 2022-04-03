@@ -38,7 +38,10 @@ export default {
         },
         getError(state) {
             return state.error;
-        }
+        },
+        hasTags(state){
+            return state.tags.length>0;
+        },
     },
     mutations:{
         [mutation.FETCHING_TAGS](state){

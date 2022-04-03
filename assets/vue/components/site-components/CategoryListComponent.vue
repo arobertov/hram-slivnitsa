@@ -1,5 +1,5 @@
 <template>
-  <b-card header="Категории">
+  <b-card header="КАТЕГОРИИ" class="mb-2">
     <b-card-text>
 
       <b-nav vertical v-if="hasCategories">

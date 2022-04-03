@@ -9,7 +9,7 @@
             </span>Публикувай статия
           </button>
         </router-link>
-        <last-articles/>
+        <last-articles route-name="admin_article_show"/>
       </div>
       <div class="col-md-4">
         <router-link :to="{ name:'admin_article_new' }" tag="div">

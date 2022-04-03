@@ -151,7 +151,7 @@ export default {
 }
 
 .prayer-book {
-  /*background-image: url("~@images/site-images/dark-old-wooden-background-texture_41471-12014.jpg"); */
+  background-image: url("~@images/site-images/dark-old-wooden-background-texture_41471-12014.jpg");
 }
 
 .parchmentTop {
