@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header bg-sub-caption sub-title">
-      Последни статии
+      ПОСЛЕДНИ СТАТИИ
     </div>
     <div>
       <div class="card-body border-bottom" v-for="lastArticle in lastArticles">

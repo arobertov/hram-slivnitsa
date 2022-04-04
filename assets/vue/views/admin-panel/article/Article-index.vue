@@ -149,8 +149,8 @@ const items = [{text:'Статии',to:{name:'admin_article_index'}}];
           this.$store.commit("MainModule/DETACH_BREADS",items);
         },
         methods:{
-            async deleteArticle(articleId){
-                const result = await this.$store.dispatch("ArticleModule/deleteArticle",articleId);
+            async delete(itemId){
+                const result = await this.$store.dispatch("ArticleModule/deleteArticle",itemId);
                 if(result !== null){
                     await this.deleteSuccessModal(result);
                 }
@@ -168,7 +168,7 @@ const items = [{text:'Статии',to:{name:'admin_article_index'}}];
                 });
                 setTimeout(()=>{this.$bvModal.hide('delete-success-modal')},3000);
             },
-            deleteModal(articleId){
+            deleteModal(itemId){
                 this.$bvModal.msgBoxConfirm('Моля потвърдете че искате да изтриете статията !', {
                     id:'delete-confirm-modal',
                     title: 'МОЛЯ ПОТВЪРДЕТЕ !',
@@ -183,7 +183,7 @@ const items = [{text:'Статии',to:{name:'admin_article_index'}}];
                 })
                     .then(value => {
                         if(value){
-                            this.deleteArticle(articleId);
+                            this.delete(itemId);
                         }
                     })
                     .catch(err => {

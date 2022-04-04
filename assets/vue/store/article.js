@@ -128,6 +128,8 @@ export default {
 
         },
         [EDITING_ARTICLE_SUCCESS](state,article){
+            state.articles[state.articles.findIndex(el => el.id === article.id)] = article;
+            /*
             let counter = 0;
             state.articles['hydra:member'].forEach(function (e) {
                 if(e.id === article.id){
@@ -135,6 +137,8 @@ export default {
                 }
                 counter++;
             })
+
+             */
         },
         [DELETING_ARTICLE](state,articleId){
             let counter = 0;
@@ -191,14 +195,6 @@ export default {
                 return response.data;
             } catch (error) {
                 commit(CREATING_ARTICLE_ERROR,error);
-                /*
-                let errorData = error.response.data;
-                if(errorData.hasOwnProperty('title') || errorData.hasOwnProperty('contents')){
-                    commit(FETCHING_FORM_ERRORS,errorData);
-                } else {
-                    commit(CREATING_ARTICLE_ERROR,error);
-                }
-                 */
                 return null;
             }
         },
@@ -252,7 +248,6 @@ export default {
         },
         async deleteArticle({commit},articleId){
             try{
-                console.log('ArticleId = '+articleId)
                 commit(DELETING_ARTICLE,articleId);
                 let response = await ArticleAPI.delete(articleId);
                 return response.data;
