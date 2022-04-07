@@ -1,5 +1,6 @@
 import ArticleAPI from "../api/article_api";
 import { getField, updateField } from 'vuex-map-fields';
+import tagMapping from "@vue/helpers/tag-mapping";
 function mapTags(article) {
     let mappedTags = [];
     article.tags.forEach(t => {
@@ -122,32 +123,28 @@ export default {
         },
         [EDITING_ARTICLE](state,tags){
            state.isLoading = false;
-           state.formErrors = {};
            state.error = null;
            state.article.tags = tags;
 
         },
         [EDITING_ARTICLE_SUCCESS](state,article){
-            state.articles[state.articles.findIndex(el => el.id === article.id)] = article;
-            /*
-            let counter = 0;
-            state.articles['hydra:member'].forEach(function (e) {
-                if(e.id === article.id){
-                    state.articles['hydra:member'].splice(counter,1,article);
-                }
-                counter++;
-            })
-
-             */
+            state.isLoading = false;
+            state.error = null;
+            if(state.articles.hasOwnProperty('hydra:member')){
+                state.articles[
+                    state.articles['hydra:member'].findIndex(el => el.id === article.id)
+                    ] = article;
+            }
         },
         [DELETING_ARTICLE](state,articleId){
-            let counter = 0;
-            state.articles['hydra:member'].forEach(function (e) {
-                if(e.id===articleId){
-                    state.articles['hydra:member'].splice(counter,1);
-                }
-                counter++;
-            });
+            state.isLoading = false;
+            state.error = null;
+            if(state.articles.hasOwnProperty('hydra:member')) {
+                state.articles['hydra:member'].splice(
+                    state.articles['hydra:member'].findIndex(el => el.id === articleId)
+                    , 1
+                );
+            }
         },
         [FETCHING_ARTICLES](state) {
             if(state.articles.length===0){
@@ -190,7 +187,7 @@ export default {
     actions: {
         async create({ commit }, article) {
             try {
-                let response = await ArticleAPI.create(mapTags(article));
+                let response = await ArticleAPI.create(tagMapping(article));
                 commit(CREATING_ARTICLE_SUCCESS, response.data);
                 return response.data;
             } catch (error) {
@@ -200,7 +197,7 @@ export default {
         },
         async editArticle({commit}, article){
             try {
-                let response = await ArticleAPI.edit(mapTags(article));
+                let response = await ArticleAPI.edit(tagMapping(article));
                 commit(EDITING_ARTICLE_SUCCESS,response.data)
                 return response.data;
             } catch (error) {

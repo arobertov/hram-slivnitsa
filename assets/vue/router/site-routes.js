@@ -5,7 +5,7 @@ import IndexPage from "@vue/views/site-views/IndexPageView";
 import PrayerBookView from "@vue/views/site-views/PrayerBookView";
 import ListByFrameView from "@vue/views/site-views/ListByFrameView";
 import ListByCategory from "@vue/components/site-components/RelatedByCategoryComponent";
-import ArticlePageView from "@vue/views/site-views/article-views/ArticlePageView";
+import ArticlePageView from "@vue/views/admin-panel/article-views/ArticlePageView";
 
 export default new VueRouter({
     mode: 'history',
