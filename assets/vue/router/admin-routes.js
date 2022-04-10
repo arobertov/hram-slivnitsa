@@ -2,14 +2,17 @@ import VueRouter from "vue-router";
 import AdminHome from "@vue/views/admin-panel/Admin-home";
 import AdminArticleIndex from "@vue/views/admin-panel/article/Article-index";
 import AdminArticleShow from "@vue/views/admin-panel/article/Article-show";
-import AdminArticleNew from "@vue/views/admin-panel/article/Article-new";
+import AdminArticleCreate from "@vue/views/admin-panel/article/Article-create";
 import AdminArticleEdit from "@vue/views/admin-panel/article/Article-edit";
+
+import AdminNewsCreate from "@vue/views/admin-panel/news/News-create";
+
 
 export default new VueRouter({
     mode: "history",
     routes: [
         {
-            path: "/admin",
+            path: '/admin/',
             name: "admin_panel",
             component: AdminHome,
             meta: {
@@ -17,7 +20,7 @@ export default new VueRouter({
             },
         },
         {
-            path: "/admin/articles",
+            path: '/admin/articles',
             name: "admin_article_index",
             component: AdminArticleIndex,
             meta: {
@@ -35,7 +38,7 @@ export default new VueRouter({
         {
             path: "/admin/articles/create",
             name: "admin_article_new",
-            component: AdminArticleNew,
+            component: AdminArticleCreate,
             meta: {
                 breadcrumb: 'Създай статия',
             },
@@ -46,6 +49,40 @@ export default new VueRouter({
             component: AdminArticleEdit,
             meta: {
                 breadcrumb: 'Редактирай статия',
+            },
+        },
+        /*---------- News Routes  -------------- */
+
+        {
+            path: "/admin/news",
+            name: "admin_news_index",
+            component: AdminArticleIndex,
+            meta: {
+                breadcrumb: 'Новини',
+            },
+        },
+        {
+            path: "/admin/news/:id/show",
+            name: "admin_news_show",
+            component: AdminArticleShow,
+            meta: {
+                breadcrumb: 'Прочети новина',
+            },
+        },
+        {
+            path: "/admin/news/create",
+            name: "admin_news_create",
+            component: AdminNewsCreate,
+            meta: {
+                breadcrumb: 'Създай новина',
+            },
+        },
+        {
+            path: "/admin/news/:id/edit",
+            name: "admin_news_edit",
+            component: AdminArticleEdit,
+            meta: {
+                breadcrumb: 'Редактирай новина',
             },
         },
     ]

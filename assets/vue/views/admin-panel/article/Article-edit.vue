@@ -8,8 +8,8 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-form-row>
             <b-col md="8">
-              <article-title-input v-model="title" />
-              <article-content-input v-model="content" />
+              <title-input v-model="title" />
+              <content-input v-model="content" />
             </b-col>
             <b-col md="4">
               <category-select v-model="category" />
@@ -35,10 +35,10 @@ import {createHelpers} from 'vuex-map-fields';
 import {VueEditor, Quill} from "vue2-editor";
 import {ImageDrop} from "quill-image-drop-module";
 import ImageResize from "quill-image-resize-module";
-import ArticleTitleInput from "../../../components/admin-panel-components/ArticleTitleInput";
+import TitleInput from "../../../components/admin-panel-components/TitleInputComponent";
 import CategorySelect from "../../../components/admin-panel-components/CategorySelect";
 import TagForm from "../../../components/admin-panel-components/TagFormSelect";
-import ArticleContentInput from "../../../components/admin-panel-components/ArticleContentInput";
+import ContentInput from "../../../components/admin-panel-components/ContentInputComponent";
 import imageManager from "@vue/components/admin-panel-components/ImageManager";
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
@@ -54,7 +54,7 @@ const items = [
 export default {
   name: "Article-edit",
   components: {
-      ArticleTitleInput,CategorySelect,TagForm,ArticleContentInput,imageManager
+      TitleInput,CategorySelect,TagForm,ContentInput,imageManager
     },
   data() {
     return {

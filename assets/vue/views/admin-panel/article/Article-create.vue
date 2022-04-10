@@ -8,8 +8,16 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-form-row>
             <b-col md="8">
-              <article-title-input v-model="title"/>
-              <article-content-input v-model="content"/>
+              <title-input
+                  v-model="title"
+                  placeholder="Въведете заглавие на статия с дължина от 3 до 50 символа"
+              />
+
+              <content-input
+                  v-model="content"
+                  placeholder="Въведете текст на статия..."
+                  publication-type="статия"
+              />
             </b-col>
             <b-col md="4">
               <category-select v-model="category"/>
@@ -32,11 +40,11 @@
 <script>
 import {createHelpers} from 'vuex-map-fields';
 /*---------- import components -----------------*/
-import ArticleTitleInput from "../../../components/admin-panel-components/ArticleTitleInput";
-import ArticleContentInput from "../../../components/admin-panel-components/ArticleContentInput";
-import TagForm from "../../../components/admin-panel-components/TagFormSelect";
-import CategorySelect from "../../../components/admin-panel-components/CategorySelect";
-import ImageManager from "../../../components/admin-panel-components/ImageManager";
+import TitleInput from "@vue/components/admin-panel-components/TitleInputComponent";
+import ContentInput from "@vue/components/admin-panel-components/ContentInputComponent";
+import TagForm from "@vue/components/admin-panel-components/TagFormSelect";
+import CategorySelect from "@vue/components/admin-panel-components/CategorySelect";
+import ImageManager from "@vue/components/admin-panel-components/ImageManager";
 
 const {mapFields} = createHelpers({
   getterType: 'ArticleModule/getArticleField',
@@ -51,12 +59,9 @@ const items = [
 export default {
   name: "Article-new",
   components: {
-    ArticleTitleInput, CategorySelect, TagForm, ArticleContentInput, ImageManager
+    TitleInput, CategorySelect, TagForm, ContentInput, ImageManager
   },
   computed: {
-    responseData() {
-      return this.$store.getters["ArticleModule/getResponseData"];
-    },
     error() {
       return this.$store.getters["ArticleModule/error"];
     },

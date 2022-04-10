@@ -1,26 +1,32 @@
 <template>
   <validation-provider
-      name="Текст на статия"
-      :rules="{ required: true, min: 3 }"
+      :name="`Текст на ${publicationType}`"
+      :rules="{ required: true, min: 30 }"
       v-slot="validationContext"
   >
     <b-form-group
-        label="Текст на статия:"
-        label-for="article_content"
+        :label="`Текст на ${publicationType} :`"
+        label-for="_content"
     >
+      <b-form-invalid-feedback
+          :class="display"
+          id="content-live-feedback"
+      >
+        {{ validationContext.errors[0] }}
+      </b-form-invalid-feedback>
       <vue-editor
-          id="article_content"
-          name="article-content"
+          :style="style"
+          id="_content"
+          name="content"
           :editorOptions="editorSettings"
           v-bind:value="value"
           v-on:input="$emit('input', $event)"
           :state="getValidationState(validationContext)"
           class="bg-white"
-          placeholder="Въведете текст на статия..."
+          :placeholder=placeholder
           aria-describedby="content-live-feedback"
       >
       </vue-editor>
-      <b-form-invalid-feedback id="content-live-feedback">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
     </b-form-group>
   </validation-provider>
 </template>
@@ -35,7 +41,7 @@ Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
 
 export default {
-  name: "ArticleContentInput",
+  name: "ContentInput",
   data() {
     return {
       editorSettings: {
@@ -43,15 +49,21 @@ export default {
           imageDrop: true,
           imageResize: {}
         }
-      }
+      },
+      style:"",
+      display:"d-none"
     }
   },
-  props: ["value"],
+  props: ["value","placeholder","publicationType"],
   components: {
-    VueEditor
+    VueEditor,Quill
   },
   methods:{
     getValidationState({ dirty, validated, valid = null }) {
+      if((dirty || validated) && !valid){
+        this.style = "border: 2px solid #dc3545;border-radius: 0.25rem;transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"
+        this.display = "d-block";
+      }else this.style = ""
       return dirty || validated ? valid : null;
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
@@ -81,5 +93,12 @@ export default {
 </script>
 
 <style scoped>
-
+#content-live-feedback{
+  padding-bottom: 4px;
+}
+.quillWrapper{
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 </style>

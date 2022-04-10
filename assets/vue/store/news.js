@@ -10,7 +10,15 @@ export default {
         isError: false,
         error: null,
         newses: [],
-        news: {},
+        news: {
+            id: undefined,
+            title: '',
+            content: '',
+            tags: [],
+            images: [],
+            category: '',
+            isPublished: true,
+        },
     },
     getters: {
         getNewsField(state) {

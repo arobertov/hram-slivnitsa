@@ -13,15 +13,16 @@
       </b-alert>
     </div>
     <b-form-group
-        label="Категория на статията"
-        label-for="article_category"
+        label="Категория :"
+        label-for="_category"
     >
       <b-form-select
-          id="article_category"
+          id="_category"
           v-bind:value="value"
           v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="options"
+          required="true"
       >
         <template #first>
           <b-form-select-option

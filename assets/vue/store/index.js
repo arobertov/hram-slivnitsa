@@ -5,16 +5,19 @@ import UserModule from "./user";
 import ArticleModule from "./article";
 import CategoryModule from "./category";
 import TagModule from "./tag";
-import ImageModule from "./image"
+import ImageModule from "./image";
+import NewsModule from "@vue/store/news"
+
 Vue.use(Vuex);
 
-export default  new Vuex.Store({
-    modules:{
-        MainModule:MainModule,
+export default new Vuex.Store({
+    modules: {
+        MainModule: MainModule,
         UserModule: UserModule,
         ArticleModule: ArticleModule,
         CategoryModule: CategoryModule,
         TagModule: TagModule,
-        ImageModule : ImageModule,
+        ImageModule: ImageModule,
+        NewsModule: NewsModule,
     }
 })

@@ -6,13 +6,13 @@
   >
     <b-form-group
         label="Заглавие"
-        label-for="article_title"
+        label-for="_title"
     >
       <b-form-input
-          id="article_title"
-          name="article_title"
+          id="_title"
+          name="title"
           type="text"
-          placeholder="Въведете заглавие на статия с дължина от 3 до 50 символа"
+          :placeholder=placeholder
           v-bind:value="value"
           v-on:input="$emit('input', $event)"
           :state="getValidationState(validationContext)"
@@ -27,8 +27,8 @@
 
 
 export default {
-  name: "ArticleTitleInput",
-  props: ["value"],
+  name: "TitleInput",
+  props: ["value","placeholder"],
   methods:{
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
