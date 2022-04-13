@@ -22,7 +22,7 @@
           v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="options"
-          required="true"
+          required
       >
         <template #first>
           <b-form-select-option

@@ -27,8 +27,8 @@
           </b-form-row>
           <b-form-row>
             <div>
-              <b-button id="check-article-btn" variant="info">Прегледай</b-button>
-              <b-button type="submit" variant="success" id="new-article-submit-btn">Публикувай</b-button>
+              <b-button id="check-article-btn" variant="info" >Прегледай</b-button>
+              <b-button :disabled="invalid" type="submit" variant="success" id="new-article-submit-btn">Публикувай</b-button>
             </div>
           </b-form-row>
         </b-form>
@@ -61,6 +61,11 @@ export default {
   components: {
     TitleInput, CategorySelect, TagForm, ContentInput, ImageManager
   },
+  data(){
+    return {
+      submitBtnDisabled:true
+    }
+  },
   computed: {
     error() {
       return this.$store.getters["ArticleModule/error"];
@@ -84,12 +89,11 @@ export default {
     this.$store.commit("MainModule/DETACH_BREADS", items);
   },
   methods: {
-    onSubmit() {
-      this.$refs.newArticle.validate().then(success => {
-        if (success) {
-          this.createArticle();
-        }
+    onSubmit(){
+      this.$refs.newArticle.validate().then(success=>{
+        if(success) this.createArticle();
       })
+
     },
     async createArticle() {
       let article = this.$store.getters["ArticleModule/getArticle"];
@@ -98,7 +102,7 @@ export default {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
       }
     },
-  }
+  },
 };
 </script>
 
