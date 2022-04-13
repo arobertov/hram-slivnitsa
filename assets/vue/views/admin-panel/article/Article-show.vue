@@ -1,15 +1,10 @@
 <template>
   <div class="main-content">
-
     <div v-if="isLoading" class="row col">
       <p>Зареждане...</p>
     </div>
-
     <div v-else-if="hasError" class="alert alert-danger" role="alert">
       {{ error }}
-    </div>
-    <div v-else-if="responseData" id="response-data-field" class="alert alert-success">
-      {{ responseData }}
     </div>
     <div>
       <article-preview v-bind:article="article"/>
@@ -43,9 +38,6 @@ export default {
     error() {
       return this.$store.getters['ArticleModule/error'];
     },
-    responseData() {
-      return this.$store.getters['ArticleModule/responseData'];
-    }
   },
   created() {
     this.$store.dispatch('ArticleModule/loadReadingArticle', this.$route.params.id);
