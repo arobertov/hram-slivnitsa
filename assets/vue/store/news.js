@@ -18,6 +18,7 @@ export default {
             images: [],
             category: '',
             isPublished: true,
+            owner:''
         },
     },
     getters: {
@@ -45,7 +46,16 @@ export default {
             updateField(state.news, field);
         },
         creatingNews(state) {
-            state.news = {};
+            /* state.news = {
+                id: undefined,
+                title: '',
+                content: '',
+                tags: [],
+                images: [],
+                category: '',
+                isPublished: true,
+                owner: '',
+            }; */
             state.error = null;
             state.isLoading = false;
             state.isError = false;
@@ -126,6 +136,7 @@ export default {
                     return response.data;
                 }
             } catch (error) {
+                console.log(error)
                 commit('setNewsError', error);
                 return error;
             }

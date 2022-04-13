@@ -1,5 +1,8 @@
 function tagMapping(object) {
     let mappedTags = [];
+    if(typeof object !== 'object'){
+        throw 'Data is not a object !'
+    }
     if(object.hasOwnProperty('tags') && Array.isArray(object.tags)){
         object.tags.forEach(t => {
             try {

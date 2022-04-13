@@ -4,7 +4,7 @@
       {{ error }}
     </b-alert>
     <b-container>
-      <validation-observer ref="newNewses" v-slot="{ handleSubmit, invalid}">
+      <validation-observer ref="createNews" v-slot="{ handleSubmit, invalid}">
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-form-row>
             <b-col md="8">
@@ -78,6 +78,19 @@ export default {
       'content',
       'category',
     ]),
+  },
+  methods:{
+    onSubmit(){
+      this.$refs.createNews.validate().then(success=>{
+        if(success) this.createNews();
+      })
+
+    },
+    async createNews(){
+      const news = this.$store.getters["NewsModule/getNews"];
+      const result = await this.$store.dispatch("NewsModule/createNews",news);
+
+    }
   }
 }
 </script>

@@ -29,3 +29,6 @@ services:
 
     App\Listener\ArticleListener:
         tags: [doctrine.orm.entity_listener]
+
+    App\Listener\NewsListener:
+        tags: [doctrine.orm.entity_listener]
