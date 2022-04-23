@@ -39,7 +39,7 @@ export default {
   },
   computed:{
     lastArticles(){
-      const lastArticles = this.$store.getters["ArticleModule/articles"]["hydra:member"];
+      const lastArticles = this.$store.getters["ArticleModule/getItems"]["hydra:member"];
       if(Array.isArray(lastArticles) && lastArticles.length > 0 ){
         return lastArticles.slice(0,3);
       }

@@ -21,12 +21,12 @@
           <div>{{data.item.title}}</div>
           <b-button-group  size="sm" style="font-size: 0.5rem">
             <b-button squared
-                      :to="{name:'admin_article_show',params:{id:data.item.id}}"
+                      :to="{name:`${routePerfix}_show`,params:{id:data.item.id}}"
             >
               Прегледай
             </b-button>
             <b-button squared
-                      :to="{name:'admin_article_edit',params:{id:data.item.id}}"
+                      :to="{name:`${routePerfix}_edit`,params:{id:data.item.id}}"
             >
               Редактирай
             </b-button>
@@ -53,7 +53,7 @@
         <div class="col-md-3">
           <b-button variant="success">Намерени са <b-badge variant="light">{{rows}}</b-badge> публикации</b-button>
         </div>
-        <router-link :to="{ name:'admin_article_new' }" class="col-md-4" tag="div">
+        <router-link :to="{ name:`${routePerfix}_create` }" class="col-md-4" tag="div">
           <b-button variant="secondary">Създай<span class="ml-3 mb-2"><b-icon-plus-square></b-icon-plus-square></span></b-button>
         </router-link>
         <div class="col-md-5">
@@ -71,7 +71,9 @@
 </template>
 
 <script>
-const module = 'ArticleModule',items = 'articles';
+
+import loginForm from "@vue/views/security/LoginForm";
+
 export default {
   name: "ListItemsComponent",
   data(){
@@ -114,52 +116,69 @@ export default {
           label:'Статус : ',
           sortable:true
         }
-      ]
+      ],
+      modalMsg:'Моля, потвърдете че желате, публикацията да бъде изтрита!'
+    }
+  },
+  props:{
+    storeModule:{
+      type:String
+    },
+    publicationItems:{
+      type:String
+    },routePerfix:{
+      type:String
     }
   },
   computed: {
-    rows() {
-      const rows =  this.$store.getters[`${module}/${items}`];
-      return rows["hydra:member"].length;
+    items() {
+      return this.$store.getters[`${this.storeModule}/${this.publicationItems}`];
     },
     isLoading() {
-      return this.$store.getters[`${module}/isLoading`];
+      return this.$store.getters[`${this.storeModule}/isLoading`];
     },
     hasError() {
-      return this.$store.getters[`${module}/hasError`];
+      return this.$store.getters[`${this.storeModule}/hasError`];
     },
     error() {
-      return this.$store.getters[`${module}/error`];
+      return this.$store.getters[`${this.storeModule}/error`];
     },
     hasItems() {
-      return this.$store.getters[`${module}/hasArticles`];
+      return this.$store.getters[`${this.storeModule}/hasItems`];
     },
-    items() {
-      return this.$store.getters[`${module}/${items}`];
+    rows() {
+      return this.items["hydra:member"].length;
     },
   },
   methods:{
     async delete(itemId){
-      const result = await this.$store.dispatch("ArticleModule/deleteArticle",itemId);
-      if(result !== null){
-        await this.deleteSuccessModal(result);
+      const result = await this.$store.dispatch(`${this.storeModule}/deleteItem`,itemId);
+      if(result !== undefined && result !== null ){
+        await this.deleteMessageModal('ПОТВЪРЖДЕНИЕ !','Публикацията '+result+ 'бе изтрита успешно!','success','success');
+      } else{
+        await this.deleteMessageModal('НЕЩО СЕ ОБЪРКА :( !!!','Публикацията не  бе изтрита!','danger','danger');
       }
+
     },
-    deleteSuccessModal(result){
-      this.$bvModal.msgBoxOk('Статията '+result+ 'бе изтрита успешно !', {
+    deleteMessageModal(title,message,headerBgVariant,okVariant){
+      this.$bvModal.msgBoxOk(message, {
         id:'delete-success-modal',
-        title: 'ПОТВЪРЖДЕНИЕ !',
-        size: 'lg',
+        title: title,
+        headerBgVariant:headerBgVariant,
+        headerTextVariant:'light',
+        size: 'sm',
         buttonSize: 'lg',
-        okVariant: 'success',
+        okVariant: okVariant,
         headerClass: 'p-2 border-bottom-0',
         footerClass: 'p-2 border-top-0',
         centered: true,
-      });
-      setTimeout(()=>{this.$bvModal.hide('delete-success-modal')},3000);
+      })
+      if(okVariant==='success'){
+        setTimeout(()=>{this.$bvModal.hide('delete-success-modal')},3000);
+      }
     },
     deleteModal(itemId){
-      this.$bvModal.msgBoxConfirm('Моля потвърдете че искате да изтриете статията !', {
+      this.$bvModal.msgBoxConfirm('Моля, потвърдете че желате, публикацията да бъде изтрита!', {
         id:'delete-confirm-modal',
         title: 'МОЛЯ ПОТВЪРДЕТЕ !',
         size: 'lg',

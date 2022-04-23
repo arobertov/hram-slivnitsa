@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     article() {
-      return this.$store.getters['ArticleModule/getArticle'];
+      return this.$store.getters['ArticleModule/getItem'];
     },
     isLoading() {
       return this.$store.getters['ArticleModule/isLoading'];

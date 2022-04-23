@@ -122,14 +122,19 @@ export default {
       inputTag: ''
     }
   },
+  props:{
+    storeModule:{
+      type:String
+    }
+  },
   computed: {
     tags: {
       get: function() {
-        return this.$store.getters["ArticleModule/getTagsArticle"].map(t=>t.name);
+        return this.$store.getters[`${this.storeModule}/getTags`].map(t=>t.name);
       },
       set: function(tags){
         this.$store.commit(
-            'ArticleModule/attachTagsForArticle',
+            `${this.storeModule}/attachTags`,
             this.allTags.filter(tag=>tags.includes(tag.name))
         );
       }

@@ -2,7 +2,10 @@
 import {getField, updateField} from 'vuex-map-fields';
 import tagMapping from "@vue/helpers/tag-mapping";
 import newsApi from "@vue/api/news_api";
-
+const handleError= function ({commit},error){
+    commit('setNewsError', error);
+    return error;
+}
 export default {
     namespaced: true,
     state: {
@@ -22,31 +25,40 @@ export default {
         },
     },
     getters: {
-        getNewsField(state) {
+        getField(state) {
             return getField(state.news)
         },
         getNewses(state) {
             return state.newses;
         },
-        getNews(state) {
+        getItem(state) {
             return state.news;
         },
-        getIsLoading(state) {
+        hasItems(state) {
+            return true; //state.articles.length > 0;
+        },
+        isLoading(state) {
             return state.isLoading;
         },
-        getError(state) {
+        error(state) {
             return state.error;
         },
-        getIsError(state) {
+        hasError(state) {
             return state.isError;
+        },
+        getTags(state){
+            return state.news.tags;
         }
     },
     mutations: {
-        updateNewsField(state, field) {
+        updateField(state, field) {
             updateField(state.news, field);
         },
+        attachTags(state, tags) {
+            state.news.tags = tags;
+        },
         creatingNews(state) {
-            /* state.news = {
+            state.news = {
                 id: undefined,
                 title: '',
                 content: '',
@@ -55,7 +67,7 @@ export default {
                 category: '',
                 isPublished: true,
                 owner: '',
-            }; */
+            };
             state.error = null;
             state.isLoading = false;
             state.isError = false;
@@ -129,19 +141,18 @@ export default {
     actions: {
         async createNews({commit}, news) {
             try {
-                commit('creatingNews');
                 const response = await newsApi.create(tagMapping(news));
                 if (response.data !== null) {
                     commit('creatingNewsSuccess', response.data);
                     return response.data;
                 }
             } catch (error) {
-                console.log(error)
+                //handleError({commit},error);
                 commit('setNewsError', error);
                 return error;
             }
         },
-        showNews: async function ({commit}, newsId) {
+        async showNews ({commit}, newsId) {
             try {
                 commit('fetchingNews');
                 const response = await newsApi.show(newsId);
@@ -154,7 +165,7 @@ export default {
                 return error;
             }
         },
-        async showAllNewses({commit}){
+        async findAll({commit}){
             try {
                 commit('fetchingNewses');
                 const response = await newsApi.findAll();
@@ -167,7 +178,7 @@ export default {
                 return error;
             }
         },
-        async editNews({commit},news){
+        async edit({commit},news){
             try {
                 commit('editingNews')
                 const response = await newsApi.edit(tagMapping(news));
@@ -180,7 +191,7 @@ export default {
                 return error;
             }
         },
-        async deleteNews({commit},newsId){
+        async deleteItem({commit},newsId){
             try {
                 const response = await newsApi.delete(newsId);
                 if (response.data !== null){

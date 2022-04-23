@@ -15,7 +15,10 @@
 
 <script>
 import NewsPreview from "@vue/components/admin-panel-components/NewsPreview";
-
+const items = [
+  {text: 'Новини', to: {name: 'admin_news_index'}},
+  {text: 'Прегледай новина', to: {name: 'admin_news_show'}}
+];
 export default {
   name: "News-show",
   components:{
@@ -23,7 +26,7 @@ export default {
   },
   computed:{
     news(){
-      return this.$store.getters["NewsModule/getNews"];
+      return this.$store.getters["NewsModule/getItem"];
     },
     isLoading(){
       return this.$store.getters["NewsModule/getIsLoading"];

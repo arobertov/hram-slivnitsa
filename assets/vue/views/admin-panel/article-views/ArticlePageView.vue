@@ -22,7 +22,7 @@ export default {
   },
   computed:{
     article() {
-      return this.$store.getters["ArticleModule/getArticle"];
+      return this.$store.getters["ArticleModule/getItem"];
     }
   },
   watch: {

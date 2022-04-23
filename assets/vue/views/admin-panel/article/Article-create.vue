@@ -1,55 +1,9 @@
 <template>
-  <div>
-    <b-alert show dismissible variant="danger" v-if="error">
-      {{ error }}
-    </b-alert>
-    <b-container>
-      <validation-observer ref="newArticle" v-slot="{ handleSubmit, invalid}">
-        <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
-          <b-form-row>
-            <b-col md="8">
-              <title-input
-                  v-model="title"
-                  placeholder="Въведете заглавие на статия с дължина от 3 до 50 символа"
-              />
-
-              <content-input
-                  v-model="content"
-                  placeholder="Въведете текст на статия..."
-                  publication-type="статия"
-              />
-            </b-col>
-            <b-col md="4">
-              <category-select v-model="category"/>
-              <tag-form/>
-              <image-manager/>
-            </b-col>
-          </b-form-row>
-          <b-form-row>
-            <div>
-              <b-button id="check-article-btn" variant="info" >Прегледай</b-button>
-              <b-button :disabled="invalid" type="submit" variant="success" id="new-article-submit-btn">Публикувай</b-button>
-            </div>
-          </b-form-row>
-        </b-form>
-      </validation-observer>
-    </b-container>
-  </div>
+  <publication-form store-module="ArticleModule" publication-type="статия"/>
 </template>
 
 <script>
-import {createHelpers} from 'vuex-map-fields';
-/*---------- import components -----------------*/
-import TitleInput from "@vue/components/admin-panel-components/TitleInputComponent";
-import ContentInput from "@vue/components/admin-panel-components/ContentInputComponent";
-import TagForm from "@vue/components/admin-panel-components/TagFormSelect";
-import CategorySelect from "@vue/components/admin-panel-components/CategorySelect";
-import ImageManager from "@vue/components/admin-panel-components/ImageManager";
-
-const {mapFields} = createHelpers({
-  getterType: 'ArticleModule/getArticleField',
-  mutationType: 'ArticleModule/updateArticleField',
-});
+import PublicationForm from "@vue/components/admin-panel-components/PublicationFormComponent";
 
 const items = [
   {text: 'Статии', to: {name: 'admin_article_index'}},
@@ -59,49 +13,16 @@ const items = [
 export default {
   name: "Article-new",
   components: {
-    TitleInput, CategorySelect, TagForm, ContentInput, ImageManager
+    PublicationForm
   },
-  data(){
-    return {
-      submitBtnDisabled:true
-    }
-  },
-  computed: {
-    error() {
-      return this.$store.getters["ArticleModule/error"];
-    },
-    ...mapFields([
-      'title',
-      'content',
-      'category',
-      'isPublished',
-    ]),
-  },
+
   created() {
     let store = this.$store;
-    if (store.getters["ArticleModule/articles"].length < 1) {
-      store.dispatch("ArticleModule/findAll");
-    }
     store.commit("MainModule/ATTACH_BREADS", items);
-    store.commit("ArticleModule/CREATING_ARTICLE");
+    store.commit("ArticleModule/creatingItem");
   },
   destroyed() {
     this.$store.commit("MainModule/DETACH_BREADS", items);
-  },
-  methods: {
-    onSubmit(){
-      this.$refs.newArticle.validate().then(success=>{
-        if(success) this.createArticle();
-      })
-
-    },
-    async createArticle() {
-      let article = this.$store.getters["ArticleModule/getArticle"];
-      const result = await this.$store.dispatch("ArticleModule/create", article);
-      if (result !== null) {
-        await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
-      }
-    },
   },
 };
 </script>

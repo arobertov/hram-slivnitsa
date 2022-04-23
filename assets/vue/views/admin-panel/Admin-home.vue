@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-md-4">
-        <router-link :to="{ name:'admin_article_new' }" tag="div">
+        <router-link :to="{ name:'admin_article_create' }" tag="div">
           <button type="button" class="btn btn-created btn-block mb-2 mt-3">
             <span class="mr-3">
               <b-icon-plus-square></b-icon-plus-square>

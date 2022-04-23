@@ -27,10 +27,10 @@ export default {
   computed:{
     images:{
       get:function (){
-        return this.$store.getters["ArticleModule/getImagesArticle"];
+        return this.$store.getters["ArticleModule/getImages"];
       },
       set:function (image){
-        this.$store.commit("ArticleModule/attachImagesForArticles",image);
+        this.$store.commit("ArticleModule/attachImages",image);
       }
     }
   },

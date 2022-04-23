@@ -18,7 +18,7 @@
     >
       <b-form-select
           id="_category"
-          v-bind:value="value"
+          v-bind:value="valueSelect"
           v-bind:selected="true"
           v-on:input="$emit('input', $event)"
           :options="options"
@@ -63,6 +63,12 @@ export default {
   },
   props: ['value'],
   computed: {
+    valueSelect(){
+      if(typeof this.value==='object'){
+        return this.value["@id"]
+      }
+      return this.value;
+    },
     categories() {
       return this.$store.getters["CategoryModule/getCategories"];
     },

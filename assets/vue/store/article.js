@@ -2,21 +2,6 @@ import ArticleAPI from "@vue/api/article_api";
 import {getField, updateField} from 'vuex-map-fields';
 import tagMapping from "@vue/helpers/tag-mapping";
 
-const
-    CREATING_ARTICLE = "CREATING_ARTICLE",
-    CREATING_ARTICLE_SUCCESS = "CREATING_ARTICLE_SUCCESS",
-    CREATING_ARTICLE_ERROR = "CREATING_ARTICLE_ERROR",
-    EDITING_ARTICLE = "EDITING_ARTICLE",
-    EDITING_ARTICLE_SUCCESS = "EDITING_ARTICLE_SUCCESS",
-    DELETING_ARTICLE = "DELETING_ARTICLE",
-    FETCHING_ARTICLES = "FETCHING_ARTICLES",
-    FETCHING_ARTICLE = "FETCHING_ARTICLE",
-    FETCHING_ARTICLE_SUCCESS = "FETCHING_ARTICLE_SUCCESS",
-    FETCHING_ARTICLES_SUCCESS = "FETCHING_ARTICLES_SUCCESS",
-    FETCHING_ARTICLES_ERROR = "FETCHING_ARTICLES_ERROR",
-    FETCHING_ARTICLE_ERROR = "FETCHING_ARTICLE_ERROR",
-    FETCHING_FORM_ERRORS = "FETCHING_FORM_ERRORS";
-
 export default {
     namespaced: true,
     state: {
@@ -39,51 +24,55 @@ export default {
         responseData: '',
     },
     getters: {
-        getArticleField(state) {
+        getField(state){
             return getField(state.article)
-        },
+        }
+        ,
         isLoading(state) {
             return state.isLoading;
         },
         hasError(state) {
             return state.error !== null;
         },
-        formErrors(state) {
-            return state.formErrors;
-        },
-        error(state) {
+        getError(state) {
             return state.error;
         },
-        hasArticles(state) {
-            return true; //state.articles.length > 0;
+        hasItems(state) {
+            if(typeof state.articles !== 'object'){
+                throw 'This value is not object';
+            }
+            if (!state.articles.hasOwnProperty('hydra:member')){
+               return false;
+            }
+            return state.articles['hydra:member'].length > 0
         },
-        articles(state) {
+        getItems(state) {
             return state.articles;
         },
-        getArticle(state) {
-            return state.article;
+        getItem(state){
+           return  state.article;
         },
-        getTagsArticle(state) {
+        getTags(state) {
             return state.article.tags;
         },
-        getImagesArticle(state) {
+        getImages(state) {
             return state.article.images;
         },
     },
     mutations: {
-        updateArticleField(state, field) {
+        updateField(state, field) {
             updateField(state.article, field);
         },
-        attachTagsForArticle(state, tags) {
+        attachTags(state, tags) {
             state.article.tags = tags;
         },
-        attachImagesForArticles(state, images) {
+        attachImages(state, images) {
             state.article.images = images;
         },
-        detachImagesForArticles(state, images) {
+        detachImages(state, images) {
 
         },
-        [CREATING_ARTICLE](state) {
+        creatingItem(state) {
             state.article = {
                 id: undefined,
                 title: '',
@@ -97,26 +86,34 @@ export default {
             state.isLoading = false;
             state.error = null;
         },
-        [CREATING_ARTICLE_SUCCESS](state, data) {
+        creatingItemSuccess(state, data) {
             state.isLoading = false;
             state.error = null;
             state.responseData = data;
-            if (data !== null) state.article = data;
-            state.articles['hydra:member'].unshift(state.article);
+            if (data !== null){
+                state.article = data;
+                state.articles['hydra:member'].unshift(state.article);
+            }
         },
-        [CREATING_ARTICLE_ERROR](state, error) {
+        fetchingItem(state) {
+            state.isLoading = true;
+            state.error = null;
+            state.article = {};
+            state.article.tags = [];
+        },
+        fetchingItemSuccess(state, article) {
             state.isLoading = false;
-            state.formErrors.title = '';
-            state.formErrors.contents = '';
-            state.error = error;
+            state.error = null;
+            state.article = article;
+
         },
-        [EDITING_ARTICLE](state, tags) {
+        editingItem(state, tags) {console.log(state.article)
             state.isLoading = false;
             state.error = null;
             state.article.tags = tags;
 
         },
-        [EDITING_ARTICLE_SUCCESS](state, article) {
+        editingItemSuccess(state, article) {
             state.isLoading = false;
             state.error = null;
             if (state.articles.hasOwnProperty('hydra:member')) {
@@ -125,7 +122,7 @@ export default {
                     ] = article;
             }
         },
-        [DELETING_ARTICLE](state, articleId) {
+        deleteItem(state, articleId) {
             state.isLoading = false;
             state.error = null;
             if (state.articles.hasOwnProperty('hydra:member')) {
@@ -135,111 +132,76 @@ export default {
                 );
             }
         },
-        [FETCHING_ARTICLES](state) {
-            if (state.articles.length === 0) {
+        fetchingItems(state) {
+            if (!state.articles.hasOwnProperty('hydra:member')) {
                 state.isLoading = true;
             }
             state.error = null;
         },
-        [FETCHING_ARTICLES_SUCCESS](state, articles) {
+        fetchingItemsSuccess(state, articles) {
             state.isLoading = false;
             state.error = null;
             state.articles = articles;
         },
-        [FETCHING_ARTICLE](state) {
-            state.isLoading = true;
-            state.error = null;
-            state.article = {};
-            state.article.tags = [];
-        },
-        [FETCHING_ARTICLE_SUCCESS](state, article) {
+        setError(state, error) {
             state.isLoading = false;
-            state.error = null;
-            state.article = article;
-
-        },
-        [FETCHING_ARTICLE_ERROR](state, error) {
-            state.isLoading = false;
-            state.error = error;
-            state.article = {};
-        },
-        [FETCHING_ARTICLES_ERROR](state, error) {
-            state.isLoading = false;
+            state.formErrors.title = '';
+            state.formErrors.contents = '';
             state.error = error;
         },
-        [FETCHING_FORM_ERRORS](state, error) {
-            state.error = null;
-            state.formErrors = error;
-        }
     },
 
     actions: {
         async create({commit}, article) {
             try {
                 let response = await ArticleAPI.create(tagMapping(article));
-                commit(CREATING_ARTICLE_SUCCESS, response.data);
+                commit('creatingItemSuccess', response.data);
                 return response.data;
             } catch (error) {
-                commit(CREATING_ARTICLE_ERROR, error);
-                return null;
+                commit('setError', error);
+                return error;
             }
         },
         async editArticle({commit}, article) {
             try {
                 let response = await ArticleAPI.edit(tagMapping(article));
-                commit(EDITING_ARTICLE_SUCCESS, response.data)
+                commit('editingItemSuccess', response.data)
                 return response.data;
             } catch (error) {
-                commit(FETCHING_ARTICLES_ERROR, error);
-                return null;
+                commit('setError', error);
+                return error;
             }
         },
-        /*
-        *** load article for editing process
-         */
-        async loadEditingArticle({commit}, articleId) {
-            commit(FETCHING_ARTICLE);
+        async loadArticle({commit}, articleId) {
+            commit('fetchingItem');
             try {
                 let response = await ArticleAPI.show(articleId);
-                commit(FETCHING_ARTICLE_SUCCESS, response.data);
-                //--- fetching only category IRI ------ //
-                response.data.category = response.data.category['@id'];
+                commit('fetchingItemSuccess', response.data)
                 return response.data;
             } catch (error) {
-                commit(FETCHING_ARTICLE_ERROR, error);
-                return null;
-            }
-        },
-        async loadReadingArticle({commit}, articleId) {
-            commit(FETCHING_ARTICLE);
-            try {
-                let response = await ArticleAPI.show(articleId);
-                commit(FETCHING_ARTICLE_SUCCESS, response.data)
-                return response.data;
-            } catch (error) {
-                commit(FETCHING_ARTICLE_ERROR, error);
-                return null;
+                commit('setError', error);
+                return error;
             }
         },
         async findAll({commit}) {
-            commit(FETCHING_ARTICLES);
             try {
+                commit('fetchingItems');
                 let response = await ArticleAPI.findAll();
-                commit(FETCHING_ARTICLES_SUCCESS, response.data);
+                commit('fetchingItemsSuccess', response.data);
                 return response.data;
             } catch (error) {
-                commit(FETCHING_ARTICLES_ERROR, error);
-                return null;
+                commit('setError', error);
+                return error;
             }
         },
-        async deleteArticle({commit}, articleId) {
+        async deleteItem({commit}, articleId) {
             try {
-                commit(DELETING_ARTICLE, articleId);
+                commit('deletingItem', articleId);
                 let response = await ArticleAPI.delete(articleId);
                 return response.data;
             } catch (error) {
-                commit(FETCHING_ARTICLES_ERROR, error);
-                return null;
+                commit('setError', error);
+                return error;
             }
         }
     }

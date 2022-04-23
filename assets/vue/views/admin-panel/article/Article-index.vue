@@ -1,5 +1,5 @@
 <template>
-    <list-items/>
+    <list-items store-module="ArticleModule" publication-items="getItems" route-perfix="admin_article"/>
 </template>
 
 <script>
@@ -11,11 +11,7 @@ const items = [{text:'Статии',to:{name:'admin_article_index'}}];
           ListItems
         },
         created() {
-            this.$store.commit("ArticleModule/FETCHING_ARTICLES");
-            if(this.$store.getters["ArticleModule/articles"].length <= 1){
-                 this.$store.dispatch("ArticleModule/findAll");
-            }
-            this.$store.commit("MainModule/ATTACH_BREADS",items)
+          this.$store.commit("MainModule/ATTACH_BREADS",items);
         },
         destroyed() {
           this.$store.commit("MainModule/DETACH_BREADS",items);

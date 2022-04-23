@@ -17,12 +17,12 @@
                 Статии
               </a>
             </router-link>
-            <li class="nav-item">
+            <router-link :to="{name: 'admin_news_index'}" class="nav-item" tag="li">
               <a class="nav-link" href="#">
                 <span class="nav-icon"><b-icon-newspaper></b-icon-newspaper></span>
                 Новини
               </a>
-            </li>
+            </router-link>
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span class="nav-icon"><b-icon-brightness-low-fill></b-icon-brightness-low-fill></span>
@@ -93,9 +93,7 @@ export default {
   },
   created() {
     this.$store.dispatch("CategoryModule/findAllCategories");
-    if(this.$store.getters["ArticleModule/articles"].length <= 1){
-      this.$store.dispatch("ArticleModule/findAll");
-    }
+    this.$store.dispatch("ArticleModule/findAll");
     this.$store.dispatch("MainModule/fetchingBreads",[{text:'Администраторски панел',to:{name:'admin_panel'}}]);
   },
   computed:{

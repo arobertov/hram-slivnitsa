@@ -40,7 +40,7 @@ class News
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @Groups({"article:read","article:write"})
@@ -53,32 +53,32 @@ class News
      *      maxMessage = "Заглавието трябва да бъде по-късо от {{ limit }} символа"
      * )
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      */
-    private $content;
+    private ?string $content;
 
     /**
      * @Groups({"article:read","article:write"})
      * @ORM\Column (type="boolean",nullable=true)
      */
-    private $isPublished;
+    private ?bool $isPublished;
 
     /**
      * @Groups({"article:read"})
      * @ORM\Column(type="datetime")
      */
-    private $dateCreated;
+    private ?\DateTimeInterface $dateCreated;
 
     /**
      * @Groups({"article:read"})
      * @ORM\Column(type="datetime")
      */
-    private $dateEdited;
+    private ?\DateTimeInterface $dateEdited;
 
 
 

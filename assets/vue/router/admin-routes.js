@@ -1,4 +1,5 @@
 import VueRouter from "vue-router";
+
 import AdminHome from "@vue/views/admin-panel/Admin-home";
 import AdminArticleIndex from "@vue/views/admin-panel/article/Article-index";
 import AdminArticleShow from "@vue/views/admin-panel/article/Article-show";
@@ -6,8 +7,9 @@ import AdminArticleCreate from "@vue/views/admin-panel/article/Article-create";
 import AdminArticleEdit from "@vue/views/admin-panel/article/Article-edit";
 
 import AdminNewsCreate from "@vue/views/admin-panel/news/News-create";
-
-
+import AdminNewsIndex from "@vue/views/admin-panel/news/News-index";
+import AdminNewsShow from "@vue/views/admin-panel/news/News-show";
+import AdminNewsEdit from "@vue/views/admin-panel/news/News-edit";
 export default new VueRouter({
     mode: "history",
     routes: [
@@ -37,7 +39,7 @@ export default new VueRouter({
         },
         {
             path: "/admin/articles/create",
-            name: "admin_article_new",
+            name: "admin_article_create",
             component: AdminArticleCreate,
             meta: {
                 breadcrumb: 'Създай статия',
@@ -56,7 +58,7 @@ export default new VueRouter({
         {
             path: "/admin/news",
             name: "admin_news_index",
-            component: AdminArticleIndex,
+            component: AdminNewsIndex,
             meta: {
                 breadcrumb: 'Новини',
             },
@@ -64,7 +66,7 @@ export default new VueRouter({
         {
             path: "/admin/news/:id/show",
             name: "admin_news_show",
-            component: AdminArticleShow,
+            component: AdminNewsShow,
             meta: {
                 breadcrumb: 'Прочети новина',
             },
@@ -80,7 +82,7 @@ export default new VueRouter({
         {
             path: "/admin/news/:id/edit",
             name: "admin_news_edit",
-            component: AdminArticleEdit,
+            component: AdminNewsEdit,
             meta: {
                 breadcrumb: 'Редактирай новина',
             },
