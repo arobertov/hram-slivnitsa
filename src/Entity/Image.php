@@ -57,12 +57,12 @@ class Image
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"image:read","article:read"})
+     * @Groups({"image:read","article:read","news:read"})
      */
     private int $id;
 
     /**
-     * @Groups({"image:read","article:read"})
+     * @Groups({"image:read","article:read","news:read"})
      */
     public ?string $contentUrl;
 
@@ -74,7 +74,7 @@ class Image
 
     /**
      * @ORM\Column(nullable=true)
-     * @Groups({"image:read","image:write","article:read"})
+     * @Groups({"image:read","image:write","article:read","news:read"})
      */
     public ?string $filePath = null;
 
@@ -84,8 +84,16 @@ class Image
      */
     private  $articles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=News::class, inversedBy="images")
+     * @Groups({"image:read"})
+     */
+    private $newses;
+
+
     public function __construct(){
         $this->articles = new ArrayCollection();
+        $this->newses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,4 +178,29 @@ class Image
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, News>
+     */
+    public function getNewses(): Collection
+    {
+        return $this->newses;
+    }
+
+    public function addNews(News $news): self
+    {
+        if (!$this->newses->contains($news)) {
+            $this->newses[] = $news;
+        }
+
+        return $this;
+    }
+
+    public function removeNews(News $news): self
+    {
+        $this->newses->removeElement($news);
+
+        return $this;
+    }
+
 }

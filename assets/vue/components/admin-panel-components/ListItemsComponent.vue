@@ -141,7 +141,7 @@ export default {
       return this.$store.getters[`${this.storeModule}/hasError`];
     },
     error() {
-      return this.$store.getters[`${this.storeModule}/error`];
+      return this.$store.getters[`${this.storeModule}/getError`];
     },
     hasItems() {
       return this.$store.getters[`${this.storeModule}/hasItems`];

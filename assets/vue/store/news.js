@@ -48,7 +48,10 @@ export default {
         },
         getTags(state){
             return state.news.tags;
-        }
+        },
+        getImages(state) {
+            return state.news.images;
+        },
     },
     mutations: {
         updateField(state, field) {
@@ -56,6 +59,12 @@ export default {
         },
         attachTags(state, tags) {
             state.news.tags = tags;
+        },
+        attachImages(state, images) {
+            state.news.images = images;
+        },
+        setItem(state,input){
+            state.news[input.field] = input.value;
         },
         creatingNews(state) {
             state.news = {
@@ -139,7 +148,7 @@ export default {
         }
     },
     actions: {
-        async createNews({commit}, news) {
+        async create({commit}, news) {
             try {
                 const response = await newsApi.create(tagMapping(news));
                 if (response.data !== null) {

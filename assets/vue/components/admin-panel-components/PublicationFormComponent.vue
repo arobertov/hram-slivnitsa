@@ -22,7 +22,7 @@
             <b-col md="4">
               <category-select v-model="category"/>
               <tag-form :store-module="storeModule"/>
-              <image-manager/>
+              <image-manager :store-module="storeModule"/>
             </b-col>
           </b-form-row>
           <b-form-row>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import {mapFields} from 'vuex-map-fields';
 /*---------- import components -----------------*/
 import TitleInput from "@vue/components/admin-panel-components/form-components/TitleInputComponent";
 import ContentInput from "@vue/components/admin-panel-components/form-components/ContentInputComponent";
@@ -55,7 +54,8 @@ export default {
   },
   props:{
     storeModule:{
-      type:String
+      type:String,
+      default:'NewsModule'
     },
     publicationType:{
       type:String
@@ -65,16 +65,39 @@ export default {
     error() {
       return this.$store.getters[`${this.storeModule}/getError`];
     },
-    ...mapFields("ArticleModule",[
-      'title',
-      'content',
-      'category',
-    ]),
+    module(){
+      console.log('Call module');
+      return this.storeModule
+    },
+    title:{
+      get(){
+        return this.$store.getters[`${this.storeModule}/getItem`].title
+      },
+      set(title){
+        return this.$store.commit(`${this.storeModule}/setItem`,{field:'title',value:title});
+      }
+    },
+    content:{
+      get(){
+        return this.$store.getters[`${this.storeModule}/getItem`].content
+      },
+      set(content){
+        return this.$store.commit(`${this.storeModule}/setItem`,{field:'content',value:content});
+      }
+    },
+    category:{
+      get(){
+        return this.$store.getters[`${this.storeModule}/getItem`].category
+      },
+      set(category){
+        return this.$store.commit(`${this.storeModule}/setItem`,{field:'category',value:category});
+      }
+    },
   },
   methods: {
     onSubmit(){
       this.$refs.publicationForm.validate().then(success=>{
-        if(success) this.create();
+        if(success) this.$emit('trigger-method');
       })
 
     },

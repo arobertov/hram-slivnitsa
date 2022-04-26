@@ -14,8 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"article:read"}},
- *     denormalizationContext={"groups"={"article:write"}},
+ *     normalizationContext={"groups"={"news:read"}},
+ *     denormalizationContext={"groups"={"news:write"}},
  *      collectionOperations={
  *           "get",
  *           "post"={"security"="is_granted('ROLE_EDITOR')","security_message"="Нямате необходимите права да създадете новина."}
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class News
 {
     /**
-     * @Groups("article:read")
+     * @Groups("news:read","category:read")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -43,7 +43,7 @@ class News
     private ?int $id;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(
@@ -56,26 +56,26 @@ class News
     private ?string $title;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      */
     private ?string $content;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\Column (type="boolean",nullable=true)
      */
     private ?bool $isPublished;
 
     /**
-     * @Groups({"article:read"})
+     * @Groups({"news:read"})
      * @ORM\Column(type="datetime")
      */
     private ?\DateTimeInterface $dateCreated;
 
     /**
-     * @Groups({"article:read"})
+     * @Groups({"news:read"})
      * @ORM\Column(type="datetime")
      */
     private ?\DateTimeInterface $dateEdited;
@@ -83,27 +83,34 @@ class News
 
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="news")
      */
     private $tags;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="news")
      */
     private $category;
 
     /**
-     * @Groups({"article:read","article:write"})
+     * @Groups({"news:read","news:write"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="news")
      */
     private $owner;
+
+    /**
+     * @Groups({"news:read","news:write"})
+     * @ORM\ManyToMany(targetEntity=Image::class, mappedBy="newses")
+     */
+    private $images;
 
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,6 +230,31 @@ class News
         return $this;
     }
 
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
 
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->addNews($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            $image->removeNews($this);
+        }
+
+        return $this;
+    }
 
 }

@@ -21,7 +21,9 @@ class ArticleListener
         if($this->security->getUser()){
             $article->setOwner($this->security->getUser());
         }
-        $article->setDateCreated(new DateTime('now'));
+        if($article->getDateCreated()===null){
+            $article->setDateCreated(new DateTime('now'));
+        }
         $article->setDateEdited(new DateTime('now'));
     }
 

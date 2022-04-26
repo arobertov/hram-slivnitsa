@@ -130,7 +130,7 @@ export default {
   computed: {
     tags: {
       get: function() {
-        return this.$store.getters[`${this.storeModule}/getTags`].map(t=>t.name);
+          return this.$store.getters[`${this.storeModule}/getTags`].map(t=>t.name);
       },
       set: function(tags){
         this.$store.commit(

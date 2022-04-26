@@ -72,6 +72,9 @@ export default {
         detachImages(state, images) {
 
         },
+        setItem(state,input){
+            state.article[input.field] = input.value;
+        },
         creatingItem(state) {
             state.article = {
                 id: undefined,
@@ -122,7 +125,7 @@ export default {
                     ] = article;
             }
         },
-        deleteItem(state, articleId) {
+        deletingItem(state, articleId) {
             state.isLoading = false;
             state.error = null;
             if (state.articles.hasOwnProperty('hydra:member')) {
@@ -177,10 +180,8 @@ export default {
             try {
                 let response = await ArticleAPI.show(articleId);
                 commit('fetchingItemSuccess', response.data)
-                return response.data;
             } catch (error) {
                 commit('setError', error);
-                return error;
             }
         },
         async findAll({commit}) {
@@ -188,20 +189,16 @@ export default {
                 commit('fetchingItems');
                 let response = await ArticleAPI.findAll();
                 commit('fetchingItemsSuccess', response.data);
-                return response.data;
             } catch (error) {
                 commit('setError', error);
-                return error;
             }
         },
         async deleteItem({commit}, articleId) {
             try {
                 commit('deletingItem', articleId);
                 let response = await ArticleAPI.delete(articleId);
-                return response.data;
             } catch (error) {
                 commit('setError', error);
-                return error;
             }
         }
     }

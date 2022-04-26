@@ -1,5 +1,5 @@
 <template>
-  <publication-form store-module="ArticleModule" publication-type="статия"/>
+  <publication-form @trigger-method="editArticle" store-module="ArticleModule" publication-type="статия"/>
 </template>
 
 <script>
@@ -16,17 +16,15 @@ export default {
       PublicationForm
     },
   mounted() {
-    const data = this.$store.dispatch("ArticleModule/loadArticle",this.$route.params.id)
+    this.$store.dispatch("ArticleModule/loadArticle",this.$route.params.id)
     this.$store.commit("MainModule/ATTACH_BREADS", items)
   },
   destroyed() {
     this.$store.commit("MainModule/DETACH_BREADS", items);
   },
   methods: {
-
     async editArticle() {
-
-      let article = this.$store.state.ArticleModule.article;
+      const article = this.$store.getters["ArticleModule/getItem"];
       const result = await this.$store.dispatch("ArticleModule/editArticle",article );
       if (result !== null) {
         await this.$router.push({name: "admin_article_show", params: {"id": result.id}});

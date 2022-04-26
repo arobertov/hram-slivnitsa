@@ -1,5 +1,5 @@
 <template>
-  <publication-form store-module="ArticleModule" publication-type="статия"/>
+  <publication-form @trigger-method="create" store-module="ArticleModule" publication-type="статия"/>
 </template>
 
 <script>
@@ -15,7 +15,6 @@ export default {
   components: {
     PublicationForm
   },
-
   created() {
     let store = this.$store;
     store.commit("MainModule/ATTACH_BREADS", items);
@@ -24,6 +23,18 @@ export default {
   destroyed() {
     this.$store.commit("MainModule/DETACH_BREADS", items);
   },
+  methods:{
+    hoho(){
+      return 'ArticleModule'
+    },
+    async create() {
+      let item = this.$store.getters['ArticleModule/getItem'];
+      const result = await this.$store.dispatch(`ArticleModule/create`, item);
+      if (result !== null) {
+        await this.$router.push({name: "admin_article_show", params: {"id": result.id}});
+      }
+    },
+  }
 };
 </script>
 
