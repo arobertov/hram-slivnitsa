@@ -24,13 +24,18 @@ export default {
       }
     }
   },
+  props:{
+    storeModule:{
+      type:String
+    }
+  },
   computed:{
     images:{
       get:function (){
-        return this.$store.getters["ArticleModule/getImages"];
+        return this.$store.getters[`${this.storeModule}/getImages`];
       },
       set:function (image){
-        this.$store.commit("ArticleModule/attachImages",image);
+        this.$store.commit(`${this.storeModule}/attachImages`,image);
       }
     }
   },

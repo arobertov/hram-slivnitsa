@@ -8,6 +8,7 @@
 // importing boostrap scss file
 import '../styles/global.scss';
 import '../styles/vue-image-manager.scss'
+import 'vue-file-agent/dist/vue-file-agent.css';
 // importing jquery
 import $ from 'jquery';
 global.$ = global.jQuery = $;

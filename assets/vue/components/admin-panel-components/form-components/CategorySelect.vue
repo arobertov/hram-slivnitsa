@@ -62,6 +62,14 @@ export default {
     CategoryInputModal
   },
   props: ['value'],
+  created() {
+    const categories = this.$store.getters["CategoryModule/getCategories"]
+    if(Array.isArray(categories)&&categories.length===0){
+      this.$store.dispatch("CategoryModule/findAllCategories");
+    }
+
+
+  },
   computed: {
     valueSelect(){
       if(typeof this.value==='object'){

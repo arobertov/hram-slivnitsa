@@ -67,6 +67,7 @@
                     <span class="name">{{ dir }}</span>
                   </a>
                 </div>
+                <!-------- select image grid  ---------------->
                 <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
                   <input
                       type="radio"
@@ -76,17 +77,15 @@
                       style="display: none;"
                   />
                   <label :for="`file_${file.id}`">
-                    <div class="preview">
-                      <a href="#" class="modal-close" @click.prevent="$emit('close')">
-                        <b-icon-x-square></b-icon-x-square>
-                    </a>
-                      <b-img
-                          fluid
-                          :src="require(`@images/${file.filePath}`).default"
-                          :alt="file.filePath">
-                      </b-img>
-                    </div>
-                    <span class="name" :title="file.id">{{ $_truncate.line(file.filePath, 8) }}</span>
+                    <figure class="preview">
+                      <img :src="require(`@images/${file.filePath}`).default" :alt="file.filePath">
+                    </figure>
+                    <span class="name" :title="file.id">
+                      {{ $_truncate.line(file.filePath, 10) }}
+                      <a  href="#" class="delete-image" @click="deleteImage(file['@id'])">
+                        <b-icon-trash  variant="danger"></b-icon-trash>
+                      </a>
+                    </span>
                   </label>
                 </div>
               </div>
@@ -115,8 +114,8 @@
     </transition>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name:"FileSelect",
   mounted() {
@@ -187,10 +186,6 @@ export default {
       }
     },
 
-    async fetchImages() {
-      this.selected_files = [];
-      const result = await this.$store.dispatch("ImageModule/findAllImages");
-    },
 
     selectFiles() {
       let input_field = document.getElementById('file_uploads_selector');
@@ -201,9 +196,12 @@ export default {
       let formData = new FormData();
       let data = this.$refs.upload_files.files[0];
       formData.append('fileImage', data);
-
       await this.$store.dispatch("ImageModule/uploadImage", formData);
     },
+
+    async deleteImage(imageIri){
+      const result = await this.$store.dispatch("ImageModule/delete",imageIri)
+    }
     /*
     fetchDir(dir) {
       this.dir += dir + '/';
@@ -239,3 +237,28 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+
+  #file-select label{
+  padding: 5px;
+  }
+
+  .name{
+    background-color: rgba(239, 239, 239, 1);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  figure {
+    width: 120px;
+    height: 120px;
+    height: auto;
+    float: left;
+    margin: 3px;
+    padding: 3px;
+  }
+</style>

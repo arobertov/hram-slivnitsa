@@ -92,8 +92,14 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("CategoryModule/findAllCategories");
-    this.$store.dispatch("ArticleModule/findAll");
+    const articles = this.$store.getters["ArticleModule/getItems"];
+    const news = this.$store.getters["NewsModule/getItems"];
+    if(!articles.hasOwnProperty("hydra-member")){
+      this.$store.dispatch("ArticleModule/findAll");
+    }
+    if(!news.hasOwnProperty("hydra-member")){
+      this.$store.dispatch("NewsModule/findAll");
+    }
     this.$store.dispatch("MainModule/fetchingBreads",[{text:'Администраторски панел',to:{name:'admin_panel'}}]);
   },
   computed:{

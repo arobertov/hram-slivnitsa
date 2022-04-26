@@ -14,7 +14,6 @@
             :alt="image.filePath">
         </b-img>
       </div>
-
     </div>
     <div>
       <p>Съдържание :</p>

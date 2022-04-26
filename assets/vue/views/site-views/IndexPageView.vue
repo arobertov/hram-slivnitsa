@@ -6,7 +6,7 @@
         <tags-list/>
       </b-col>
       <b-col lg="4">
-        <last-articles route-name="article_preview"/>
+        <last-items route-name="article_preview"/>
       </b-col>
       <b-col lg="4"><h2>Последни новини</h2></b-col>
     </b-row>
@@ -16,7 +16,7 @@
 
 <script>
 import CategoryList from "@vue/components/site-components/CategoryListComponent";
-import LastArticles from "@vue/components/LastArticlesComponent";
+import LastItems from "@vue/components/LastItemsComponent";
 import TagsList from "@vue/components/site-components/TagsListComponent";
 
 export default {
@@ -24,7 +24,7 @@ export default {
   components:{
     CategoryList,
     TagsList,
-    LastArticles
+    LastItems
   },
   mounted() {
     this.$store.dispatch("CategoryModule/findAllCategories");

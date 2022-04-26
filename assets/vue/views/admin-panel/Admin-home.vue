@@ -9,7 +9,9 @@
             </span>Публикувай статия
           </button>
         </router-link>
-        <last-articles route-name="admin_article_show"/>
+        <last-items store-module="ArticleModule" route-name="admin_article_show">
+          <template #card-header><b-icon-card-text/> ПОСЛЕДНИ СТАТИИ</template>
+        </last-items>
       </div>
       <div class="col-md-4">
         <router-link :to="{ name:'admin_news_create' }" tag="div">
@@ -19,23 +21,9 @@
             </span>Публикувай новина
           </button>
         </router-link>
-        <div class="card">
-          <div class="card-header bg-sub-caption sub-title">
-            Последни новини
-          </div>
-          <div class="card-body border-bottom">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content....</p>
-        </div>
-          <div class="card-body border-bottom">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content....</p>
-        </div>
-          <div class="card-body border-bottom">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content....</p>
-        </div>
-        </div>
+        <last-items store-module="NewsModule" route-name="admin_news_show">
+          <template #card-header><b-icon-newspaper/> ПОСЛЕДНИ НОВИНИ</template>
+        </last-items>
       </div>
       <div class="col-md-4">
       <router-link :to="{ name:'admin_article_new' }" tag="div">
@@ -68,12 +56,12 @@
 </template>
 
 <script>
-import LastArticles from "../../components/LastArticlesComponent";
+import LastItems from "../../components/LastItemsComponent";
 
 export default {
   name: "Admin-home",
   components:{
-    LastArticles
+    LastItems
   }
 }
 </script>

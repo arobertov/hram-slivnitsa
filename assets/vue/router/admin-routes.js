@@ -10,17 +10,19 @@ import AdminNewsCreate from "@vue/views/admin-panel/news/News-create";
 import AdminNewsIndex from "@vue/views/admin-panel/news/News-index";
 import AdminNewsShow from "@vue/views/admin-panel/news/News-show";
 import AdminNewsEdit from "@vue/views/admin-panel/news/News-edit";
+
 export default new VueRouter({
     mode: "history",
     routes: [
         {
-            path: '/admin/',
+            path: '/admin',
             name: "admin_panel",
             component: AdminHome,
             meta: {
                 breadcrumb: 'Админ панел',
             },
         },
+
         {
             path: '/admin/articles',
             name: "admin_article_index",

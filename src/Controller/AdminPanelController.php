@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class AdminPanelController extends AbstractController
 {
     /**
-     * @Route("admin/{vueRouting}",requirements={"vueRouting"="^(?!api).*"},name="admin_panel")
+     * @Route("/admin",name="admin_panel")
+     * @Route("/admin/{vueRouting}",requirements={"vueRouting"="^(?!api).*"})
      * @param SerializerInterface $serializer
      * @return Response
      */

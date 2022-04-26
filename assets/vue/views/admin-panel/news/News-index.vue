@@ -1,5 +1,5 @@
 <template>
-  <list-items store-module="NewsModule" publication-items="getNewses" route-perfix="admin_news"/>
+  <list-items store-module="NewsModule"  route-perfix="admin_news"/>
 </template>
 
 <script>

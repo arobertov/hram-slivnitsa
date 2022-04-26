@@ -38,7 +38,7 @@ class Category
     private $id;
 
     /**
-     * @Groups({"category:read","category:write","article:read"})
+     * @Groups({"category:read","category:write","article:read","news:read"})
      * @ORM\Column(type="string", length=255,unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(

@@ -124,15 +124,13 @@ export default {
     storeModule:{
       type:String
     },
-    publicationItems:{
-      type:String
-    },routePerfix:{
+    routePerfix:{
       type:String
     }
   },
   computed: {
     items() {
-      return this.$store.getters[`${this.storeModule}/${this.publicationItems}`];
+      return this.$store.getters[`${this.storeModule}/getItems`];
     },
     isLoading() {
       return this.$store.getters[`${this.storeModule}/isLoading`];
@@ -141,7 +139,7 @@ export default {
       return this.$store.getters[`${this.storeModule}/hasError`];
     },
     error() {
-      return this.$store.getters[`${this.storeModule}/error`];
+      return this.$store.getters[`${this.storeModule}/getError`];
     },
     hasItems() {
       return this.$store.getters[`${this.storeModule}/hasItems`];

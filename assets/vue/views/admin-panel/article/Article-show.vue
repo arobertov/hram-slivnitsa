@@ -40,7 +40,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('ArticleModule/loadReadingArticle', this.$route.params.id);
+    this.$store.dispatch('ArticleModule/loadArticle', this.$route.params.id);
     this.$store.commit("MainModule/ATTACH_BREADS", items);
   },
   destroyed() {
